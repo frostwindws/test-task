@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Articles.Services.CommentsService, Articles" CodeBehind="CommentsService.svc.cs" Factory="Autofac.Integration.Wcf.AutofacHostFactory, Autofac.Integration.Wcf" %>
