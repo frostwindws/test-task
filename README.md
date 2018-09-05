@@ -2,6 +2,7 @@
 Test project
 
 Technologies:
+
 Part 1:
   - Dapper
   - WPF
@@ -11,11 +12,13 @@ Part 1:
   - Autofac
   - Serilog
   - Nelibur.Sword
+  
 Part 2:
   - NHibernate (mapping by code)
   - TeamCity
   - Powershell Cmdlet
   - RabbitMQ
+  
 Part 3:
   - Angular
   - WebApi
