@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data;
 using Dapper;
 using Npgsql;
+using Serilog;
 
 namespace Articles.Models
 {
@@ -14,7 +15,7 @@ namespace Articles.Models
         // Для сокращения объема запрашиваемых данных текст передается только при запросе отдельной статьи
         private const string GetQuery = "select id, title, author, content, created from articles"; 
         private const string FindQuery = "select * from articles where id = @id";
-        private const string CreateQuery = "select (insert into articles(title, author, content) values(@Title, @Author, @Content) returning id)";
+        private const string CreateQuery = "insert into articles(title, author, content) values(@Title, @Author, @Content) returning id";
         private const string UpdateQuery = "update articles set title = @Title, author = @Author, content = @Content where id = @Id";
         private const string DeleteQuery = "delete from articles where id = @id";
 
@@ -57,7 +58,9 @@ namespace Articles.Models
         /// <returns>Возвращает идентификатор созданной статьи</returns>
         public long Create(Article record)
         {
-            return connection.QuerySingle<long>(CreateQuery, record);
+            var id = connection.QuerySingle<long>(CreateQuery, record);
+            Log.Information($"Created new article (Id={id}): \"{record.Title}\" by {record.Author}");
+            return id;
         }
 
         /// <summary>
@@ -67,6 +70,7 @@ namespace Articles.Models
         public void Update(Article record)
         {
             connection.Execute(UpdateQuery, record);
+            Log.Information($"Article updated (Id={record.Id}): \"{record.Title}\" by {record.Author}");
         }
 
         /// <summary>
@@ -76,6 +80,7 @@ namespace Articles.Models
         public void Delete(long id)
         {
             connection.Execute(DeleteQuery, new { id });
+            Log.Information($"Article deleted (Id={id})");
         }
 
         /// <summary>

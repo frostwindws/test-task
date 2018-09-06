@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data;
 using Dapper;
 using Npgsql;
+using Serilog;
 
 namespace Articles.Models
 {
@@ -64,7 +65,9 @@ namespace Articles.Models
         /// <returns>Возвращает идентификатор созданного комментария</returns>
         public long Create(Comment comment)
         {
-            return connection.QuerySingle<long>(CreateQuery, comment);
+            long id = connection.QuerySingle<long>(CreateQuery, comment);
+            Log.Information($"Created new comment (Id={id}) by {comment.Author} for article id = {comment.ArticleId}");
+            return id;
         }
 
         /// <summary>
@@ -74,6 +77,7 @@ namespace Articles.Models
         public void Update(Comment comment)
         {
             connection.Execute(UpdateQuery, comment);
+            Log.Information($"Comment updated (Id={comment.Id}) by {comment.Author} for article id = {comment.ArticleId}");
         }
 
         /// <summary>
@@ -83,6 +87,7 @@ namespace Articles.Models
         public void Delete(long id)
         {
             connection.Execute(DeleteQuery, new { id });
+            Log.Information($"Comment deleted (Id={id})");
         }
 
         /// <summary>
