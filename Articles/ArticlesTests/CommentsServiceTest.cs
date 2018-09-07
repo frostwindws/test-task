@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Articles;
 using Articles.Models;
 using Articles.Services;
-using ArticlesTests.Repositories;
+using Moq;
 using NUnit.Framework;
 
 namespace ArticlesTests
@@ -12,94 +11,79 @@ namespace ArticlesTests
     /// <summary>
     /// Тест сервиса коментариев 
     /// </summary>
-    public class CommentsServiceTest : CommentsService
+    public class CommentsServiceTest
     {
-        public CommentsServiceTest(): base(null)
+        private readonly Mock<ICommentsRepository> mock;
+        private readonly ICommentsService service;
+
+        /// <summary>
+        /// Конструктор теста сервиса коментариев
+        /// </summary>
+        public CommentsServiceTest()
         {
+            mock = new Mock<ICommentsRepository>();
+            service = new CommentsService(mock.Object);
         }
 
-        [SetUp]
-        public void TestsSetup()
-        {
-            Repository = new CommentsTestRepository();
-        }
-
+        /// <summary>
+        /// По запросу комментариев к статье сервис возвращает то же количество записей, что и репозиторий
+        /// </summary>
         [Test]
-        public void GetForArticleRequestExistingArticleCommentsReturnsRepositorySameLengthResult()
+        public void GetForArticleReturnsRepositorySameLengthResult()
         {
-            IEnumerable<Comment> requestedComments = Repository.GetForArticle(1);
-            IEnumerable<Comment> result = GetForArticle(1);
-
-            Assert.AreEqual(requestedComments.Count(), result.Count());
-        }
-
-        [Test]
-        public void CreateAddNewRecordReturnsExistingRecordId()
-        {
-            long newId = Create(new Comment());
-            Comment addedComment = Repository.Find(newId);
-
-            Assert.IsNotNull(addedComment);
-        }
-
-        [Test]
-        public void UpdateExistingRecordPropertiesUpdatedExceptCreatedDate()
-        {
-            long existingCommentId = Repository.GetCollection().First().Id;
-            const string Author = "Updated Author";
-            const int ArticleId = 5;
-            const string Content = "Updated Content";
-            DateTime created = DateTime.MinValue;
-
-            Update(new Comment
+            const long ArticleId = 1;
+            IEnumerable<Comment> collection = Enumerable.Range(1, 10).Select(i => new Comment
             {
-                Id = existingCommentId,
+                Id = i,
                 ArticleId = ArticleId,
-                Author = Author,
-                Content = Content,
-                Created = created
+                Author = $"Test Author {i}",
+                Content = $"Test Comment {i}",
+                Created = DateTime.Now.AddHours(-i)
             });
 
-            Comment comment = Repository.Find(existingCommentId);
+            mock.Setup(a => a.GetForArticle(ArticleId)).Returns(collection);
+            IEnumerable<Comment> result = service.GetForArticle(ArticleId);
 
-            Assert.AreEqual(comment.Author, Author, "Автор статьи не был обновлен");
-            Assert.AreEqual(comment.Content, Content, "Контент статьи не был обновлен");
-            Assert.AreNotEqual(comment.ArticleId, ArticleId, "Идентификатор статьи был обновлен");
-            Assert.AreNotEqual(comment.Created, created, "Дата создания статьи была обновлен");
+            Assert.AreEqual(collection.Count(), result.Count());
         }
 
+        /// <summary>
+        /// Запрос создания вызывает метод создания репозитория 1 раз и возвращает идентификатор созаданной записи
+        /// </summary>
         [Test]
-        public void DeleteExistingRecordRecordIsNotInRepository()
+        public void CreateRunCreateMethodOnceReturnsCreatedRecordId()
         {
-            Comment comment = Repository.GetCollection().First();
+            const long CreatedId = 1;
+            var commentToCreate = new Comment();
+            mock.Setup(a => a.Create(commentToCreate)).Returns(CreatedId);
+            long newId = service.Create(commentToCreate);
 
-            Delete(comment.Id);
-            comment = Repository.Find(comment.Id);
-
-            Assert.IsNull(comment);
+            mock.Verify(r => r.Create(commentToCreate), Times.Once, "Repository creation method wasn't called or was called more than once");
+            Assert.AreEqual(newId, CreatedId, 0, "Returned identity isn't equal created identity");
         }
 
+        /// <summary>
+        /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз
+        /// </summary>
         [Test]
-        public void DeleteExistingRecordRecordRepositoryCountChangedByOne()
+        public void UpdateRunsRepositoryUpdateMethodOnce()
         {
-            int initialCount = Repository.GetCollection().Count();
-            long existingCommentId = Repository.GetCollection().First().Id;
+            var commentToUpdate = new Comment();
+            service.Update(commentToUpdate);
 
-            Delete(existingCommentId);
-            int countAfterDelete = Repository.GetCollection().Count();
-
-            Assert.AreEqual(initialCount, countAfterDelete + 1);
+            mock.Verify(r => r.Update(commentToUpdate), Times.Once);
         }
 
+        /// <summary>
+        /// Запрос удаления записи выполняет метод удаления репозитория 1 раз
+        /// </summary>
         [Test]
-        public void DeleteNotExistingRecordRepositoryCountIsTheSame()
+        public void DeleteRunsRepositoryDeleteMethodOnce()
         {
-            int initialCount = Repository.GetCollection().Count();
+            const long TargetId = 1;
+            service.Delete(TargetId);
 
-            Delete(-1);
-            int countAfterDelete = Repository.GetCollection().Count();
-
-            Assert.AreEqual(initialCount, countAfterDelete);
+            mock.Verify(r => r.Delete(TargetId), Times.Once);
         }
     }
 }
