@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
+using Articles.Models;
 using Dapper;
-using Npgsql;
 using Serilog;
 
-namespace Articles.Models
+namespace Articles.Dapper
 {
     /// <summary>
     /// Репозиторий коментариев
     /// </summary>
     public class CommentsRepository : ICommentsRepository
     {
-        private const string GetQuery = "select * from comments";
+        private const string GetQuery = "select id, articleid, author, content, created  from comments";
         private const string GetForArticleQuery = GetQuery + " where articleid = @articleId";
         private const string FindQuery = GetQuery + " where id = @id";
         private const string CreateQuery = "insert into comments(articleid, author, content) values(@ArticleId, @Author, @Content) returning id";
@@ -24,10 +23,9 @@ namespace Articles.Models
         /// <summary>
         /// Конструктор репозитория коментариев.
         /// </summary>
-        public CommentsRepository()
+        public CommentsRepository(IDbConnection connection)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["PostgreConnection"].ConnectionString;
-            connection = new NpgsqlConnection(connectionString);
+            this.connection = connection;
         }
         public IEnumerable<Comment> GetCollection()
         {
@@ -88,14 +86,6 @@ namespace Articles.Models
         {
             connection.Execute(DeleteQuery, new { id });
             Log.Information($"Comment deleted (Id={id})");
-        }
-
-        /// <summary>
-        /// Освободить ресурсы
-        /// </summary>
-        public void Dispose()
-        {
-            connection?.Dispose();
         }
     }
 }

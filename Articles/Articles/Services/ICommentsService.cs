@@ -1,5 +1,5 @@
 ﻿using System.ServiceModel;
-using Articles.Models;
+using Articles.Services.Models;
 
 namespace Articles.Services
 {
@@ -15,7 +15,7 @@ namespace Articles.Services
         /// <param name="id">Идентификатор статьи.</param>
         /// <returns>Возвращает массив комментариев к указанной статье.</returns>
         [OperationContract]
-        Comment[] GetForArticle(long id);
+        CommentData[] GetForArticle(long id);
 
         /// <summary>
         /// Создание комментария
@@ -23,7 +23,7 @@ namespace Articles.Services
         /// <param name="comment">Создаваемый комментарий</param>
         /// <returns></returns>
         [OperationContract]
-        long Create(Comment comment);
+        long? Create(CommentData comment);
 
         /// <summary>
         /// Обновление имеющегося комментария.
@@ -31,7 +31,7 @@ namespace Articles.Services
         /// <param name="comment">Обновляемый комментарий</param>
         /// <returns></returns>
         [OperationContract]
-        void Update(Comment comment);
+        void Update(CommentData comment);
 
         /// <summary>
         /// Удаление комментария

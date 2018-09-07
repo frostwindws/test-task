@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Articles.Models;
 using Articles.Services;
+using Articles.Services.Models;
+using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using MapperConfiguration = Articles.Initialization.MapperConfiguration;
 
 namespace ArticlesTests
 {
@@ -13,7 +16,7 @@ namespace ArticlesTests
     /// </summary>
     public class CommentsServiceTest
     {
-        private readonly Mock<ICommentsRepository> mock;
+        private readonly Mock<IDataContext> mock;
         private readonly ICommentsService service;
 
         /// <summary>
@@ -21,7 +24,9 @@ namespace ArticlesTests
         /// </summary>
         public CommentsServiceTest()
         {
-            mock = new Mock<ICommentsRepository>();
+            Mapper.Reset();
+            MapperConfiguration.Init();
+            mock = new Mock<IDataContext>();
             service = new CommentsService(mock.Object);
         }
 
@@ -41,8 +46,8 @@ namespace ArticlesTests
                 Created = DateTime.Now.AddHours(-i)
             });
 
-            mock.Setup(a => a.GetForArticle(ArticleId)).Returns(collection);
-            IEnumerable<Comment> result = service.GetForArticle(ArticleId);
+            mock.Setup(a => a.Comments.GetForArticle(ArticleId)).Returns(collection);
+            IEnumerable<CommentData> result = service.GetForArticle(ArticleId);
 
             Assert.AreEqual(collection.Count(), result.Count());
         }
@@ -54,12 +59,12 @@ namespace ArticlesTests
         public void CreateRunCreateMethodOnceReturnsCreatedRecordId()
         {
             const long CreatedId = 1;
-            var commentToCreate = new Comment();
-            mock.Setup(a => a.Create(commentToCreate)).Returns(CreatedId);
-            long newId = service.Create(commentToCreate);
+            var commentToCreate = new CommentData();
+            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(CreatedId);
+            long? newId = service.Create(commentToCreate);
 
-            mock.Verify(r => r.Create(commentToCreate), Times.Once, "Repository creation method wasn't called or was called more than once");
-            Assert.AreEqual(newId, CreatedId, 0, "Returned identity isn't equal created identity");
+            mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Once, "Repository creation method wasn't called or was called more than once");
+            Assert.AreEqual(newId, CreatedId, "Returned identity isn't equal created identity");
         }
 
         /// <summary>
@@ -68,10 +73,11 @@ namespace ArticlesTests
         [Test]
         public void UpdateRunsRepositoryUpdateMethodOnce()
         {
-            var commentToUpdate = new Comment();
+            var commentToUpdate = new CommentData();
+            mock.Setup(a => a.Comments.Update(It.IsAny<Comment>()));
             service.Update(commentToUpdate);
 
-            mock.Verify(r => r.Update(commentToUpdate), Times.Once);
+            mock.Verify(r => r.Comments.Update(It.IsAny<Comment>()), Times.Once);
         }
 
         /// <summary>
@@ -83,7 +89,7 @@ namespace ArticlesTests
             const long TargetId = 1;
             service.Delete(TargetId);
 
-            mock.Verify(r => r.Delete(TargetId), Times.Once);
+            mock.Verify(r => r.Comments.Delete(TargetId), Times.Once);
         }
     }
 }

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Articles.Models;
 using Articles.Services;
+using Articles.Services.Models;
+using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using MapperConfiguration = Articles.Initialization.MapperConfiguration;
 
 namespace ArticlesTests
 {
@@ -14,7 +17,7 @@ namespace ArticlesTests
     [TestFixture]
     public class ArticlesServiceTest
     {
-        private readonly Mock<IArticlesRepository> mock;
+        private readonly Mock<IDataContext> mock;
         private readonly IArticlesService service;
 
         /// <summary>
@@ -22,7 +25,9 @@ namespace ArticlesTests
         /// </summary>
         public ArticlesServiceTest()
         {
-            mock = new Mock<IArticlesRepository>();
+            Mapper.Reset();
+            MapperConfiguration.Init();
+            mock = new Mock<IDataContext>();
             service = new ArticlesService(mock.Object);
         }
 
@@ -41,8 +46,8 @@ namespace ArticlesTests
                 Created = DateTime.Now.AddHours(-i)
             });
 
-            mock.Setup(a => a.GetCollection()).Returns(collection);
-            IEnumerable<Article> result = service.GetAll();
+            mock.Setup(a => a.Articles.GetCollection()).Returns(collection);
+            IEnumerable<ArticleData> result = service.GetAll();
 
            Assert.AreEqual(collection.Count(), result.Count());
         }
@@ -54,8 +59,9 @@ namespace ArticlesTests
         public void GetRequestExistingRecordReturnsNotNull()
         {
             long searchId = 1;
-            mock.Setup(a => a.Find(searchId)).Returns(new Article());
-            Article result = service.Get(searchId);
+            mock.Setup(a => a.Articles.Find(searchId)).Returns(new Article());
+            mock.Setup(a => a.Comments.GetForArticle(searchId)).Returns(new Comment[0]);
+            ArticleData result = service.Get(searchId);
 
             Assert.IsNotNull(result);
         }
@@ -67,8 +73,8 @@ namespace ArticlesTests
         public void GetRequestNotExistingRecordReturnsNull()
         {
             const long SearchId = 1;
-            mock.Setup(a => a.Find(SearchId)).Returns((Article)null);
-            Article result = service.Get(SearchId);
+            mock.Setup(a => a.Articles.Find(SearchId)).Returns((Article)null);
+            ArticleData result = service.Get(SearchId);
 
             Assert.IsNull(result);
         }
@@ -80,12 +86,12 @@ namespace ArticlesTests
         public void CreateRunCreateMethodOnceReturnsCreatedRecordId()
         {
             const long CreatedId = 1;
-            var articleToCreate = new Article();
-            mock.Setup(a => a.Create(articleToCreate)).Returns(CreatedId);
-            long newId = service.Create(articleToCreate);
+            var articleToCreate = new ArticleData();
+            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(CreatedId);
+            long? newId = service.Create(articleToCreate);
 
-            mock.Verify(r => r.Create(articleToCreate), Times.Once, "Repository creation method wasn't called or was called more than once");
-            Assert.AreEqual(newId, CreatedId, 0, "Returned identity isn't equal created identity");
+            mock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Once, "Repository creation method wasn't called or was called more than once");
+            Assert.AreEqual(newId, CreatedId, "Returned identity isn't equal created identity");
         }
 
         /// <summary>
@@ -94,10 +100,11 @@ namespace ArticlesTests
         [Test]
         public void UpdateRunsRepositoryUpdateMethodOnce()
         {
-            var articleToUpdate = new Article();
+            var articleToUpdate = new ArticleData();
+            mock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
             service.Update(articleToUpdate);
 
-            mock.Verify(r => r.Update(articleToUpdate), Times.Once);
+            mock.Verify(r => r.Articles.Update(It.IsAny<Article>()), Times.Once);
         }
 
         /// <summary>
@@ -109,7 +116,7 @@ namespace ArticlesTests
             const long TargetId = 1;
             service.Delete(TargetId);
 
-            mock.Verify(r => r.Delete(TargetId), Times.Once);
+            mock.Verify(r => r.Articles.Delete(TargetId), Times.Once);
         }
     }
 }

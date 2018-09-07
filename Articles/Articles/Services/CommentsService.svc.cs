@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using Articles.Models;
+using Articles.Services.Models;
+using AutoMapper;
 
 namespace Articles.Services
 {
@@ -10,47 +12,61 @@ namespace Articles.Services
     public class CommentsService : ICommentsService, IDisposable
     {
         /// <summary>
-        /// Репозиторий для работы с комментариями
+        /// Контекст работы с данными
         /// </summary>
-        protected ICommentsRepository Repository { get; set; }
+        private IDataContext Context { get; }
 
         /// <summary>
         /// Конструктор сервиса
         /// </summary>
-        /// <param name="repository">Используемый репозиторий</param>
-        public CommentsService(ICommentsRepository repository)
+        /// <param name="context">Используемый контекст</param>
+        public CommentsService(IDataContext context)
         {
-            Repository = repository;
+            Context = context;
         }
 
         /// <inheritdoc />
-        public Comment[] GetForArticle(long articleid)
+        public CommentData[] GetForArticle(long articleid)
         {
-            return Repository.GetForArticle(articleid).ToArray();
+            IEnumerable<Comment> comments = Context.Comments.GetForArticle(articleid);
+            return Mapper.Map<CommentData[]>(comments);
         }
 
         /// <inheritdoc />
-        public long Create(Comment comment)
+        public long? Create(CommentData comment)
         {
-            return Repository.Create(comment);
+            if (comment != null)
+            {
+                Comment dbComment = Mapper.Map<Comment>(comment);
+                return Context.Comments.Create(dbComment);
+            }
+
+            return null;
         }
 
         /// <inheritdoc />
-        public void Update(Comment comment)
+        public void Update(CommentData comment)
         {
-            Repository.Update(comment);
+            if (comment != null)
+            {
+                Comment dbComment = Mapper.Map<Comment>(comment);
+                Context.Comments.Update(dbComment);
+            }
         }
 
         /// <inheritdoc />
         public void Delete(long id)
         {
-            Repository.Delete(id);
+            Context.Comments.Delete(id);
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
-            Repository?.Dispose();
+            if (Context is IDisposable disposableContext)
+            {
+                disposableContext.Dispose();
+            }
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using Articles.Models;
 using Dapper;
 using Npgsql;
 using Serilog;
 
-namespace Articles.Models
+namespace Articles.Dapper
 {
     /// <summary>
     /// Репозиторий статей
@@ -13,8 +15,8 @@ namespace Articles.Models
     public class ArticlesRepository : IArticlesRepository
     {
         // Для сокращения объема запрашиваемых данных текст передается только при запросе отдельной статьи
-        private const string GetQuery = "select id, title, author, content, created from articles"; 
-        private const string FindQuery = "select * from articles where id = @id";
+        private const string GetQuery = "select id, title, author, created from articles"; 
+        private const string FindQuery = "select id, title, author, content, created from articles where id = @id";
         private const string CreateQuery = "insert into articles(title, author, content) values(@Title, @Author, @Content) returning id";
         private const string UpdateQuery = "update articles set title = @Title, author = @Author, content = @Content where id = @Id";
         private const string DeleteQuery = "delete from articles where id = @id";
@@ -24,10 +26,9 @@ namespace Articles.Models
         /// <summary>
         /// Конструктор репозитория статей.
         /// </summary>
-        public ArticlesRepository()
+        public ArticlesRepository(IDbConnection connection)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["PostgreConnection"].ConnectionString;
-            connection = new NpgsqlConnection(connectionString);
+            this.connection = connection;
         }
 
         /// <summary>
@@ -81,14 +82,6 @@ namespace Articles.Models
         {
             connection.Execute(DeleteQuery, new { id });
             Log.Information($"Article deleted (Id={id})");
-        }
-
-        /// <summary>
-        /// Освободить ресурсы
-        /// </summary>
-        public void Dispose()
-        {
-            connection?.Dispose();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.ServiceModel;
-using Articles.Models;
+using Articles.Services.Models;
 
 namespace Articles.Services
 {
@@ -14,7 +14,7 @@ namespace Articles.Services
         /// </summary>
         /// <returns>Возвращает массив всех имеющихся статей.</returns>
         [OperationContract]
-        Article[] GetAll();
+        ArticleData[] GetAll();
 
         /// <summary>
         /// Получить отдельную статью
@@ -22,21 +22,21 @@ namespace Articles.Services
         /// <param name="id">Идентификатор статьи.</param>
         /// <returns>Возвращает объект запрашиваемой статьи.</returns>
         [OperationContract]
-        Article Get(long id);
+        ArticleData Get(long id);
 
         /// <summary>
         /// Создать новую статью
         /// </summary>
         /// <param name="article">Объект создаваемой стаьи</param>
         [OperationContract]
-        long Create(Article article);
+        long? Create(ArticleData article);
 
         /// <summary>
         /// Обновить имеющуюся статью
         /// </summary>
         /// <param name="article">Объект обновляемой статьи</param>
         [OperationContract]
-        void Update(Article article);
+        void Update(ArticleData article);
 
         /// <summary>
         /// Удалить статью

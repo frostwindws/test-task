@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using Articles.Models;
+using Articles.Services.Models;
+using AutoMapper;
 
 namespace Articles.Services
 {
@@ -10,54 +12,75 @@ namespace Articles.Services
     public class ArticlesService : IArticlesService, IDisposable
     {
         /// <summary>
-        /// Репозиторий для работы со статьями
+        /// Контекст работы с данными
         /// </summary>
-        protected IArticlesRepository Repository { get; set; }
+        private IDataContext Context { get; }
 
         /// <summary>
         /// Конструктор сервиса
         /// </summary>
-        /// <param name="repository">Используемый репозиторий</param>
-        public ArticlesService(IArticlesRepository repository)
+        /// <param name="context">Используемый контекст</param>
+        public ArticlesService(IDataContext context)
         {
-            Repository = repository;
+            Context = context;
         }
-
-
+        
         /// <inheritdoc />
-        public Article[] GetAll()
+        public ArticleData[] GetAll()
         {
-            return Repository.GetCollection().ToArray();
-        }
-
-        /// <inheritdoc />
-        public Article Get(long id)
-        {
-            return Repository.Find(id);
+            IEnumerable<Article> articles = Context.Articles.GetCollection();
+            return Mapper.Map<ArticleData[]>(articles);
         }
 
         /// <inheritdoc />
-        public long Create(Article article)
+        public ArticleData Get(long id)
         {
-            return Repository.Create(article);
+            Article article = Context.Articles.Find(id);
+            ArticleData data = Mapper.Map<ArticleData>(article);
+            if (article != null)
+            {
+                IEnumerable<Comment> comments = Context.Comments.GetForArticle(article.Id);
+                data.Comments = Mapper.Map<CommentData[]>(comments);
+            }
+
+            return data;
         }
 
         /// <inheritdoc />
-        public void Update(Article article)
+        public long? Create(ArticleData article)
         {
-            Repository.Update(article);
+            if (article != null)
+            {
+                Article dbArticle = Mapper.Map<Article>(article);
+                return Context.Articles.Create(dbArticle);
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
+        public void Update(ArticleData article)
+        {
+            if (article != null)
+            {
+                Article dbArticle = Mapper.Map<Article>(article);
+                Context.Articles.Update(dbArticle);
+            }
         }
 
         /// <inheritdoc />
         public void Delete(long id)
         {
-            Repository.Delete(id);
+            Context.Articles.Delete(id);
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
-            Repository?.Dispose();
+            if (Context is IDisposable disposableContext)
+            {
+                disposableContext.Dispose();
+            }
         }
     }
 }

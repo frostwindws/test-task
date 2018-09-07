@@ -1,26 +1,126 @@
-﻿<Window x:Class="ArticlesClient.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ArticlesClient"
+        xmlns:local="clr-namespace:ArticlesClient.Models"
+        x:Class="ArticlesClient.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="{Binding Text, ElementName=ArticleTitleBlock}" Height="450" Width="800">
+    <Window.Resources>
+        <SolidColorBrush x:Key="AdditionalTextBrush" Color="#FF555555"/>
+        <SolidColorBrush x:Key="CommentBorderBrush" Color="#FF4D6DC1"/>
+        <SolidColorBrush x:Key="CommentTitleForeground" Color="Azure"/>
+        <Style x:Key="ArticlesButton">
+            <Setter Property="FrameworkElement.MinHeight" Value="50px"/>
+            <Setter Property="FrameworkElement.Cursor" Value="Hand"/>
+            <Setter Property="Control.BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Control.Background" Value="{x:Null}"/>
+            <Setter Property="Control.BorderBrush" Value="{StaticResource AdditionalTextBrush}"/>
+        </Style>
+        <Style x:Key="ArticlesPanel">
+            <Setter Property="Control.BorderThickness" Value="0,0,1,0"/>
+            <Setter Property="Control.BorderBrush" Value="{StaticResource AdditionalTextBrush}"/>
+        </Style>
+        <Style x:Key="ArticleTitle">
+            <Setter Property="FrameworkElement.Margin" Value="20"/>
+            <Setter Property="Control.FontSize" Value="30"/>
+        </Style>
+        <Style x:Key="Content">
+            <Setter Property="FrameworkElement.Margin" Value="5"/>
+            <Setter Property="Control.FontSize" Value="17"/>
+            <Setter Property="FrameworkElement.HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style x:Key="ArticleFooter">
+            <Setter Property="FrameworkElement.Margin" Value="5"/>
+            <Setter Property="Control.FontSize" Value="12"/>
+            <Setter Property="FrameworkElement.HorizontalAlignment" Value="Right"/>
+            <Setter Property="Control.Foreground" Value="{StaticResource AdditionalTextBrush}"/>
+        </Style>
+        <Style x:Key="CommentsBlockTitle">
+            <Setter Property="FrameworkElement.Margin" Value="20,5,20,5"/>
+            <Setter Property="Control.FontSize" Value="20"/>
+        </Style>
+        <Style x:Key="CommentBlock">
+            <Setter Property="FrameworkElement.Margin" Value="20,5,20,5"/>
+        </Style>
+        <Style x:Key="CommentTitle" TargetType="{x:Type Border}">
+            <Setter Property="Control.Background" Value="{StaticResource CommentBorderBrush}"/>
+            <Setter Property="CornerRadius" Value="5,5,0,0"/>
+            <Setter Property="Control.FontWeight" Value="Bold"/>
+            <Setter Property="Control.FontSize" Value="12"/>
+        </Style>
+        <Style x:Key="CommentContent" TargetType="{x:Type Border}">
+            <Setter Property="CornerRadius" Value="0,0,5,5"/>
+            <Setter Property="Control.BorderBrush" Value="{StaticResource CommentBorderBrush}"/>
+            <Setter Property="Control.BorderThickness" Value="1"/>
+            <Setter Property="Control.FontSize" Value="17"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+    </Window.Resources>
+    <Window.DataContext>
+        <local:ViewDataContainer/>
+    </Window.DataContext>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.RowSpan="3" Name="ArticlesPanel" >
-            
-        </StackPanel>
-        <TextBlock Grid.Column="1" Grid.Row="0" Name="ArticleTitleBlock" />
-        <TextBlock Grid.Column="1" Grid.Row="1" Name="ArticleContentBlock" />
-        <StackPanel Grid.Column="1" Grid.Row="2" Name="CommentsPanel" />
+        <ItemsControl x:Name="ItemsControl" Grid.Column="0" Grid.RowSpan="3" Style="{StaticResource ArticlesPanel}" ItemsSource="{Binding ArticlesList}"  >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding Title}" Style="{StaticResource ArticlesButton}" Click="ArticlesListButton_OnClick"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ScrollViewer Grid.Column="1">
+            <StackPanel Visibility="{Binding TargetNullValue=Hidden}" DataContext="{Binding DataContext.CurrentArticle, RelativeSource={RelativeSource AncestorType=Window}}" >
+                <TextBlock  x:Name="ArticleTitleBlock" Text="{Binding Title}" Style="{StaticResource ArticleTitle}" />
+                <TextBlock Text="{Binding Content}" Style="{StaticResource Content}" />
+                <TextBlock Style="{StaticResource ArticleFooter}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="By {0} at {1:dd.MM.yyyy HH:mm}">
+                            <Binding Path="Author"/>
+                            <Binding Path="Created"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Text="Comments" Style="{StaticResource CommentsBlockTitle}" />
+                <ItemsControl ItemsSource="{Binding Comments}" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Style="{StaticResource CommentBlock}">
+                                <Border Style="{StaticResource CommentTitle}">
+                                    <Label>
+                                        <TextBlock Foreground="{StaticResource CommentTitleForeground}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="By {0} at {1:dd.MM.yyyy HH:mm}">
+                                                    <Binding Path="Author" />
+                                                    <Binding Path="Created" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Label>
+                                </Border>
+                                <Border Style="{StaticResource CommentContent}">
+                                    <TextBlock Text="{Binding Content}" Style="{StaticResource Content}"/>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </Window>

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Articles.Models
 {
     /// <summary>
     /// Интерфейс репозитория коментариев
     /// </summary>
-    public interface ICommentsRepository : IRepository<Comment>, IDisposable
+    public interface ICommentsRepository : IRepository<Comment>
     {
         /// <summary>
         /// Получить коментарии для статьи

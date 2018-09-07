@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
-namespace Articles.Models
+namespace ArticlesClient.Models
 {
     /// <summary>
-    /// Модель статьи
+    /// Модель статьи для отображения
     /// </summary>
-    public class Article
+    internal class ArticleView
     {
         /// <summary>
         /// Идентификатор
@@ -32,5 +33,9 @@ namespace Articles.Models
         /// </summary>
         public DateTime Created { get; set; }
 
+        /// <summary>
+        /// Коллекция комментариев
+        /// </summary>
+        public ObservableCollection<CommentView> Comments { get; set; }
     }
 }

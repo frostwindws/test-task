@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Articles.Models
+namespace ArticlesClient.Models
 {
     /// <summary>
-    /// Модель статьи
+    /// Модель комментария к статье для отображения
     /// </summary>
-    public class Article
+    internal class CommentView
     {
         /// <summary>
         /// Идентификатор
@@ -13,9 +13,9 @@ namespace Articles.Models
         public long Id { get; set; }
 
         /// <summary>
-        /// Заголовок
+        /// Идентификатор статьи
         /// </summary>
-        public string Title { get; set; }
+        public long ArticleId { get; set; }
 
         /// <summary>
         /// Автор
@@ -31,6 +31,5 @@ namespace Articles.Models
         /// Дата создания
         /// </summary>
         public DateTime Created { get; set; }
-
     }
 }

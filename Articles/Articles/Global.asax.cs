@@ -8,6 +8,7 @@ namespace Articles
     {
         protected void Application_Start(object sender, EventArgs e)
         {
+            MapperConfiguration.Init();
             AutofacConfiguration.Init();
             SerilogConfiguration.Init();
         }
