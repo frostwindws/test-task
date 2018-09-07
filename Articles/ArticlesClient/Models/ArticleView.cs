@@ -6,7 +6,7 @@ namespace ArticlesClient.Models
     /// <summary>
     /// Модель статьи для отображения
     /// </summary>
-    internal class ArticleView
+    public class ArticleView
     {
         /// <summary>
         /// Идентификатор
@@ -32,6 +32,11 @@ namespace ArticlesClient.Models
         /// Дата создания
         /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Флаг нового объекта
+        /// </summary>
+        public bool IsNew { get; set; }
 
         /// <summary>
         /// Коллекция комментариев

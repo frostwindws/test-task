@@ -5,7 +5,7 @@ namespace ArticlesClient.Models
     /// <summary>
     /// Модель комментария к статье для отображения
     /// </summary>
-    internal class CommentView
+    public class CommentView
     {
         /// <summary>
         /// Идентификатор
@@ -26,6 +26,11 @@ namespace ArticlesClient.Models
         /// Текст
         /// </summary>
         public string Content { get; set; }
+
+        /// <summary>
+        /// Флаг нового объекта
+        /// </summary>
+        public bool IsNew { get; set; }
 
         /// <summary>
         /// Дата создания

@@ -36,6 +36,9 @@ namespace ArticlesClient.Models
             get => currentArticle;
             set
             {
+                // Допонительно производится сброс редактирования
+                EditableArticle = null;
+                EditableComment = null;
                 currentArticle = value;
                 OnPropertyChanged();
             }
