@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Articles", "Articles\Articles.csproj", "{0F4B282A-68D1-4B31-BABC-BB94C1A73E9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Articles", "Source\Articles\Articles.csproj", "{0F4B282A-68D1-4B31-BABC-BB94C1A73E9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesClient", "ArticlesClient\ArticlesClient.csproj", "{4A76316D-A57A-427B-A190-0FD927B67248}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesClient", "Source\ArticlesClient\ArticlesClient.csproj", "{4A76316D-A57A-427B-A190-0FD927B67248}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0F4B282A-68D1-4B31-BABC-BB94C1A73E9F} = {0F4B282A-68D1-4B31-BABC-BB94C1A73E9F}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesTests", "ArticlesTests\ArticlesTests.csproj", "{E79B1A6F-9EEA-45AB-A156-423ED3EE587E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesTests", "Source\ArticlesTests\ArticlesTests.csproj", "{E79B1A6F-9EEA-45AB-A156-423ED3EE587E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

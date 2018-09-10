@@ -1,0 +1,96 @@
+15:53:15:4057 [Verbose]: Accepting request: /Services/ArticlesService.svc
+15:53:16:2922 [Verbose]: Accepting request: /Services/ArticlesService.svc
+15:53:16:3012 [Verbose]: Accepting request: /Services/ArticlesService.svc/mex
+15:53:16:6582 [Verbose]: Accepting request: /Services/ArticlesService.svc
+15:53:16:6702 [Verbose]: Accepting request: /Services/ArticlesService.svc
+15:53:16:7223 [Verbose]: Accepting request: /Services/ArticlesService.svc
+15:53:16:9940 [Verbose]: Accepting request: /Services/ArticlesService.svc
+15:53:16:9991 [Verbose]: Accepting request: /Services/ArticlesService.svc
+15:53:25:2382 [Verbose]: Accepting request: /Services/ArticlesService.svc
+15:53:25:4548 [Debug]: ArticlesService: executing GetAll
+15:54:35:9969 [Verbose]: CommentsService: executing GetForArticle
+15:56:48:1653 [Verbose]: ArticlesService: executing GetAll
+15:56:52:7527 [Verbose]: ArticlesService: executing Create
+15:56:52:7928 [Error]: Error accured while executing ArticlesService.Create
+Npgsql.PostgresException (0x80004005): 23502: нулевое значение в столбце "title" нарушает ограничение NOT NULL
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в System.Threading.Tasks.ValueTask`1.get_Result()
+   в Npgsql.NpgsqlDataReader.<NextResult>d__46.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlDataReader.NextResult()
+   в Npgsql.NpgsqlCommand.<ExecuteDbDataReader>d__100.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   в System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   в Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   в Dapper.SqlMapper.QueryRowImpl[T](IDbConnection cnn, Row row, CommandDefinition& command, Type effectiveType)
+   в Dapper.SqlMapper.QuerySingle[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType)
+   в Articles.Models.ArticlesRepository.Create(Article record) в D:\GitHub\test-task\Articles\Articles\Models\ArticlesRepository.cs:строка 61
+   в Articles.Services.ArticlesService.Create(Article article) в D:\GitHub\test-task\Articles\Articles\Services\ArticlesService.svc.cs:строка 42
+   в Castle.Proxies.Invocations.IArticlesService_Create.InvokeMethodOnTarget()
+   в Castle.DynamicProxy.AbstractInvocation.Proceed()
+   в Articles.Initialization.LoggerInterceptor.Intercept(IInvocation invocation) в D:\GitHub\test-task\Articles\Articles\Initialization\LoggerInterceptor.cs:строка 14
+16:04:23:1609 [Verbose]: ArticlesService: executing GetAll
+16:42:16:0771 [Verbose]: ArticlesService: executing GetAll
+16:42:46:1765 [Verbose]: ArticlesService: executing GetAll
+16:44:46:1640 [Verbose]: ArticlesService: executing GetAll
+16:45:36:7811 [Verbose]: ArticlesService: executing GetAll
+16:46:07:4626 [Verbose]: ArticlesService: executing GetAll
+16:47:34:5018 [Verbose]: ArticlesService: executing GetAll
+16:47:54:5006 [Verbose]: ArticlesService: executing GetAll
+16:49:00:2023 [Verbose]: ArticlesService: executing GetAll
+16:52:34:9043 [Verbose]: ArticlesService: executing GetAll
+16:53:05:0844 [Verbose]: ArticlesService: executing GetAll
+16:57:01:4654 [Verbose]: ArticlesService: executing GetAll
+16:57:13:7608 [Verbose]: ArticlesService: executing Get
+16:57:37:1402 [Verbose]: ArticlesService: executing GetAll
+16:57:40:2386 [Verbose]: ArticlesService: executing Get
+17:15:58:4928 [Verbose]: ArticlesService: executing GetAll
+17:16:00:7799 [Verbose]: ArticlesService: executing Get
+17:16:00:8200 [Verbose]: CommentsService: executing GetForArticle
+17:18:17:4392 [Verbose]: ArticlesService: executing GetAll
+17:18:19:5237 [Verbose]: ArticlesService: executing Get
+17:18:19:5327 [Verbose]: CommentsService: executing GetForArticle
+17:18:20:1062 [Verbose]: ArticlesService: executing Get
+17:18:20:1103 [Verbose]: CommentsService: executing GetForArticle
+17:18:20:6036 [Verbose]: ArticlesService: executing Get
+17:18:20:6096 [Verbose]: CommentsService: executing GetForArticle
+17:18:21:0267 [Verbose]: ArticlesService: executing Get
+17:18:21:0327 [Verbose]: CommentsService: executing GetForArticle
+17:18:59:5633 [Verbose]: ArticlesService: executing GetAll
+17:19:01:0084 [Verbose]: ArticlesService: executing Get
+17:19:01:0184 [Verbose]: CommentsService: executing GetForArticle
+17:19:01:4886 [Verbose]: ArticlesService: executing Get
+17:19:01:4937 [Verbose]: CommentsService: executing GetForArticle
+17:19:01:8168 [Verbose]: ArticlesService: executing Get
+17:19:01:8218 [Verbose]: CommentsService: executing GetForArticle
+17:19:20:9396 [Verbose]: ArticlesService: executing GetAll
+17:19:58:7983 [Verbose]: ArticlesService: executing GetAll
+17:25:43:3169 [Verbose]: ArticlesService: executing GetAll
+18:08:19:3882 [Verbose]: ArticlesService: executing GetAll
+18:08:21:5428 [Verbose]: ArticlesService: executing Get
+18:08:21:5929 [Verbose]: CommentsService: executing GetForArticle
+18:08:21:9358 [Verbose]: ArticlesService: executing Get
+18:08:21:9418 [Verbose]: CommentsService: executing GetForArticle
+18:08:23:8832 [Verbose]: ArticlesService: executing Get
+18:08:23:8882 [Verbose]: CommentsService: executing GetForArticle
+18:08:24:6542 [Verbose]: ArticlesService: executing Get
+18:08:24:6592 [Verbose]: CommentsService: executing GetForArticle
+18:08:32:5053 [Verbose]: ArticlesService: executing Get
+18:08:32:5103 [Verbose]: CommentsService: executing GetForArticle
+18:08:33:2803 [Verbose]: ArticlesService: executing Get
+18:08:33:2863 [Verbose]: CommentsService: executing GetForArticle
+18:08:33:8009 [Verbose]: ArticlesService: executing Get
+18:08:33:8059 [Verbose]: CommentsService: executing GetForArticle
+18:10:07:3604 [Verbose]: ArticlesService: executing Get
+18:10:07:3674 [Verbose]: CommentsService: executing GetForArticle
