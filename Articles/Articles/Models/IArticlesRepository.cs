@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Articles.Models
+﻿namespace Articles.Models
 {
     /// <summary>
     /// Интерфейс репозитория статей

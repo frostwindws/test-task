@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
@@ -71,6 +74,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\CommentEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CommentViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -79,6 +90,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Utils\AutofacHelper.cs" />
+    <Compile Include="Clients\Wcf\ArticlesRepository.cs" />
+    <Compile Include="Clients\IDataClient.cs" />
+    <Compile Include="Clients\IRepository.cs" />
+    <Compile Include="Clients\Wcf\CommentsRepository.cs" />
+    <Compile Include="Clients\Wcf\WcfDataClient.cs" />
     <Compile Include="Connected Services\ArticlesService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -95,7 +112,14 @@
     <Compile Include="Controls\ArticleViewer.xaml.cs">
       <DependentUpon>ArticleViewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\EditorTitleConverter.cs" />
+    <Compile Include="Controls\CommentEditor.xaml.cs">
+      <DependentUpon>CommentEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CommentViewer.xaml.cs">
+      <DependentUpon>CommentViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\AutomapHelper.cs" />
+    <Compile Include="Utils\EditorTitleConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -123,7 +147,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Connected Services\ArticlesService\ArticlesClient.ArticlesService.ArticleData.datasource">
+    <None Include="Connected Services\ArticlesService\ArticlesClient.ArticlesService.ArticleDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ArticlesService\ArticlesService.wsdl" />
@@ -136,7 +160,7 @@
     <None Include="Connected Services\ArticlesService\ArticlesService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\CommentsService\ArticlesClient.CommentsService.CommentData.datasource">
+    <None Include="Connected Services\CommentsService\ArticlesClient.CommentsService.CommentDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\CommentsService\CommentsService.wsdl" />

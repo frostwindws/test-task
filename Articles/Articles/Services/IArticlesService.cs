@@ -14,7 +14,7 @@ namespace Articles.Services
         /// </summary>
         /// <returns>Возвращает массив всех имеющихся статей.</returns>
         [OperationContract]
-        ArticleData[] GetAll();
+        ArticleDto[] GetAll();
 
         /// <summary>
         /// Получить отдельную статью
@@ -22,21 +22,21 @@ namespace Articles.Services
         /// <param name="id">Идентификатор статьи.</param>
         /// <returns>Возвращает объект запрашиваемой статьи.</returns>
         [OperationContract]
-        ArticleData Get(long id);
+        ArticleDto Get(long id);
 
         /// <summary>
         /// Создать новую статью
         /// </summary>
         /// <param name="article">Объект создаваемой стаьи</param>
         [OperationContract]
-        long? Create(ArticleData article);
+        ArticleDto Create(ArticleDto article);
 
         /// <summary>
         /// Обновить имеющуюся статью
         /// </summary>
         /// <param name="article">Объект обновляемой статьи</param>
         [OperationContract]
-        void Update(ArticleData article);
+        ArticleDto Update(ArticleDto article);
 
         /// <summary>
         /// Удалить статью

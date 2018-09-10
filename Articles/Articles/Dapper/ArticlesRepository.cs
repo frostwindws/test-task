@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using Articles.Models;
 using Dapper;
-using Npgsql;
 using Serilog;
 
 namespace Articles.Dapper
@@ -17,8 +15,8 @@ namespace Articles.Dapper
         // Для сокращения объема запрашиваемых данных текст передается только при запросе отдельной статьи
         private const string GetQuery = "select id, title, author, created from articles"; 
         private const string FindQuery = "select id, title, author, content, created from articles where id = @id";
-        private const string CreateQuery = "insert into articles(title, author, content) values(@Title, @Author, @Content) returning id";
-        private const string UpdateQuery = "update articles set title = @Title, author = @Author, content = @Content where id = @Id";
+        private const string CreateQuery = "insert into articles(title, author, content) values(@Title, @Author, @Content) returning id, title, author, content, created";
+        private const string UpdateQuery = "update articles set title = @Title, author = @Author, content = @Content where id = @Id returning id, title, author, content, created";
         private const string DeleteQuery = "delete from articles where id = @id";
 
         private readonly IDbConnection connection;
@@ -47,7 +45,7 @@ namespace Articles.Dapper
         /// <returns>
         /// Возвращает найденую статью.
         /// Если статья отсутствует - возвращает null</returns>
-        public Article Find(long id)
+        public Article Get(long id)
         {
             return connection.QuerySingleOrDefault<Article>(FindQuery, new { id });
         }
@@ -57,21 +55,22 @@ namespace Articles.Dapper
         /// </summary>
         /// <param name="record">Создаваемая статья</param>
         /// <returns>Возвращает идентификатор созданной статьи</returns>
-        public long Create(Article record)
+        public Article Create(Article record)
         {
-            var id = connection.QuerySingle<long>(CreateQuery, record);
-            Log.Information($"Created new article (Id={id}): \"{record.Title}\" by {record.Author}");
-            return id;
+            var createdArticle = connection.QuerySingle<Article>(CreateQuery, record);
+            Log.Information($"Created new article (Id={createdArticle.Id}): \"{createdArticle.Title}\" by {createdArticle.Author}");
+            return createdArticle;
         }
 
         /// <summary>
         /// Обновление имеющейся статьи
         /// </summary>
         /// <param name="record">Обновляемая статья</param>
-        public void Update(Article record)
+        public Article Update(Article record)
         {
-            connection.Execute(UpdateQuery, record);
-            Log.Information($"Article updated (Id={record.Id}): \"{record.Title}\" by {record.Author}");
+            var updatedArticle = connection.QuerySingle<Article>(UpdateQuery, record);
+            Log.Information($"Article updated (Id={updatedArticle.Id}): \"{updatedArticle.Title}\"");
+            return updatedArticle;
         }
 
         /// <summary>

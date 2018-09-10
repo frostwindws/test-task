@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:models="clr-namespace:ArticlesClient.Models"
              xmlns:converters="clr-namespace:ArticlesClient.Converters"
+             xmlns:models="clr-namespace:ArticlesClient.Models"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -20,20 +20,20 @@
             <Setter Property="Control.FontSize" Value="30"></Setter>
         </Style>
         <Style x:Key="EditButtonsStyle">
-            <Setter Property="Control.Width" Value="150"></Setter>
+            <Setter Property="Control.Width" Value="100"></Setter>
             <Setter Property="Control.Height" Value="30"></Setter>
             <Setter Property="Control.Margin" Value="10"></Setter>
         </Style>
     </UserControl.Resources>
     <Grid Style="{StaticResource EditorStyle}">
         <StackPanel Orientation="Vertical" Margin="10">
-            <Label Content="{Binding IsNew, Converter={StaticResource EditorTitleConverter}}" Style="{StaticResource TitleStyle}"/>
+            <Label Content="{Binding IsNew, Converter={StaticResource EditorTitleConverter}, ConverterParameter=article}" Style="{StaticResource TitleStyle}"/>
             <Label Content="Title*"/>
             <TextBox Text="{Binding Title, Mode=TwoWay}" AutomationProperties.IsRequiredForForm="True" />
             <Label Content="Author*"/>
             <TextBox Text="{Binding Author, Mode=TwoWay}" IsEnabled="{Binding IsNew}" AutomationProperties.IsRequiredForForm="True"/>
             <Label Content="Content*"/>
-            <TextBox Text="{Binding Content, Mode=TwoWay}" MinLines="7" AutomationProperties.IsRequiredForForm="True"></TextBox>
+            <TextBox Text="{Binding Content, Mode=TwoWay}" MinLines="7" AcceptsReturn="True" AcceptsTab="True" AutomationProperties.IsRequiredForForm="True"></TextBox>
         </StackPanel>
         <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Right">
             <Button Content="Save" Style="{StaticResource EditButtonsStyle}" Click="SaveBase_OnClick"/>

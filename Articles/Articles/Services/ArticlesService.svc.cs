@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Articles.Models;
 using Articles.Services.Models;
 using AutoMapper;
@@ -26,46 +27,48 @@ namespace Articles.Services
         }
         
         /// <inheritdoc />
-        public ArticleData[] GetAll()
+        public ArticleDto[] GetAll()
         {
-            IEnumerable<Article> articles = Context.Articles.GetCollection();
-            return Mapper.Map<ArticleData[]>(articles);
+            IEnumerable<Article> articles = Context.Articles.GetCollection().OrderByDescending(a => a.Created);
+            return Mapper.Map<ArticleDto[]>(articles);
         }
 
         /// <inheritdoc />
-        public ArticleData Get(long id)
+        public ArticleDto Get(long id)
         {
-            Article article = Context.Articles.Find(id);
-            ArticleData data = Mapper.Map<ArticleData>(article);
+            Article article = Context.Articles.Get(id);
+            ArticleDto data = Mapper.Map<ArticleDto>(article);
             if (article != null)
             {
                 IEnumerable<Comment> comments = Context.Comments.GetForArticle(article.Id);
-                data.Comments = Mapper.Map<CommentData[]>(comments);
+                data.Comments = Mapper.Map<CommentDto[]>(comments);
             }
 
             return data;
         }
 
         /// <inheritdoc />
-        public long? Create(ArticleData article)
+        public ArticleDto Create(ArticleDto article)
         {
             if (article != null)
             {
                 Article dbArticle = Mapper.Map<Article>(article);
-                return Context.Articles.Create(dbArticle);
+                return Mapper.Map<ArticleDto>(Context.Articles.Create(dbArticle));
             }
 
             return null;
         }
 
         /// <inheritdoc />
-        public void Update(ArticleData article)
+        public ArticleDto Update(ArticleDto article)
         {
             if (article != null)
             {
                 Article dbArticle = Mapper.Map<Article>(article);
-                Context.Articles.Update(dbArticle);
+                return Mapper.Map<ArticleDto>(Context.Articles.Update(dbArticle));
             }
+
+            return null;
         }
 
         /// <inheritdoc />

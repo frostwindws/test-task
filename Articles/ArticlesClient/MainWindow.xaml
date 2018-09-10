@@ -5,21 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ArticlesClient.Models"
         xmlns:controls="clr-namespace:ArticlesClient.Controls"
-        x:Class="ArticlesClient.MainWindow"
+    x:Class="ArticlesClient.MainWindow"
         mc:Ignorable="d"
         Title="Articles" Height="450" Width="800">
     <Window.Resources>
-        <SolidColorBrush x:Key="AdditionalTextBrush" Color="#FF555555"/>
+        <SolidColorBrush x:Key="BordersBrush" Color="#FF555555"/>
         <Style x:Key="ArticlesButton">
-            <Setter Property="FrameworkElement.MinHeight" Value="50px"/>
+            <Setter Property="FrameworkElement.Height" Value="50px"/>
             <Setter Property="FrameworkElement.Cursor" Value="Hand"/>
             <Setter Property="Control.BorderThickness" Value="0,0,0,1"/>
             <Setter Property="Control.Background" Value="{x:Null}"/>
-            <Setter Property="Control.BorderBrush" Value="{StaticResource AdditionalTextBrush}"/>
+            <Setter Property="Control.BorderBrush" Value="{StaticResource BordersBrush}"/>
         </Style>
         <Style x:Key="ArticlesPanel">
             <Setter Property="Control.BorderThickness" Value="0,0,1,0"/>
-            <Setter Property="Control.BorderBrush" Value="{StaticResource AdditionalTextBrush}"/>
+            <Setter Property="Control.BorderBrush" Value="{StaticResource BordersBrush}"/>
         </Style>
     </Window.Resources>
     <Window.DataContext>
@@ -31,23 +31,27 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Border Style="{StaticResource ArticlesPanel}" Grid.Column="0">
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
-            <StackPanel Orientation="Vertical" >
-                <ItemsControl ItemsSource="{Binding ArticlesList}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Content="{Binding Title}" Style="{StaticResource ArticlesButton}" Click="ArticlesListButton_OnClick"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Button Content="Add new" Style="{StaticResource ArticlesButton}" Click="CreateArticle_OnClick"/>
-            </StackPanel>
-        </ScrollViewer>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Orientation="Vertical" Name="ArticlesPanel" >
+                    <ItemsControl ItemsSource="{Binding ArticlesList}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource ArticlesButton}" Click="ArticlesListButton_OnClick">
+                                    <TextBlock Text="{Binding Title}" TextTrimming="WordEllipsis" TextWrapping="Wrap"></TextBlock>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Separator Margin="0,5,0,5"/>
+                    <Button Content="Refresh" Style="{StaticResource ArticlesButton}" Click="RefreshArticle_OnClick"/>
+                    <Button Content="Add new" Style="{StaticResource ArticlesButton}" Click="CreateArticle_OnClick"/>
+                </StackPanel>
+            </ScrollViewer>
         </Border>
         <controls:ArticleViewer Grid.Column="1" 
                                 DataContext="{Binding DataContext.CurrentArticle, RelativeSource={RelativeSource AncestorType=Window}}" 
@@ -56,11 +60,17 @@
                                 DoArticleDelete="ArticleViewer_OnDoArticleDelete"
                                 DoCommentAdd="ArticleViewer_OnDoCommentAdd"
                                 DoCommentEdit="ArticleViewer_OnDoCommentEdit"
-                                DoCommentDelete="ArticleViewer_OnDoCommentDelete"/>
+                                DoCommentDelete="ArticleViewer_OnDoCommentDelete"
+                                DoRefresh="ArticleViewer_OnDoRefresh"/>
         <controls:ArticleEditor Grid.Column="1" 
                                 DataContext="{Binding DataContext.EditableArticle, RelativeSource={RelativeSource AncestorType=Window}}" 
                                 Visibility="{Binding TargetNullValue=Hidden}"
                                 CommitEdit="ArticleEditor_OnCommitEdit"
                                 CancelEdit="ArticleEditor_OnCancelEdit"/>
+        <controls:CommentEditor Grid.Column="1" VerticalAlignment="Bottom"
+                                DataContext="{Binding DataContext.EditableComment, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                Visibility="{Binding TargetNullValue=Hidden}"
+                                CommitEdit="CommentEditor_OnCommentCommit"
+                                CancelEdit="CommentEditor_OnCommentCancel"/>
     </Grid>
 </Window>

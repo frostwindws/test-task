@@ -9,7 +9,7 @@
   <xs:element name="GetAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="GetAllResult" nillable="true" type="q1:ArrayOfArticleData" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="GetAllResult" nillable="true" type="q1:ArrayOfArticleDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -23,34 +23,36 @@
   <xs:element name="GetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="GetResult" nillable="true" type="q2:ArticleData" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="GetResult" nillable="true" type="q2:ArticleDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Create">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="article" nillable="true" type="q3:ArticleData" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="article" nillable="true" type="q3:ArticleDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="CreateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="CreateResult" nillable="true" type="xs:long" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="CreateResult" nillable="true" type="q4:ArticleDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Update">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="article" nillable="true" type="q4:ArticleData" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="article" nillable="true" type="q5:ArticleDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdateResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="UpdateResult" nillable="true" type="q6:ArticleDto" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Delete">

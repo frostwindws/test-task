@@ -8,7 +8,7 @@ namespace Articles.Services.Models
     /// Модель статьи
     /// </summary>
     [DataContract]
-    public class ArticleData
+    public class ArticleDto
     {
         /// <summary>
         /// Идентификатор
@@ -44,6 +44,6 @@ namespace Articles.Services.Models
         /// Набор комментариев к статье
         /// </summary>
         [DataMember]
-        public IEnumerable<CommentData> Comments { get; set; }
+        public IEnumerable<CommentDto> Comments { get; set; }
     }
 }

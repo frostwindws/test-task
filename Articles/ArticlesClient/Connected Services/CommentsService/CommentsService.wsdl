@@ -7,6 +7,18 @@
       <xsd:import schemaLocation="http://localhost:51430/Services/CommentsService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="ICommentsService_GetAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAll" />
+  </wsdl:message>
+  <wsdl:message name="ICommentsService_GetAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICommentsService_Get_InputMessage">
+    <wsdl:part name="parameters" element="tns:Get" />
+  </wsdl:message>
+  <wsdl:message name="ICommentsService_Get_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetResponse" />
+  </wsdl:message>
   <wsdl:message name="ICommentsService_GetForArticle_InputMessage">
     <wsdl:part name="parameters" element="tns:GetForArticle" />
   </wsdl:message>
@@ -32,6 +44,14 @@
     <wsdl:part name="parameters" element="tns:DeleteResponse" />
   </wsdl:message>
   <wsdl:portType name="ICommentsService">
+    <wsdl:operation name="GetAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICommentsService/GetAll" message="tns:ICommentsService_GetAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICommentsService/GetAllResponse" message="tns:ICommentsService_GetAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Get">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICommentsService/Get" message="tns:ICommentsService_Get_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICommentsService/GetResponse" message="tns:ICommentsService_Get_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetForArticle">
       <wsdl:input wsaw:Action="http://tempuri.org/ICommentsService/GetForArticle" message="tns:ICommentsService_GetForArticle_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICommentsService/GetForArticleResponse" message="tns:ICommentsService_GetForArticle_OutputMessage" />
@@ -51,6 +71,24 @@
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICommentsService" type="tns:ICommentsService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAll">
+      <soap:operation soapAction="http://tempuri.org/ICommentsService/GetAll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get">
+      <soap:operation soapAction="http://tempuri.org/ICommentsService/Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetForArticle">
       <soap:operation soapAction="http://tempuri.org/ICommentsService/GetForArticle" style="document" />
       <wsdl:input>

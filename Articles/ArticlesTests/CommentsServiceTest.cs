@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Articles.Models;
 using Articles.Services;
@@ -14,10 +15,11 @@ namespace ArticlesTests
     /// <summary>
     /// Тест сервиса коментариев 
     /// </summary>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class CommentsServiceTest
     {
-        private readonly Mock<IDataContext> mock;
-        private readonly ICommentsService service;
+        private Mock<IDataContext> mock;
+        private ICommentsService service;
 
         /// <summary>
         /// Конструктор теста сервиса коментариев
@@ -26,6 +28,14 @@ namespace ArticlesTests
         {
             Mapper.Reset();
             MapperConfiguration.Init();
+        }
+
+        /// <summary>
+        /// Инициализация тестов
+        /// </summary>
+        [SetUp]
+        public void TestSetUp()
+        {
             mock = new Mock<IDataContext>();
             service = new CommentsService(mock.Object);
         }
@@ -34,7 +44,7 @@ namespace ArticlesTests
         /// По запросу комментариев к статье сервис возвращает то же количество записей, что и репозиторий
         /// </summary>
         [Test]
-        public void GetForArticleReturnsRepositorySameLengthResult()
+        public void GetForArticle_RequestCommentsForArticle_ReturnsRepositorySameLengthResult()
         {
             const long ArticleId = 1;
             IEnumerable<Comment> collection = Enumerable.Range(1, 10).Select(i => new Comment
@@ -47,34 +57,102 @@ namespace ArticlesTests
             });
 
             mock.Setup(a => a.Comments.GetForArticle(ArticleId)).Returns(collection);
-            IEnumerable<CommentData> result = service.GetForArticle(ArticleId);
+
+            IEnumerable<CommentDto> result = service.GetForArticle(ArticleId);
 
             Assert.AreEqual(collection.Count(), result.Count());
         }
 
         /// <summary>
-        /// Запрос создания вызывает метод создания репозитория 1 раз и возвращает идентификатор созаданной записи
+        /// Сервис возвращает то же количество записей, что и репозиторий
         /// </summary>
         [Test]
-        public void CreateRunCreateMethodOnceReturnsCreatedRecordId()
+        public void GetAll_RequestRecords_ReturnsRepositorySameLengthResult()
+        {
+            IEnumerable<Comment> collection = Enumerable.Range(1, 10).Select(i => new Comment
+            {
+                Id = i,
+                ArticleId = i,
+                Author = $"Test Author {i}",
+                Content = $"Test Comment {i}",
+                Created = DateTime.Now.AddHours(-i)
+            });
+
+            mock.Setup(a => a.Comments.GetCollection()).Returns(collection);
+
+            IEnumerable<CommentDto> result = service.GetAll();
+
+            Assert.AreEqual(collection.Count(), result.Count());
+        }
+
+        /// <summary>
+        /// Запрос имеющейся записи возвращает не пустой результат
+        /// </summary>
+        [Test]
+        public void Get_RequestExistingRecord_ReturnsNotNull()
+        {
+            long searchId = 1;
+            mock.Setup(a => a.Comments.Get(searchId)).Returns(new Comment());
+
+            CommentDto result = service.Get(searchId);
+
+            Assert.IsNotNull(result);
+        }
+
+        /// <summary>
+        /// Запрос отсутствующей записи возвращает null 
+        /// </summary>
+        [Test]
+        public void Get_RequestNotExistingRecord_ReturnsNull()
+        {
+            const long SearchId = 1;
+            mock.Setup(a => a.Comments.Get(SearchId)).Returns((Comment)null);
+
+            CommentDto result = service.Get(SearchId);
+
+            Assert.IsNull(result);
+        }
+
+        /// <summary>
+        /// Запрос создания вызывает метод создания репозитория 1 раз
+        /// </summary>
+        [Test]
+        public void Create_RequestNewCommentCreate_RunCreateMethodOnce()
+        {
+            var commentToCreate = new CommentDto();
+            var comment = new Comment();
+            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(comment);
+
+            service.Create(commentToCreate);
+
+            mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Once);
+        }
+
+        /// <summary>
+        /// Запрос создания возвращает идентификатор созаданной записи
+        /// </summary>
+        [Test]
+        public void Create_RequestNewCommentCreate_ReturnsCreatedRecordId()
         {
             const long CreatedId = 1;
-            var commentToCreate = new CommentData();
-            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(CreatedId);
-            long? newId = service.Create(commentToCreate);
+            var commentToCreate = new CommentDto();
+            var comment = new Comment { Id = CreatedId };
+            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(comment);
 
-            mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Once, "Repository creation method wasn't called or was called more than once");
-            Assert.AreEqual(newId, CreatedId, "Returned identity isn't equal created identity");
+            CommentDto createdComment = service.Create(commentToCreate);
+
+            Assert.AreEqual(createdComment.Id, comment.Id);
         }
 
         /// <summary>
         /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз
         /// </summary>
         [Test]
-        public void UpdateRunsRepositoryUpdateMethodOnce()
+        public void Update_RequestCommentUpdate_RunsRepositoryUpdateMethodOnce()
         {
-            var commentToUpdate = new CommentData();
+            var commentToUpdate = new CommentDto();
             mock.Setup(a => a.Comments.Update(It.IsAny<Comment>()));
+
             service.Update(commentToUpdate);
 
             mock.Verify(r => r.Comments.Update(It.IsAny<Comment>()), Times.Once);
@@ -84,9 +162,11 @@ namespace ArticlesTests
         /// Запрос удаления записи выполняет метод удаления репозитория 1 раз
         /// </summary>
         [Test]
-        public void DeleteRunsRepositoryDeleteMethodOnce()
+        public void Delete_RequestNewCommentDelete_RunsRepositoryDeleteMethodOnce()
         {
             const long TargetId = 1;
+            mock.Setup(m => m.Comments.Delete(TargetId));
+
             service.Delete(TargetId);
 
             mock.Verify(r => r.Comments.Delete(TargetId), Times.Once);

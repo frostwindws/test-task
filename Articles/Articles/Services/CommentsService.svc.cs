@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Articles.Models;
 using Articles.Services.Models;
 using AutoMapper;
@@ -25,33 +26,45 @@ namespace Articles.Services
             Context = context;
         }
 
-        /// <inheritdoc />
-        public CommentData[] GetForArticle(long articleid)
+        public CommentDto[] GetAll()
         {
-            IEnumerable<Comment> comments = Context.Comments.GetForArticle(articleid);
-            return Mapper.Map<CommentData[]>(comments);
+            return Mapper.Map<CommentDto[]>(Context.Comments.GetCollection().OrderByDescending(a => a.Created));
+        }
+
+        public CommentDto Get(long id)
+        {
+            return Mapper.Map<CommentDto>(Context.Comments.Get(id));
         }
 
         /// <inheritdoc />
-        public long? Create(CommentData comment)
+        public CommentDto[] GetForArticle(long articleid)
+        {
+            IEnumerable<Comment> comments = Context.Comments.GetForArticle(articleid).OrderByDescending(a => a.Created);
+            return Mapper.Map<CommentDto[]>(comments);
+        }
+
+        /// <inheritdoc />
+        public CommentDto Create(CommentDto comment)
         {
             if (comment != null)
             {
                 Comment dbComment = Mapper.Map<Comment>(comment);
-                return Context.Comments.Create(dbComment);
+                return Mapper.Map<CommentDto>(Context.Comments.Create(dbComment));
             }
 
             return null;
         }
 
         /// <inheritdoc />
-        public void Update(CommentData comment)
+        public CommentDto Update(CommentDto comment)
         {
             if (comment != null)
             {
                 Comment dbComment = Mapper.Map<Comment>(comment);
-                Context.Comments.Update(dbComment);
+                return Mapper.Map<CommentDto>(Context.Comments.Update(dbComment));
             }
+
+            return null;
         }
 
         /// <inheritdoc />

@@ -5,7 +5,7 @@ namespace Articles.Models
     /// <summary>
     /// Интерфейс репозитория записей типа <see cref="T"/>.
     /// </summary>
-    /// <typeparam name="T">Тип записей.</typeparam>
+    /// <typeparam name="T">Тип записей репозитория.</typeparam>
     public interface IRepository<T>
     {
         /// <summary>
@@ -22,20 +22,21 @@ namespace Articles.Models
         /// Возвращает найденную запись. 
         /// Если записи с указанным идентификатором нет, возвращает null.
         /// </returns>
-        T Find(long id);
+        T Get(long id);
 
         /// <summary>
         /// Создать новую запись
         /// </summary>
         /// <param name="record">Объект создаваемой записи.</param>
-        /// <returns>Возвращает идентификатор созданной записи.</returns>
-        long Create(T record);
+        /// <returns>Возвращает данные созданной записи.</returns>
+        T Create(T record);
 
         /// <summary>
         /// Обновить имеющуюся запись.
         /// </summary>
         /// <param name="record">Обновляемая запись.</param>
-        void Update(T record);
+        /// <returns>Возвращает данные обновленной записи.</returns>
+        T Update(T record);
 
         /// <summary>
         /// Удалить запись.

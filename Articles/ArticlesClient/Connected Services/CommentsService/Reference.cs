@@ -15,9 +15,9 @@ namespace ArticlesClient.CommentsService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CommentData", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CommentDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
     [System.SerializableAttribute()]
-    public partial class CommentData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CommentDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -126,23 +126,35 @@ namespace ArticlesClient.CommentsService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CommentsService.ICommentsService")]
     public interface ICommentsService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetForArticle", ReplyAction="http://tempuri.org/ICommentsService/GetForArticleResponse")]
-        ArticlesClient.CommentsService.CommentData[] GetForArticle(long id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetAll", ReplyAction="http://tempuri.org/ICommentsService/GetAllResponse")]
+        ArticlesClient.CommentsService.CommentDto[] GetAll();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetAll", ReplyAction="http://tempuri.org/ICommentsService/GetAllResponse")]
+        System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto[]> GetAllAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Get", ReplyAction="http://tempuri.org/ICommentsService/GetResponse")]
+        ArticlesClient.CommentsService.CommentDto Get(long id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Get", ReplyAction="http://tempuri.org/ICommentsService/GetResponse")]
+        System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto> GetAsync(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetForArticle", ReplyAction="http://tempuri.org/ICommentsService/GetForArticleResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentData[]> GetForArticleAsync(long id);
+        ArticlesClient.CommentsService.CommentDto[] GetForArticle(long id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetForArticle", ReplyAction="http://tempuri.org/ICommentsService/GetForArticleResponse")]
+        System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto[]> GetForArticleAsync(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Create", ReplyAction="http://tempuri.org/ICommentsService/CreateResponse")]
-        System.Nullable<long> Create(ArticlesClient.CommentsService.CommentData comment);
+        ArticlesClient.CommentsService.CommentDto Create(ArticlesClient.CommentsService.CommentDto comment);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Create", ReplyAction="http://tempuri.org/ICommentsService/CreateResponse")]
-        System.Threading.Tasks.Task<System.Nullable<long>> CreateAsync(ArticlesClient.CommentsService.CommentData comment);
+        System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto> CreateAsync(ArticlesClient.CommentsService.CommentDto comment);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Update", ReplyAction="http://tempuri.org/ICommentsService/UpdateResponse")]
-        void Update(ArticlesClient.CommentsService.CommentData comment);
+        ArticlesClient.CommentsService.CommentDto Update(ArticlesClient.CommentsService.CommentDto comment);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Update", ReplyAction="http://tempuri.org/ICommentsService/UpdateResponse")]
-        System.Threading.Tasks.Task UpdateAsync(ArticlesClient.CommentsService.CommentData comment);
+        System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto> UpdateAsync(ArticlesClient.CommentsService.CommentDto comment);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Delete", ReplyAction="http://tempuri.org/ICommentsService/DeleteResponse")]
         void Delete(long id);
@@ -178,27 +190,43 @@ namespace ArticlesClient.CommentsService {
                 base(binding, remoteAddress) {
         }
         
-        public ArticlesClient.CommentsService.CommentData[] GetForArticle(long id) {
+        public ArticlesClient.CommentsService.CommentDto[] GetAll() {
+            return base.Channel.GetAll();
+        }
+        
+        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto[]> GetAllAsync() {
+            return base.Channel.GetAllAsync();
+        }
+        
+        public ArticlesClient.CommentsService.CommentDto Get(long id) {
+            return base.Channel.Get(id);
+        }
+        
+        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto> GetAsync(long id) {
+            return base.Channel.GetAsync(id);
+        }
+        
+        public ArticlesClient.CommentsService.CommentDto[] GetForArticle(long id) {
             return base.Channel.GetForArticle(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentData[]> GetForArticleAsync(long id) {
+        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto[]> GetForArticleAsync(long id) {
             return base.Channel.GetForArticleAsync(id);
         }
         
-        public System.Nullable<long> Create(ArticlesClient.CommentsService.CommentData comment) {
+        public ArticlesClient.CommentsService.CommentDto Create(ArticlesClient.CommentsService.CommentDto comment) {
             return base.Channel.Create(comment);
         }
         
-        public System.Threading.Tasks.Task<System.Nullable<long>> CreateAsync(ArticlesClient.CommentsService.CommentData comment) {
+        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto> CreateAsync(ArticlesClient.CommentsService.CommentDto comment) {
             return base.Channel.CreateAsync(comment);
         }
         
-        public void Update(ArticlesClient.CommentsService.CommentData comment) {
-            base.Channel.Update(comment);
+        public ArticlesClient.CommentsService.CommentDto Update(ArticlesClient.CommentsService.CommentDto comment) {
+            return base.Channel.Update(comment);
         }
         
-        public System.Threading.Tasks.Task UpdateAsync(ArticlesClient.CommentsService.CommentData comment) {
+        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.CommentDto> UpdateAsync(ArticlesClient.CommentsService.CommentDto comment) {
             return base.Channel.UpdateAsync(comment);
         }
         

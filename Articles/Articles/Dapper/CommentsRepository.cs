@@ -14,8 +14,8 @@ namespace Articles.Dapper
         private const string GetQuery = "select id, articleid, author, content, created  from comments";
         private const string GetForArticleQuery = GetQuery + " where articleid = @articleId";
         private const string FindQuery = GetQuery + " where id = @id";
-        private const string CreateQuery = "insert into comments(articleid, author, content) values(@ArticleId, @Author, @Content) returning id";
-        private const string UpdateQuery = "update comments set author = @Author, content = @Content where id = @Id";
+        private const string CreateQuery = "insert into comments(articleid, author, content) values(@ArticleId, @Author, @Content) returning id, articleid, author, content, created";
+        private const string UpdateQuery = "update comments set content = @Content where id = @Id returning id, articleid, author, content, created"; // У комментариев может обновляться только контент
         private const string DeleteQuery = "delete from comments where id = @id";
 
         private readonly IDbConnection connection;
@@ -27,6 +27,11 @@ namespace Articles.Dapper
         {
             this.connection = connection;
         }
+
+        /// <summary>
+        /// Получить все имеющиеся комментарии
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Comment> GetCollection()
         {
             return connection.Query<Comment>(GetQuery);
@@ -51,7 +56,7 @@ namespace Articles.Dapper
         /// Возвращает найденный комментарий.
         /// Если комментарий с указанным идентификатором отсутствует, возвращает null.
         /// </returns>
-        public Comment Find(long id)
+        public Comment Get(long id)
         {
             return connection.QuerySingleOrDefault<Comment>(FindQuery, new { id });
         }
@@ -61,21 +66,22 @@ namespace Articles.Dapper
         /// </summary>
         /// <param name="comment">Создаваемый комментарий</param>
         /// <returns>Возвращает идентификатор созданного комментария</returns>
-        public long Create(Comment comment)
+        public Comment Create(Comment comment)
         {
-            long id = connection.QuerySingle<long>(CreateQuery, comment);
-            Log.Information($"Created new comment (Id={id}) by {comment.Author} for article id = {comment.ArticleId}");
-            return id;
+            Comment createdComment = connection.QuerySingle<Comment>(CreateQuery, comment);
+            Log.Information($"Created new comment (Id={createdComment.Id}) by {createdComment.Author} for article id = {createdComment.ArticleId}");
+            return createdComment;
         }
 
         /// <summary>
         /// Обновить имеющийся комментарий
         /// </summary>
         /// <param name="comment">Обновляемый комментарий</param>
-        public void Update(Comment comment)
+        public Comment Update(Comment comment)
         {
-            connection.Execute(UpdateQuery, comment);
-            Log.Information($"Comment updated (Id={comment.Id}) by {comment.Author} for article id = {comment.ArticleId}");
+            Comment updatedComment = connection.QuerySingle<Comment>(UpdateQuery, comment);
+            Log.Information($"Comment updated (Id={updatedComment.Id}) by {updatedComment.Author} for article id = {updatedComment.ArticleId}");
+            return updatedComment;
         }
 
         /// <summary>

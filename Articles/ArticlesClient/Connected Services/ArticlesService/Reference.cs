@@ -15,9 +15,9 @@ namespace ArticlesClient.ArticlesService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ArticleData", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ArticleDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
     [System.SerializableAttribute()]
-    public partial class ArticleData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class ArticleDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -26,7 +26,7 @@ namespace ArticlesClient.ArticlesService {
         private string AuthorField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ArticlesClient.ArticlesService.CommentData[] CommentsField;
+        private ArticlesClient.ArticlesService.CommentDto[] CommentsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ContentField;
@@ -64,7 +64,7 @@ namespace ArticlesClient.ArticlesService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ArticlesClient.ArticlesService.CommentData[] Comments {
+        public ArticlesClient.ArticlesService.CommentDto[] Comments {
             get {
                 return this.CommentsField;
             }
@@ -140,9 +140,9 @@ namespace ArticlesClient.ArticlesService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CommentData", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CommentDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
     [System.SerializableAttribute()]
-    public partial class CommentData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CommentDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -252,28 +252,28 @@ namespace ArticlesClient.ArticlesService {
     public interface IArticlesService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/GetAll", ReplyAction="http://tempuri.org/IArticlesService/GetAllResponse")]
-        ArticlesClient.ArticlesService.ArticleData[] GetAll();
+        ArticlesClient.ArticlesService.ArticleDto[] GetAll();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/GetAll", ReplyAction="http://tempuri.org/IArticlesService/GetAllResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleData[]> GetAllAsync();
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto[]> GetAllAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Get", ReplyAction="http://tempuri.org/IArticlesService/GetResponse")]
-        ArticlesClient.ArticlesService.ArticleData Get(long id);
+        ArticlesClient.ArticlesService.ArticleDto Get(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Get", ReplyAction="http://tempuri.org/IArticlesService/GetResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleData> GetAsync(long id);
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> GetAsync(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Create", ReplyAction="http://tempuri.org/IArticlesService/CreateResponse")]
-        System.Nullable<long> Create(ArticlesClient.ArticlesService.ArticleData article);
+        ArticlesClient.ArticlesService.ArticleDto Create(ArticlesClient.ArticlesService.ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Create", ReplyAction="http://tempuri.org/IArticlesService/CreateResponse")]
-        System.Threading.Tasks.Task<System.Nullable<long>> CreateAsync(ArticlesClient.ArticlesService.ArticleData article);
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> CreateAsync(ArticlesClient.ArticlesService.ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Update", ReplyAction="http://tempuri.org/IArticlesService/UpdateResponse")]
-        void Update(ArticlesClient.ArticlesService.ArticleData article);
+        ArticlesClient.ArticlesService.ArticleDto Update(ArticlesClient.ArticlesService.ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Update", ReplyAction="http://tempuri.org/IArticlesService/UpdateResponse")]
-        System.Threading.Tasks.Task UpdateAsync(ArticlesClient.ArticlesService.ArticleData article);
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> UpdateAsync(ArticlesClient.ArticlesService.ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Delete", ReplyAction="http://tempuri.org/IArticlesService/DeleteResponse")]
         void Delete(long id);
@@ -309,35 +309,35 @@ namespace ArticlesClient.ArticlesService {
                 base(binding, remoteAddress) {
         }
         
-        public ArticlesClient.ArticlesService.ArticleData[] GetAll() {
+        public ArticlesClient.ArticlesService.ArticleDto[] GetAll() {
             return base.Channel.GetAll();
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleData[]> GetAllAsync() {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto[]> GetAllAsync() {
             return base.Channel.GetAllAsync();
         }
         
-        public ArticlesClient.ArticlesService.ArticleData Get(long id) {
+        public ArticlesClient.ArticlesService.ArticleDto Get(long id) {
             return base.Channel.Get(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleData> GetAsync(long id) {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> GetAsync(long id) {
             return base.Channel.GetAsync(id);
         }
         
-        public System.Nullable<long> Create(ArticlesClient.ArticlesService.ArticleData article) {
+        public ArticlesClient.ArticlesService.ArticleDto Create(ArticlesClient.ArticlesService.ArticleDto article) {
             return base.Channel.Create(article);
         }
         
-        public System.Threading.Tasks.Task<System.Nullable<long>> CreateAsync(ArticlesClient.ArticlesService.ArticleData article) {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> CreateAsync(ArticlesClient.ArticlesService.ArticleDto article) {
             return base.Channel.CreateAsync(article);
         }
         
-        public void Update(ArticlesClient.ArticlesService.ArticleData article) {
-            base.Channel.Update(article);
+        public ArticlesClient.ArticlesService.ArticleDto Update(ArticlesClient.ArticlesService.ArticleDto article) {
+            return base.Channel.Update(article);
         }
         
-        public System.Threading.Tasks.Task UpdateAsync(ArticlesClient.ArticlesService.ArticleData article) {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> UpdateAsync(ArticlesClient.ArticlesService.ArticleDto article) {
             return base.Channel.UpdateAsync(article);
         }
         

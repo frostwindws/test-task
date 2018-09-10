@@ -10,12 +10,27 @@ namespace Articles.Services
     public interface ICommentsService
     {
         /// <summary>
+        /// Получить список комментариев.
+        /// </summary>
+        /// <returns>Возвращает массив всех имеющихся статей.</returns>
+        [OperationContract]
+        CommentDto[] GetAll();
+
+        /// <summary>
+        /// Получить отдельный комментарий
+        /// </summary>
+        /// <param name="id">Идентификатор комментария.</param>
+        /// <returns>Возвращает объект запрашиваемого комментария.</returns>
+        [OperationContract]
+        CommentDto Get(long id);
+
+        /// <summary>
         /// Запрос списка комментариев к статье.
         /// </summary>
         /// <param name="id">Идентификатор статьи.</param>
         /// <returns>Возвращает массив комментариев к указанной статье.</returns>
         [OperationContract]
-        CommentData[] GetForArticle(long id);
+        CommentDto[] GetForArticle(long id);
 
         /// <summary>
         /// Создание комментария
@@ -23,7 +38,7 @@ namespace Articles.Services
         /// <param name="comment">Создаваемый комментарий</param>
         /// <returns></returns>
         [OperationContract]
-        long? Create(CommentData comment);
+        CommentDto Create(CommentDto comment);
 
         /// <summary>
         /// Обновление имеющегося комментария.
@@ -31,7 +46,7 @@ namespace Articles.Services
         /// <param name="comment">Обновляемый комментарий</param>
         /// <returns></returns>
         [OperationContract]
-        void Update(CommentData comment);
+        CommentDto Update(CommentDto comment);
 
         /// <summary>
         /// Удаление комментария

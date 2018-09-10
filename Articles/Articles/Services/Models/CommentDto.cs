@@ -7,7 +7,7 @@ namespace Articles.Services.Models
     /// Модель комментария к статье
     /// </summary>
     [DataContract]
-    public class CommentData
+    public class CommentDto
     {
         /// <summary>
         /// Идентификатор

@@ -52,6 +52,8 @@ namespace ArticlesClient.Models
             get => editableArticle;
             set
             {
+                // При редактировании статьи производится сброс редактирования комментария
+                EditableComment = null;
                 editableArticle = value;
                 OnPropertyChanged();
             }

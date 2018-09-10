@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using ArticlesClient.Models;
 
 namespace ArticlesClient.Controls
@@ -24,6 +23,11 @@ namespace ArticlesClient.Controls
         /// Событие запроса на добавление коментария
         /// </summary>
         public event EventHandler<ArticleView> DoCommentAdd;
+
+        /// <summary>
+        /// Событие запроса на обновление статьи
+        /// </summary>
+        public event EventHandler<ArticleView> DoRefresh;
 
         /// <summary>
         /// Событие запроса на редактирование коментария
@@ -55,16 +59,22 @@ namespace ArticlesClient.Controls
 
         private void AddComment_OnClick(object sender, RoutedEventArgs e)
         {
-            DoCommentAdd.Invoke(this, DataContext as ArticleView);
+            DoCommentAdd?.Invoke(this, DataContext as ArticleView);
+        }
+        
+        private void CommentViewer_OnDoCommentEdit(object sender, CommentView e)
+        {
+            DoCommentEdit?.Invoke(this, ((CommentViewer)sender).DataContext as CommentView);
         }
 
-        private void EditComment_OnClick(object sender, RoutedEventArgs e)
+        private void CommentViewer_OnDoCommentDelete(object sender, CommentView e)
         {
-            DoCommentEdit.Invoke(this, ((Button)sender).DataContext as CommentView);
+            DoCommentDelete?.Invoke(this, ((CommentViewer)sender).DataContext as CommentView);
         }
-        private void DeleteComment_OnClick(object sender, RoutedEventArgs e)
+
+        private void RefreshArticle_OnClick(object sender, RoutedEventArgs e)
         {
-            DoCommentDelete.Invoke(this, ((Button)sender).DataContext as CommentView);
+            DoRefresh?.Invoke(this, DataContext as ArticleView);
         }
     }
 }

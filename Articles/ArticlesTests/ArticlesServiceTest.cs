@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Articles.Models;
 using Articles.Services;
@@ -15,10 +16,11 @@ namespace ArticlesTests
     /// Класс теста сервиса статей
     /// </summary>
     [TestFixture]
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class ArticlesServiceTest
     {
-        private readonly Mock<IDataContext> mock;
-        private readonly IArticlesService service;
+        private Mock<IDataContext> mock;
+        private IArticlesService service;
 
         /// <summary>
         /// Конструктор теста сервиса статей
@@ -27,6 +29,14 @@ namespace ArticlesTests
         {
             Mapper.Reset();
             MapperConfiguration.Init();
+        }
+
+        /// <summary>
+        /// Инициализация тестов
+        /// </summary>
+        [SetUp]
+        public void TestSetUp()
+        {
             mock = new Mock<IDataContext>();
             service = new ArticlesService(mock.Object);
         }
@@ -35,7 +45,7 @@ namespace ArticlesTests
         /// Сервис возвращает то же количество записей, что и репозиторий
         /// </summary>
         [Test]
-        public void GetAllReturnsRepositorySameLengthResult()
+        public void GetAll_RequestRecords_ReturnsRepositorySameLengthResult()
         {
             IEnumerable<Article> collection = Enumerable.Range(1, 10).Select(i => new Article
             {
@@ -47,21 +57,23 @@ namespace ArticlesTests
             });
 
             mock.Setup(a => a.Articles.GetCollection()).Returns(collection);
-            IEnumerable<ArticleData> result = service.GetAll();
 
-           Assert.AreEqual(collection.Count(), result.Count());
+            IEnumerable<ArticleDto> result = service.GetAll();
+
+            Assert.AreEqual(collection.Count(), result.Count());
         }
 
         /// <summary>
         /// Запрос имеющейся записи возвращает не пустой результат
         /// </summary>
         [Test]
-        public void GetRequestExistingRecordReturnsNotNull()
+        public void Get_RequestExistingRecord_ReturnsNotNull()
         {
             long searchId = 1;
-            mock.Setup(a => a.Articles.Find(searchId)).Returns(new Article());
+            mock.Setup(a => a.Articles.Get(searchId)).Returns(new Article());
             mock.Setup(a => a.Comments.GetForArticle(searchId)).Returns(new Comment[0]);
-            ArticleData result = service.Get(searchId);
+
+            ArticleDto result = service.Get(searchId);
 
             Assert.IsNotNull(result);
         }
@@ -70,38 +82,56 @@ namespace ArticlesTests
         /// Запрос отсутствующей записи возвращает null 
         /// </summary>
         [Test]
-        public void GetRequestNotExistingRecordReturnsNull()
+        public void Get_RequestNotExistingRecord_ReturnsNull()
         {
             const long SearchId = 1;
-            mock.Setup(a => a.Articles.Find(SearchId)).Returns((Article)null);
-            ArticleData result = service.Get(SearchId);
+            mock.Setup(a => a.Articles.Get(SearchId)).Returns((Article)null);
+
+            ArticleDto result = service.Get(SearchId);
 
             Assert.IsNull(result);
         }
 
         /// <summary>
-        /// Запрос создания вызывает метод создания репозитория 1 раз и возвращает идентификатор созаданной записи
+        /// Запрос создания вызывает метод создания репозитория 1 раз
         /// </summary>
         [Test]
-        public void CreateRunCreateMethodOnceReturnsCreatedRecordId()
+        public void Create_RequestNewArticleCreating_RunsCreateMethodOnce()
+        {
+            var articleToCreate = new ArticleDto();
+            var article = new Article();
+            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(article);
+
+            service.Create(articleToCreate);
+
+            mock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Once);
+        }
+
+        /// <summary>
+        /// Запрос создания возвращает идентификатор созаданной записи
+        /// </summary>
+        [Test]
+        public void Create_RequestNewArticleCreate_ReturnsRecordWithCreatedId()
         {
             const long CreatedId = 1;
-            var articleToCreate = new ArticleData();
-            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(CreatedId);
-            long? newId = service.Create(articleToCreate);
+            var articleToCreate = new ArticleDto();
+            var article = new Article { Id = CreatedId };
+            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(article);
 
-            mock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Once, "Repository creation method wasn't called or was called more than once");
-            Assert.AreEqual(newId, CreatedId, "Returned identity isn't equal created identity");
+            ArticleDto createdArticle = service.Create(articleToCreate);
+
+            Assert.AreEqual(createdArticle.Id, article.Id);
         }
 
         /// <summary>
         /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз
         /// </summary>
         [Test]
-        public void UpdateRunsRepositoryUpdateMethodOnce()
+        public void Update_RequestArticleUpdate_RunsRepositoryUpdateMethodOnce()
         {
-            var articleToUpdate = new ArticleData();
+            var articleToUpdate = new ArticleDto();
             mock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
+
             service.Update(articleToUpdate);
 
             mock.Verify(r => r.Articles.Update(It.IsAny<Article>()), Times.Once);
@@ -111,9 +141,11 @@ namespace ArticlesTests
         /// Запрос удаления записи выполняет метод удаления репозитория 1 раз
         /// </summary>
         [Test]
-        public void DeleteRunsRepositoryDeleteMethodOnce()
+        public void Delete_RequestArticleDelete_RunsRepositoryDeleteMethodOnce()
         {
             const long TargetId = 1;
+            mock.Setup(m => m.Articles.Delete(TargetId));
+
             service.Delete(TargetId);
 
             mock.Verify(r => r.Articles.Delete(TargetId), Times.Once);

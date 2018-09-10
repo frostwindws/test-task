@@ -1,9 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using ArticlesClient.ArticlesService;
+using ArticlesClient.Clients;
 using ArticlesClient.Models;
+using ArticlesClient.Utils;
 using AutoMapper;
 
 namespace ArticlesClient
@@ -24,45 +27,50 @@ namespace ArticlesClient
         public MainWindow()
         {
             InitializeComponent();
+            AutomapHelper.InitMapping();
+
             viewData = (ViewDataContainer)DataContext;
-
-            InitializeModelsMapping();
             RequestArticlesList();
-        }
-
-        /// <summary>
-        /// Инициализация маппинга моделей
-        /// </summary>
-        private void InitializeModelsMapping()
-        {
-            Mapper.Initialize(c =>
-            {
-                c.CreateMap<ArticleData, ArticleView>();
-                c.CreateMap<CommentData, CommentView>();
-            });
         }
 
         /// <summary>
         /// Запросить список статей
         /// </summary>
-        private void RequestArticlesList()
+        private async void RequestArticlesList()
         {
-            using (var articlesService = new ArticlesServiceClient())
+            using (var client = AutofacHelper.Resolve<IDataClient>())
             {
-                ArticleData[] articles = articlesService.GetAll();
-                viewData.ArticlesList = Mapper.Map<ObservableCollection<ArticleView>>(articles.OrderByDescending(a => a.Created));
+                viewData.ArticlesList = new ObservableCollection<ArticleView>(await client.Articles.GetAllAsync());
             }
-
         }
 
-        private void ArticlesListButton_OnClick(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Запросить данные отдельной статьи
+        /// </summary>
+        /// <param name="articleId">Идентификатор статьи</param>
+        /// <returns></returns>
+        private async Task RequestArticledata(long articleId)
+        {
+            viewData.CurrentArticle = null;
+            ArticlesPanel.IsEnabled = false;
+            try
+            {
+                using (var client = AutofacHelper.Resolve<IDataClient>())
+                {
+                    viewData.CurrentArticle = await client.Articles.GetAsync(articleId);
+                }
+            }
+            finally
+            {
+                ArticlesPanel.IsEnabled = true;
+            }
+        }
+
+        private async void ArticlesListButton_OnClick(object sender, RoutedEventArgs e)
         {
             // Контекстом кнопки является статья
             ArticleView article = (ArticleView)((Button)sender).DataContext;
-            using (var articlesService = new ArticlesServiceClient())
-            {
-                viewData.CurrentArticle = Mapper.Map<ArticleView>(articlesService.Get(article.Id));
-            }
+            await RequestArticledata(article.Id);
         }
 
         private void CreateArticle_OnClick(object sender, RoutedEventArgs e)
@@ -71,32 +79,51 @@ namespace ArticlesClient
             viewData.EditableArticle = newArticle;
         }
 
-        private void ArticleEditor_OnCommitEdit(object sender, ArticleView article)
+        private void ArticleViewer_OnDoArticleEdit(object sender, ArticleView article)
         {
-            using (var service = new ArticlesServiceClient())
+            viewData.EditableArticle = new ArticleView
             {
-                // В зависимости от флага IsNew производится либо создание новой, либо обновление имеющейся статьи
-                var data = Mapper.Map<ArticleData>(article);
-                if (article.IsNew)
+                Id = article.Id,
+                Title = article.Title,
+                Author = article.Author,
+                Content = article.Content,
+                Created = article.Created
+            };
+        }
+
+        private async void ArticleEditor_OnCommitEdit(object sender, ArticleView article)
+        {
+            try
+            {
+                IsEnabled = false;
+                using (var client = AutofacHelper.Resolve<IDataClient>())
                 {
-                    long? createdId = service.Create(data);
-                    if (!createdId.HasValue)
+                    if (article.IsNew)
                     {
-                        article.Id = createdId.Value;
-                        article.IsNew = false;
+                        article = await client.Articles.AddAsync(article);
                         viewData.ArticlesList.Insert(0, article);
+                        viewData.CurrentArticle = article;
+                    }
+                    else
+                    {
+                        article = await client.Articles.UpdateAsync(article);
+                        int index = viewData.ArticlesList.IndexOf(viewData.ArticlesList.First(a => a.Id == article.Id));
+
+                        if (index >= 0)
+                        {
+                            viewData.ArticlesList[index] = article;
+                        }
+
+                        // Необходима дополнительная подгрузка комментариев
+                        viewData.CurrentArticle = await client.Articles.GetAsync(article.Id);
                     }
                 }
-                else
-                {
-                    service.Update(data);
-                    int index = viewData.ArticlesList.IndexOf(viewData.ArticlesList.First(a => a.Id == article.Id));
-                    viewData.ArticlesList[index] = article;
-                }
-            }
 
-            viewData.EditableArticle = null;
-            viewData.CurrentArticle = article;
+            }
+            finally
+            {
+                IsEnabled = true;
+            }
         }
 
         private void ArticleEditor_OnCancelEdit(object sender, ArticleView article)
@@ -104,20 +131,32 @@ namespace ArticlesClient
             viewData.EditableArticle = null;
         }
 
-        private void ArticleViewer_OnDoArticleEdit(object sender, ArticleView article)
+        private async void ArticleViewer_OnDoArticleDelete(object sender, ArticleView article)
         {
-            viewData.EditableArticle = new ArticleView
+            try
             {
-                Id = article.Id,
-                Author = article.Author,
-                Content = article.Content,
-                Created = article.Created
-            };
-        }
+                MessageBoxResult result = MessageBox.Show($"Do you really want to delete article \"{article.Title}\"?", "Confirmation", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    IsEnabled = false;
+                    using (var client = AutofacHelper.Resolve<IDataClient>())
+                    {
+                        await client.Articles.DeleteAsync(article);
+                    }
 
-        private void ArticleViewer_OnDoArticleDelete(object sender, ArticleView article)
-        {
-            throw new System.NotImplementedException();
+                    article = viewData.ArticlesList.FirstOrDefault(a => a.Id == article.Id);
+                    if (article != null)
+                    {
+                        viewData.ArticlesList.Remove(article);
+                    }
+
+                    viewData.CurrentArticle = null;
+                }
+            }
+            finally
+            {
+                IsEnabled = true;
+            }
         }
 
         private void ArticleViewer_OnDoCommentAdd(object sender, ArticleView article)
@@ -141,19 +180,73 @@ namespace ArticlesClient
             };
         }
 
-        private void ArticleViewer_OnDoCommentDelete(object sender, CommentView comment)
+        private async void ArticleViewer_OnDoCommentDelete(object sender, CommentView comment)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                MessageBoxResult result = MessageBox.Show("Do you really want to delete this comment?", "Confirmation", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    IsEnabled = false;
+                    using (var client = AutofacHelper.Resolve<IDataClient>())
+                    {
+                        await client.Comments.DeleteAsync(comment);
+                    }
+
+                    viewData.CurrentArticle.Comments.Remove(comment);
+                }
+            }
+            finally
+            {
+                IsEnabled = true;
+            }
         }
 
-        private void CommentEditor_OnCommentCommit(object sender, CommentView comment)
+        private async void CommentEditor_OnCommentCommit(object sender, CommentView comment)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                IsEnabled = false;
+                ObservableCollection<CommentView> commentsList = viewData.CurrentArticle.Comments;
+                using (var client = AutofacHelper.Resolve<IDataClient>())
+                {
+                    if (comment.IsNew)
+                    {
+                        comment = await client.Comments.AddAsync(comment);
+                        commentsList.Add(comment);
+                    }
+                    else
+                    {
+                        comment = await client.Comments.UpdateAsync(comment);
+                        int index = commentsList.IndexOf(commentsList.First(a => a.Id == comment.Id));
+                        if (index >= 0)
+                        {
+                            commentsList[index] = comment;
+                        }
+                    }
+                }
+
+                viewData.EditableComment = null;
+            }
+            finally
+            {
+                IsEnabled = true;
+            }
         }
 
         private void CommentEditor_OnCommentCancel(object sender, CommentView comment)
         {
-            throw new System.NotImplementedException();
+            viewData.EditableComment = null;
+        }
+
+        private void RefreshArticle_OnClick(object sender, RoutedEventArgs e)
+        {
+            RequestArticlesList();
+        }
+
+        private async void ArticleViewer_OnDoRefresh(object sender, ArticleView article)
+        {
+            await RequestArticledata(article.Id);
         }
     }
 }
