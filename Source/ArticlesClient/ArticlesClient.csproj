@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Out\Debug\ArticlesClient\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -92,12 +92,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Utils\AutofacHelper.cs" />
-    <Compile Include="Clients\Wcf\ArticlesRepository.cs" />
-    <Compile Include="Clients\IDataClient.cs" />
-    <Compile Include="Clients\IRepository.cs" />
-    <Compile Include="Clients\Wcf\CommentsRepository.cs" />
-    <Compile Include="Clients\Wcf\WcfDataClient.cs" />
     <Compile Include="Connected Services\ArticlesService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -108,6 +102,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Utils\AutofacHelper.cs" />
+    <Compile Include="Clients\Wcf\ArticlesRepository.cs" />
+    <Compile Include="Clients\IDataClient.cs" />
+    <Compile Include="Clients\IRepository.cs" />
+    <Compile Include="Clients\Wcf\CommentsRepository.cs" />
+    <Compile Include="Clients\Wcf\WcfDataClient.cs" />
     <Compile Include="Controls\ArticleEditor.xaml.cs">
       <DependentUpon>ArticleEditor.xaml</DependentUpon>
     </Compile>
@@ -149,7 +149,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Connected Services\ArticlesService\ArticlesClient.ArticlesService.ArticleDto.datasource">
+    <None Include="Connected Services\ArticlesService\ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ArticlesService\ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ArticlesService\ArticlesService.wsdl" />
@@ -162,7 +165,10 @@
     <None Include="Connected Services\ArticlesService\ArticlesService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\CommentsService\ArticlesClient.CommentsService.CommentDto.datasource">
+    <None Include="Connected Services\CommentsService\ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CommentsService\ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\CommentsService\CommentsService.wsdl" />
@@ -192,21 +198,6 @@
     <WCFMetadataStorage Include="Connected Services\CommentsService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\ArticlesService\ArticlesService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ArticlesService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ArticlesService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ArticlesService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Connected Services\CommentsService\CommentsService.disco" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +212,20 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Connected Services\ArticlesService\ArticlesService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ArticlesService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ArticlesService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ArticlesService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

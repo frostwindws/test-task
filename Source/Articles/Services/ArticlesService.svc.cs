@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Articles.Models;
 using Articles.Services.Models;
 using AutoMapper;
+using Nelibur.Sword.Extensions;
+using Serilog;
 
 namespace Articles.Services
 {
@@ -25,56 +29,140 @@ namespace Articles.Services
         {
             Context = context;
         }
-        
-        /// <inheritdoc />
-        public ArticleDto[] GetAll()
+
+        /// <summary>
+        /// Формирование результат успешной операции
+        /// </summary>
+        /// <typeparam name="T">Тип передаваемых данных</typeparam>
+        /// <param name="data">передаваемые в результате данные</param>
+        /// <returns>Результат операции с флагом успешного выполнения</returns>
+        private ResultDto<T> SuccessResult<T>(T data)
         {
-            IEnumerable<Article> articles = Context.Articles.GetCollection().OrderByDescending(a => a.Created);
-            return Mapper.Map<ArticleDto[]>(articles);
+            return new ResultDto<T>
+            {
+                Success = true,
+                Data = data
+            };
+        }
+
+        /// <summary>
+        /// Формирование результат об ошибке выполнения операции
+        /// </summary>
+        /// <typeparam name="T">Тип передаваемых данных</typeparam>
+        /// <param name="exception">Текст сообщения об ошибке</param>
+        /// <returns>Результат операции с флагом провала выполнения</returns>
+        private ResultDto<T> FaultResult<T>(string exception)
+        {
+            return new ResultDto<T>
+            {
+                Success = false,
+                Message = exception
+            };
+        }
+
+        /// <summary>
+        /// Оббертка для выполнения операция со стандартным набором обработчиков ошибок
+        /// </summary>
+        /// <typeparam name="T">Тип передаваемых на выходе данных</typeparam>
+        /// <param name="function">Выполняемая функция</param>
+        /// <param name="callerName">Имя вызывающего метода (используется для логирования)</param>
+        /// <returns>Результат выполнения операции</returns>
+        private ResultDto<T> SaveExecute<T>(Func<ResultDto<T>> function, [CallerMemberName] string callerName = "")
+        {
+            const string ErrorLogTemplate = "Error accured while executing \"ArticleService\".{MethodName}";
+
+            try
+            {
+                return function.Invoke();
+            }
+            catch (TimeoutException e)
+            {
+                Log.Error(e, ErrorLogTemplate, callerName);
+                return FaultResult<T>("Database connection timeout. Please try again later");
+            }
+            catch (DbException e)
+            {
+                Log.Error(e, ErrorLogTemplate, callerName);
+                return FaultResult<T>($"Unexpected database exception: {e.GetBaseException().Message}.\r\nPlease try again later");
+            }
         }
 
         /// <inheritdoc />
-        public ArticleDto Get(long id)
+        public ResultDto<ArticleDto[]> GetAll()
         {
-            Article article = Context.Articles.Get(id);
-            ArticleDto data = Mapper.Map<ArticleDto>(article);
-            if (article != null)
+            return SaveExecute(() =>
             {
+                IEnumerable<Article> articles = Context.Articles.GetCollection().OrderByDescending(a => a.Created);
+                return SuccessResult(Mapper.Map<ArticleDto[]>(articles));
+            });
+        }
+
+        /// <inheritdoc />
+        public ResultDto<ArticleDto> Get(long id)
+        {
+            return SaveExecute(() =>
+            {
+                Article article = Context.Articles.Get(id);
+                ArticleDto data = Mapper.Map<ArticleDto>(article);
+                if (article == null)
+                {
+                    return FaultResult<ArticleDto>("Article wasn't found");
+                }
+
                 IEnumerable<Comment> comments = Context.Comments.GetForArticle(article.Id);
                 data.Comments = Mapper.Map<CommentDto[]>(comments);
-            }
-
-            return data;
+                return SuccessResult(data);
+            });
         }
 
         /// <inheritdoc />
-        public ArticleDto Create(ArticleDto article)
+        public ResultDto<ArticleDto> Create(ArticleDto article)
         {
-            if (article != null)
+            return SaveExecute(() =>
             {
-                Article dbArticle = Mapper.Map<Article>(article);
-                return Mapper.Map<ArticleDto>(Context.Articles.Create(dbArticle));
-            }
+                ResultDto<ArticleDto> result = article
+                    .ToOption()
+                    .DoOnEmpty(() => result = FaultResult<ArticleDto>("The article is empty"))
+                    .Map(a => Mapper.Map<Article>(article))
+                    .Map(a =>
+                    {
+                        IEnumerable<string> errors = a.Validate();
+                        return errors.Any()
+                            ? FaultResult<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
+                            : SuccessResult(Mapper.Map<ArticleDto>(Context.Articles.Create(a)));
+                    }).Value;
 
-            return null;
+                return result;
+            });
         }
 
         /// <inheritdoc />
-        public ArticleDto Update(ArticleDto article)
+        public ResultDto<ArticleDto> Update(ArticleDto article)
         {
-            if (article != null)
-            {
-                Article dbArticle = Mapper.Map<Article>(article);
-                return Mapper.Map<ArticleDto>(Context.Articles.Update(dbArticle));
-            }
+            return SaveExecute(() => {
+                ResultDto<ArticleDto> result = article
+                    .ToOption()
+                    .DoOnEmpty(() => result = FaultResult<ArticleDto>("The article is empty"))
+                    .Map(a => Mapper.Map<Article>(article))
+                    .Map(a =>
+                    {
+                        IEnumerable<string> errors = a.Validate();
+                        return errors.Any()
+                            ? FaultResult<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
+                            : SuccessResult(Mapper.Map<ArticleDto>(Context.Articles.Update(a)));
+                    }).Value;
 
-            return null;
+                return result;
+            });
         }
 
         /// <inheritdoc />
-        public void Delete(long id)
+        public ResultDto<ArticleDto> Delete(long id)
         {
-            Context.Articles.Delete(id);
+            return SaveExecute(() => {
+                Context.Articles.Delete(id);
+                return SuccessResult<ArticleDto>(null);
+            });
         }
 
         /// <inheritdoc />

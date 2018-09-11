@@ -15,6 +15,83 @@ namespace ArticlesClient.ArticlesService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfArrayOfArticleDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [System.SerializableAttribute()]
+    public partial class ResultDtoOfArrayOfArticleDtoO_Po34nZx : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ArticlesClient.ArticlesService.ArticleDto[] DataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool SuccessField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ArticlesClient.ArticlesService.ArticleDto[] Data {
+            get {
+                return this.DataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DataField, value) != true)) {
+                    this.DataField = value;
+                    this.RaisePropertyChanged("Data");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Success {
+            get {
+                return this.SuccessField;
+            }
+            set {
+                if ((this.SuccessField.Equals(value) != true)) {
+                    this.SuccessField = value;
+                    this.RaisePropertyChanged("Success");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ArticleDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
     [System.SerializableAttribute()]
     public partial class ArticleDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -247,39 +324,116 @@ namespace ArticlesClient.ArticlesService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfArticleDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [System.SerializableAttribute()]
+    public partial class ResultDtoOfArticleDtoO_Po34nZx : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ArticlesClient.ArticlesService.ArticleDto DataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool SuccessField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ArticlesClient.ArticlesService.ArticleDto Data {
+            get {
+                return this.DataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DataField, value) != true)) {
+                    this.DataField = value;
+                    this.RaisePropertyChanged("Data");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Success {
+            get {
+                return this.SuccessField;
+            }
+            set {
+                if ((this.SuccessField.Equals(value) != true)) {
+                    this.SuccessField = value;
+                    this.RaisePropertyChanged("Success");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ArticlesService.IArticlesService")]
     public interface IArticlesService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/GetAll", ReplyAction="http://tempuri.org/IArticlesService/GetAllResponse")]
-        ArticlesClient.ArticlesService.ArticleDto[] GetAll();
+        ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx GetAll();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/GetAll", ReplyAction="http://tempuri.org/IArticlesService/GetAllResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto[]> GetAllAsync();
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx> GetAllAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Get", ReplyAction="http://tempuri.org/IArticlesService/GetResponse")]
-        ArticlesClient.ArticlesService.ArticleDto Get(long id);
+        ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Get(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Get", ReplyAction="http://tempuri.org/IArticlesService/GetResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> GetAsync(long id);
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> GetAsync(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Create", ReplyAction="http://tempuri.org/IArticlesService/CreateResponse")]
-        ArticlesClient.ArticlesService.ArticleDto Create(ArticlesClient.ArticlesService.ArticleDto article);
+        ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Create(ArticlesClient.ArticlesService.ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Create", ReplyAction="http://tempuri.org/IArticlesService/CreateResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> CreateAsync(ArticlesClient.ArticlesService.ArticleDto article);
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> CreateAsync(ArticlesClient.ArticlesService.ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Update", ReplyAction="http://tempuri.org/IArticlesService/UpdateResponse")]
-        ArticlesClient.ArticlesService.ArticleDto Update(ArticlesClient.ArticlesService.ArticleDto article);
+        ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Update(ArticlesClient.ArticlesService.ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Update", ReplyAction="http://tempuri.org/IArticlesService/UpdateResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> UpdateAsync(ArticlesClient.ArticlesService.ArticleDto article);
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> UpdateAsync(ArticlesClient.ArticlesService.ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Delete", ReplyAction="http://tempuri.org/IArticlesService/DeleteResponse")]
-        void Delete(long id);
+        ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Delete(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Delete", ReplyAction="http://tempuri.org/IArticlesService/DeleteResponse")]
-        System.Threading.Tasks.Task DeleteAsync(long id);
+        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> DeleteAsync(long id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -309,43 +463,43 @@ namespace ArticlesClient.ArticlesService {
                 base(binding, remoteAddress) {
         }
         
-        public ArticlesClient.ArticlesService.ArticleDto[] GetAll() {
+        public ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx GetAll() {
             return base.Channel.GetAll();
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto[]> GetAllAsync() {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx> GetAllAsync() {
             return base.Channel.GetAllAsync();
         }
         
-        public ArticlesClient.ArticlesService.ArticleDto Get(long id) {
+        public ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Get(long id) {
             return base.Channel.Get(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> GetAsync(long id) {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> GetAsync(long id) {
             return base.Channel.GetAsync(id);
         }
         
-        public ArticlesClient.ArticlesService.ArticleDto Create(ArticlesClient.ArticlesService.ArticleDto article) {
+        public ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Create(ArticlesClient.ArticlesService.ArticleDto article) {
             return base.Channel.Create(article);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> CreateAsync(ArticlesClient.ArticlesService.ArticleDto article) {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> CreateAsync(ArticlesClient.ArticlesService.ArticleDto article) {
             return base.Channel.CreateAsync(article);
         }
         
-        public ArticlesClient.ArticlesService.ArticleDto Update(ArticlesClient.ArticlesService.ArticleDto article) {
+        public ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Update(ArticlesClient.ArticlesService.ArticleDto article) {
             return base.Channel.Update(article);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ArticleDto> UpdateAsync(ArticlesClient.ArticlesService.ArticleDto article) {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> UpdateAsync(ArticlesClient.ArticlesService.ArticleDto article) {
             return base.Channel.UpdateAsync(article);
         }
         
-        public void Delete(long id) {
-            base.Channel.Delete(id);
+        public ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Delete(long id) {
+            return base.Channel.Delete(id);
         }
         
-        public System.Threading.Tasks.Task DeleteAsync(long id) {
+        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> DeleteAsync(long id) {
             return base.Channel.DeleteAsync(id);
         }
     }

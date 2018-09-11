@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using ArticlesClient.CommentsService;
 using ArticlesClient.Models;
@@ -32,7 +33,13 @@ namespace ArticlesClient.Clients.Wcf
         /// <returns>Полный список всех комментариев в системе</returns>
         public async Task<IEnumerable<CommentView>> GetAllAsync()
         {
-            return Mapper.Map<CommentView[]>(await commentsService.GetAllAsync());
+            var result =  await commentsService.GetAllAsync();
+            if (!result.Success)
+            {
+                throw new CommunicationException(result.Message);
+            }
+
+            return Mapper.Map<CommentView[]>(result.Data);
         }
 
         /// <summary>
@@ -42,7 +49,13 @@ namespace ArticlesClient.Clients.Wcf
         /// <returns>Найденный комментарий, либо null  в случае отсутствия комментария с указанным идентификатором</returns>
         public async Task<CommentView> GetAsync(long id)
         {
-            return Mapper.Map<CommentView>(await commentsService.GetAsync(id));
+            var result = await commentsService.GetAsync(id);
+            if (!result.Success)
+            {
+                throw new CommunicationException(result.Message);
+            }
+
+            return Mapper.Map<CommentView>(result.Data);
         }
 
         /// <summary>
@@ -52,13 +65,13 @@ namespace ArticlesClient.Clients.Wcf
         /// <returns>Данные созданного комментария</returns>
         public async Task<CommentView> AddAsync(CommentView record)
         {
-            CommentDto createdComment = await commentsService.CreateAsync(Mapper.Map<CommentDto>(record));
-            if (createdComment != null)
+            var result = await commentsService.CreateAsync(Mapper.Map<CommentDto>(record));
+            if (!result.Success)
             {
-                return Mapper.Map<CommentView>(createdComment);
+                throw new CommunicationException(result.Message);
             }
 
-            return null;
+            return Mapper.Map<CommentView>(result.Data);
         }
 
         /// <summary>
@@ -68,13 +81,13 @@ namespace ArticlesClient.Clients.Wcf
         /// <returns>Обновленный комментарий</returns>
         public async Task<CommentView> UpdateAsync(CommentView record)
         {
-            CommentDto updatedComment = await commentsService.UpdateAsync(Mapper.Map<CommentDto>(record));
-            if (updatedComment != null)
+            var result = await commentsService.UpdateAsync(Mapper.Map<CommentDto>(record));
+            if (!result.Success)
             {
-                return Mapper.Map<CommentView>(updatedComment);
+                throw new CommunicationException(result.Message);
             }
 
-            return null;
+            return Mapper.Map<CommentView>(result.Data);
         }
 
         /// <summary>
@@ -83,7 +96,11 @@ namespace ArticlesClient.Clients.Wcf
         /// <param name="record">Удаляемый комментарий</param>
         public async Task DeleteAsync(CommentView record)
         {
-            await commentsService.DeleteAsync(record.Id);
+            var result = await commentsService.DeleteAsync(record.Id);
+            if (!result.Success)
+            {
+                throw new CommunicationException(result.Message);
+            }
         }
     }
 }

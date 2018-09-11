@@ -234,3 +234,152 @@ System.InvalidOperationException: Последовательность не со
 16:07:36:2398 [Verbose]: ArticlesService: executing Get
 16:07:37:6575 [Verbose]: ArticlesService: executing Get
 16:07:38:9211 [Verbose]: ArticlesService: executing Get
+16:48:52:7674 [Verbose]: ArticlesService: executing GetAll
+16:49:00:1804 [Verbose]: ArticlesService: executing Get
+16:49:07:4653 [Verbose]: ArticlesService: executing Delete
+16:49:07:4693 [Information]: Article deleted (Id=66)
+16:49:18:6656 [Verbose]: ArticlesService: executing Create
+16:49:18:7248 [Error]: Error accured while executing ArticlesService.Create
+Npgsql.PostgresException (0x80004005): 23502: нулевое значение в столбце "title" нарушает ограничение NOT NULL
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в System.Threading.Tasks.ValueTask`1.get_Result()
+   в Npgsql.NpgsqlDataReader.<NextResult>d__46.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlDataReader.NextResult()
+   в Npgsql.NpgsqlCommand.<ExecuteDbDataReader>d__100.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   в System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   в Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   в Dapper.SqlMapper.QueryRowImpl[T](IDbConnection cnn, Row row, CommandDefinition& command, Type effectiveType)
+   в Dapper.SqlMapper.QuerySingle[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType)
+   в Articles.Dapper.ArticlesRepository.Create(Article record) в D:\GitHub\test-task\Articles\Articles\Dapper\ArticlesRepository.cs:строка 60
+   в Articles.Services.ArticlesService.Create(ArticleDto article) в D:\GitHub\test-task\Articles\Articles\Services\ArticlesService.svc.cs:строка 56
+   в Castle.Proxies.Invocations.IArticlesService_Create.InvokeMethodOnTarget()
+   в Castle.DynamicProxy.AbstractInvocation.Proceed()
+   в Articles.Initialization.LoggerInterceptor.Intercept(IInvocation invocation) в D:\GitHub\test-task\Articles\Articles\Initialization\LoggerInterceptor.cs:строка 21
+17:06:51:3207 [Verbose]: ArticlesService: executing GetAll
+17:07:27:8838 [Verbose]: ArticlesService: executing GetAll
+17:07:33:6744 [Verbose]: ArticlesService: executing Get
+17:07:41:4456 [Verbose]: CommentsService: executing Create
+17:07:41:5018 [Error]: Error accured while executing CommentsService.Create
+Npgsql.PostgresException (0x80004005): 23502: нулевое значение в столбце "author" нарушает ограничение NOT NULL
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в System.Threading.Tasks.ValueTask`1.get_Result()
+   в Npgsql.NpgsqlDataReader.<NextResult>d__46.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlDataReader.NextResult()
+   в Npgsql.NpgsqlCommand.<ExecuteDbDataReader>d__100.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   в System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   в Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   в Dapper.SqlMapper.QueryRowImpl[T](IDbConnection cnn, Row row, CommandDefinition& command, Type effectiveType)
+   в Dapper.SqlMapper.QuerySingle[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType)
+   в Articles.Dapper.CommentsRepository.Create(Comment comment) в D:\GitHub\test-task\Source\Articles\Dapper\CommentsRepository.cs:строка 71
+   в Articles.Services.CommentsService.Create(CommentDto comment) в D:\GitHub\test-task\Source\Articles\Services\CommentsService.svc.cs:строка 53
+   в Castle.Proxies.Invocations.ICommentsService_Create.InvokeMethodOnTarget()
+   в Castle.DynamicProxy.AbstractInvocation.Proceed()
+   в Articles.Initialization.ServiceInterceptor.Intercept(IInvocation invocation) в D:\GitHub\test-task\Source\Articles\Initialization\ServiceInterceptor.cs:строка 23
+17:08:04:5143 [Verbose]: ArticlesService: executing GetAll
+17:08:17:3545 [Verbose]: ArticlesService: executing Get
+17:08:19:5587 [Verbose]: CommentsService: executing Create
+17:08:19:5817 [Error]: Error accured while executing CommentsService.Create
+Npgsql.PostgresException (0x80004005): 23502: нулевое значение в столбце "author" нарушает ограничение NOT NULL
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в System.Threading.Tasks.ValueTask`1.get_Result()
+   в Npgsql.NpgsqlDataReader.<NextResult>d__46.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlDataReader.NextResult()
+   в Npgsql.NpgsqlCommand.<ExecuteDbDataReader>d__100.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   в System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   в Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   в Dapper.SqlMapper.QueryRowImpl[T](IDbConnection cnn, Row row, CommandDefinition& command, Type effectiveType)
+   в Dapper.SqlMapper.QuerySingle[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType)
+   в Articles.Dapper.CommentsRepository.Create(Comment comment) в D:\GitHub\test-task\Source\Articles\Dapper\CommentsRepository.cs:строка 71
+   в Articles.Services.CommentsService.Create(CommentDto comment) в D:\GitHub\test-task\Source\Articles\Services\CommentsService.svc.cs:строка 53
+   в Castle.Proxies.Invocations.ICommentsService_Create.InvokeMethodOnTarget()
+   в Castle.DynamicProxy.AbstractInvocation.Proceed()
+   в Articles.Initialization.ServiceInterceptor.Intercept(IInvocation invocation) в D:\GitHub\test-task\Source\Articles\Initialization\ServiceInterceptor.cs:строка 23
+17:10:06:9123 [Verbose]: ArticlesService: executing GetAll
+17:10:09:5467 [Verbose]: ArticlesService: executing Get
+17:10:12:6427 [Verbose]: CommentsService: executing Create
+17:10:12:6828 [Error]: Error accured while executing CommentsService.Create
+Npgsql.PostgresException (0x80004005): 23502: нулевое значение в столбце "author" нарушает ограничение NOT NULL
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   в Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в System.Threading.Tasks.ValueTask`1.get_Result()
+   в Npgsql.NpgsqlDataReader.<NextResult>d__46.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlDataReader.NextResult()
+   в Npgsql.NpgsqlCommand.<ExecuteDbDataReader>d__100.MoveNext()
+--- Конец трассировка стека из предыдущего расположения, где возникло исключение ---
+   в System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   в System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   в Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   в System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   в Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   в Dapper.SqlMapper.QueryRowImpl[T](IDbConnection cnn, Row row, CommandDefinition& command, Type effectiveType)
+   в Dapper.SqlMapper.QuerySingle[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType)
+   в Articles.Dapper.CommentsRepository.Create(Comment comment) в D:\GitHub\test-task\Source\Articles\Dapper\CommentsRepository.cs:строка 71
+   в Articles.Services.CommentsService.Create(CommentDto comment) в D:\GitHub\test-task\Source\Articles\Services\CommentsService.svc.cs:строка 53
+   в Castle.Proxies.Invocations.ICommentsService_Create.InvokeMethodOnTarget()
+   в Castle.DynamicProxy.AbstractInvocation.Proceed()
+   в Articles.Initialization.ServiceInterceptor.Intercept(IInvocation invocation) в D:\GitHub\test-task\Source\Articles\Initialization\ServiceInterceptor.cs:строка 23
+17:11:55:2837 [Verbose]: ArticlesService: executing GetAll
+17:11:55:3188 [Error]: Error accured while executing ArticlesService.GetAll
+System.ServiceModel.FaultException`1[Articles.Services.Models.ServiceFault]: Server Side Error (Дополнительные сведения об ошибке — Articles.Services.Models.ServiceFault).
+17:21:37:6565 [Verbose]: ArticlesService: executing GetAll
+17:21:37:6926 [Error]: Error accured while executing ArticlesService.GetAll
+System.ServiceModel.FaultException`1[Articles.Services.Models.ServiceFault]: Server Side Error (Дополнительные сведения об ошибке — Articles.Services.Models.ServiceFault).
+17:23:59:3017 [Verbose]: ArticlesService: executing GetAll
+17:28:31:1047 [Verbose]: ArticlesService: executing GetAll
+17:28:31:1398 [Error]: Error accured while executing ArticlesService.GetAll
+System.ServiceModel.FaultException`1[Articles.Services.Models.ServiceFault]: Server Side Error (Дополнительные сведения об ошибке — Articles.Services.Models.ServiceFault).
+17:33:25:5465 [Verbose]: ArticlesService: executing GetAll
+17:33:25:5805 [Error]: Error accured while executing ArticlesService.GetAll
+System.ServiceModel.FaultException`1[Articles.Services.Models.ServiceFault]: Server Side Error (Дополнительные сведения об ошибке — Articles.Services.Models.ServiceFault).
+17:40:25:5308 [Verbose]: ArticlesService: executing GetAll
+17:40:25:5739 [Error]: Error accured while executing ArticlesService.GetAll
+System.ServiceModel.FaultException`1[Articles.Services.Models.ServiceFault]: Server Side Error (Дополнительные сведения об ошибке — Articles.Services.Models.ServiceFault).
+17:50:44:3113 [Verbose]: ArticlesService: executing GetAll
+17:54:53:3431 [Verbose]: ArticlesService: executing GetAll

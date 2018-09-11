@@ -14,7 +14,7 @@ namespace Articles.Services
         /// </summary>
         /// <returns>Возвращает массив всех имеющихся статей.</returns>
         [OperationContract]
-        CommentDto[] GetAll();
+        ResultDto<CommentDto[]> GetAll();
 
         /// <summary>
         /// Получить отдельный комментарий
@@ -22,7 +22,7 @@ namespace Articles.Services
         /// <param name="id">Идентификатор комментария.</param>
         /// <returns>Возвращает объект запрашиваемого комментария.</returns>
         [OperationContract]
-        CommentDto Get(long id);
+        ResultDto<CommentDto> Get(long id);
 
         /// <summary>
         /// Запрос списка комментариев к статье.
@@ -30,7 +30,7 @@ namespace Articles.Services
         /// <param name="id">Идентификатор статьи.</param>
         /// <returns>Возвращает массив комментариев к указанной статье.</returns>
         [OperationContract]
-        CommentDto[] GetForArticle(long id);
+        ResultDto<CommentDto[]> GetForArticle(long id);
 
         /// <summary>
         /// Создание комментария
@@ -38,7 +38,7 @@ namespace Articles.Services
         /// <param name="comment">Создаваемый комментарий</param>
         /// <returns></returns>
         [OperationContract]
-        CommentDto Create(CommentDto comment);
+        ResultDto<CommentDto> Create(CommentDto comment);
 
         /// <summary>
         /// Обновление имеющегося комментария.
@@ -46,13 +46,13 @@ namespace Articles.Services
         /// <param name="comment">Обновляемый комментарий</param>
         /// <returns></returns>
         [OperationContract]
-        CommentDto Update(CommentDto comment);
+        ResultDto<CommentDto> Update(CommentDto comment);
 
         /// <summary>
         /// Удаление комментария
         /// </summary>
         /// <param name="id">Идентификатор удаляемого комментария</param>
         [OperationContract]
-        void Delete(long id);
+        ResultDto<CommentDto> Delete(long id);
     }
 }

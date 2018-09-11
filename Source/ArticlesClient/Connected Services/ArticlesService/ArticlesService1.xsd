@@ -9,7 +9,7 @@
   <xs:element name="GetAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="GetAllResult" nillable="true" type="q1:ArrayOfArticleDto" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="GetAllResult" nillable="true" type="q1:ResultDtoOfArrayOfArticleDtoO_Po34nZx" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -23,7 +23,7 @@
   <xs:element name="GetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="GetResult" nillable="true" type="q2:ArticleDto" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="GetResult" nillable="true" type="q2:ResultDtoOfArticleDtoO_Po34nZx" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -37,7 +37,7 @@
   <xs:element name="CreateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="CreateResult" nillable="true" type="q4:ArticleDto" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="CreateResult" nillable="true" type="q4:ResultDtoOfArticleDtoO_Po34nZx" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -51,7 +51,7 @@
   <xs:element name="UpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="UpdateResult" nillable="true" type="q6:ArticleDto" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="UpdateResult" nillable="true" type="q6:ResultDtoOfArticleDtoO_Po34nZx" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -64,7 +64,9 @@
   </xs:element>
   <xs:element name="DeleteResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Articles.Services.Models" minOccurs="0" name="DeleteResult" nillable="true" type="q7:ResultDtoOfArticleDtoO_Po34nZx" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>

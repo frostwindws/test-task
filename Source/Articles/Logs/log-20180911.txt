@@ -1,0 +1,61 @@
+09:30:03:3668 [Verbose]: ArticlesService: executing GetAll
+09:30:03:8370 [Error]: Error accured while executing ArticleService."GetAll"
+System.Exception: xxx
+09:30:53:4835 [Verbose]: ArticlesService: executing GetAll
+09:30:53:9296 [Error]: Error accured while executing ArticleService."GetAll"
+System.Exception: xxx
+09:43:57:7293 [Verbose]: ArticlesService: executing GetAll
+09:44:02:3189 [Verbose]: ArticlesService: executing Create
+10:04:58:5305 [Verbose]: CommentsService: executing Create
+10:06:06:0601 [Verbose]: CommentsService: executing Create
+10:06:06:5624 [Information]: Created new comment (Id=20) by z for article id = 13
+10:06:18:1033 [Verbose]: CommentsService: executing Delete
+10:06:18:1113 [Information]: Comment deleted (Id=20)
+10:17:25:5701 [Verbose]: ArticlesService: executing GetAll
+10:17:28:2420 [Verbose]: ArticlesService: executing Get
+10:17:32:5162 [Verbose]: ArticlesService: executing Get
+10:17:33:7144 [Verbose]: ArticlesService: executing Get
+10:17:40:1468 [Verbose]: CommentsService: executing Create
+10:18:08:2298 [Verbose]: CommentsService: executing Create
+10:22:43:6557 [Verbose]: ArticlesService: executing GetAll
+10:22:47:5391 [Verbose]: ArticlesService: executing Get
+10:22:50:0418 [Verbose]: CommentsService: executing Create
+10:23:50:8129 [Verbose]: ArticlesService: executing GetAll
+10:23:51:8608 [Verbose]: ArticlesService: executing Get
+10:23:55:9379 [Verbose]: CommentsService: executing Create
+10:25:08:8592 [Verbose]: ArticlesService: executing GetAll
+10:25:09:7934 [Verbose]: ArticlesService: executing Get
+10:25:12:7402 [Verbose]: CommentsService: executing Create
+10:31:20:0211 [Verbose]: ArticlesService: executing GetAll
+10:31:20:8243 [Verbose]: ArticlesService: executing Get
+10:31:22:5504 [Verbose]: ArticlesService: executing Get
+10:31:23:5594 [Verbose]: ArticlesService: executing Get
+10:31:27:8321 [Verbose]: ArticlesService: executing Get
+10:31:28:8404 [Verbose]: ArticlesService: executing Get
+10:31:38:8324 [Verbose]: CommentsService: executing Create
+10:31:38:8384 [Information]: Created new comment (Id=21) by xx for article id = 13
+10:32:22:0294 [Verbose]: ArticlesService: executing GetAll
+10:32:22:9053 [Verbose]: ArticlesService: executing Get
+10:32:27:9642 [Verbose]: CommentsService: executing Create
+10:32:27:9652 [Information]: Created new comment (Id=22) by x for article id = 13
+10:34:04:7752 [Verbose]: ArticlesService: executing GetAll
+10:34:06:0720 [Verbose]: ArticlesService: executing Get
+10:34:11:6539 [Verbose]: CommentsService: executing Delete
+10:34:11:6579 [Information]: Comment deleted (Id=21)
+10:34:13:3282 [Verbose]: CommentsService: executing Delete
+10:34:13:3292 [Information]: Comment deleted (Id=22)
+10:34:15:3297 [Verbose]: CommentsService: executing Create
+10:34:26:9756 [Verbose]: CommentsService: executing Create
+10:34:26:9766 [Information]: Created new comment (Id=23) by x for article id = 13
+10:34:29:1129 [Verbose]: CommentsService: executing Delete
+10:34:29:1139 [Information]: Comment deleted (Id=23)
+10:41:29:5804 [Verbose]: ArticlesService: executing GetAll
+10:41:30:4793 [Verbose]: ArticlesService: executing Get
+10:41:33:9207 [Verbose]: CommentsService: executing Create
+10:44:54:5096 [Verbose]: ArticlesService: executing GetAll
+10:44:56:1023 [Verbose]: ArticlesService: executing Get
+10:45:04:2685 [Verbose]: CommentsService: executing Update
+10:45:04:2896 [Information]: Comment updated (Id=4) by Timofey for article id = 13
+10:45:08:2899 [Verbose]: ArticlesService: executing Get
+10:45:14:5530 [Verbose]: CommentsService: executing Update
+10:45:14:5540 [Information]: Comment updated (Id=4) by Timofey for article id = 13

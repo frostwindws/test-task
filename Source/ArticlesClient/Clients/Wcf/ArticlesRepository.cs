@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using ArticlesClient.ArticlesService;
 using ArticlesClient.Models;
@@ -31,7 +32,13 @@ namespace ArticlesClient.Clients.Wcf
         /// <returns>Перечисление всех статей</returns>
         public async Task<IEnumerable<ArticleView>> GetAllAsync()
         {
-            return Mapper.Map<ArticleView[]>(await articlesService.GetAllAsync());
+            var result = await articlesService.GetAllAsync();
+            if (!result.Success)
+            {
+                throw new CommunicationException(result.Message);
+            }
+
+            return Mapper.Map<ArticleView[]>(result.Data);
         }
 
         /// <summary>
@@ -41,7 +48,13 @@ namespace ArticlesClient.Clients.Wcf
         /// <returns>Найденная статья, либо null  в случае отсутствия статьи с указанным идентификатором</returns>
         public async Task<ArticleView> GetAsync(long id)
         {
-            return Mapper.Map<ArticleView>(await articlesService.GetAsync(id));
+            var result = await articlesService.GetAsync(id);
+            if (!result.Success)
+            {
+                throw new CommunicationException(result.Message);
+            }
+
+            return Mapper.Map<ArticleView>(result.Data);
         }
 
         /// <summary>
@@ -51,13 +64,13 @@ namespace ArticlesClient.Clients.Wcf
         /// <returns>Данные созданной статьи</returns>
         public async Task<ArticleView> AddAsync(ArticleView record)
         {
-            ArticleDto createdArticle =  await articlesService.CreateAsync(Mapper.Map<ArticleDto>(record));
-            if (createdArticle != null)
+            var result = await articlesService.CreateAsync(Mapper.Map<ArticleDto>(record));
+            if (!result.Success)
             {
-                return Mapper.Map<ArticleView>(createdArticle);
+                throw new CommunicationException(result.Message);
             }
 
-            return null;
+            return Mapper.Map<ArticleView>(result.Data);
         }
 
         /// <summary>
@@ -67,13 +80,13 @@ namespace ArticlesClient.Clients.Wcf
         /// <returns>Обновленная статья</returns>
         public async Task<ArticleView> UpdateAsync(ArticleView record)
         {
-            ArticleDto updatedArticle = await articlesService.UpdateAsync(Mapper.Map<ArticleDto>(record));
-            if (updatedArticle != null)
+            var result = await articlesService.UpdateAsync(Mapper.Map<ArticleDto>(record));
+            if (!result.Success)
             {
-                return Mapper.Map<ArticleView>(updatedArticle);
+                throw new CommunicationException(result.Message);
             }
 
-            return null;
+            return Mapper.Map<ArticleView>(result.Data);
         }
 
         /// <summary>
@@ -82,7 +95,11 @@ namespace ArticlesClient.Clients.Wcf
         /// <param name="record">Удаляемая статья</param>
         public async Task DeleteAsync(ArticleView record)
         {
-            await articlesService.DeleteAsync(record.Id);
+            var result = await articlesService.DeleteAsync(record.Id);
+            if (!result.Success)
+            {
+                throw new CommunicationException(result.Message);
+            }
         }
     }
 }

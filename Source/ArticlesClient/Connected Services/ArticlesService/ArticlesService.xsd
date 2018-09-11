@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Articles.Services.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ResultDtoOfArrayOfArticleDtoO_Po34nZx">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="ResultDtoOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="ArrayOfArticleDto" Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Data" nillable="true" type="tns:ArrayOfArticleDto" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Success" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ResultDtoOfArrayOfArticleDtoO_Po34nZx" nillable="true" type="tns:ResultDtoOfArrayOfArticleDtoO_Po34nZx" />
   <xs:complexType name="ArrayOfArticleDto">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ArticleDto" nillable="true" type="tns:ArticleDto" />
@@ -33,4 +48,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CommentDto" nillable="true" type="tns:CommentDto" />
+  <xs:complexType name="ResultDtoOfArticleDtoO_Po34nZx">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="ResultDtoOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="ArticleDto" Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Data" nillable="true" type="tns:ArticleDto" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Success" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ResultDtoOfArticleDtoO_Po34nZx" nillable="true" type="tns:ResultDtoOfArticleDtoO_Po34nZx" />
 </xs:schema>
