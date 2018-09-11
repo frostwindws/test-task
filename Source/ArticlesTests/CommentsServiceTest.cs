@@ -58,9 +58,10 @@ namespace ArticlesTests
 
             mock.Setup(a => a.Comments.GetForArticle(ArticleId)).Returns(collection);
 
-            IEnumerable<CommentDto> result = service.GetForArticle(ArticleId);
+            ResultDto<CommentDto[]> result = service.GetForArticle(ArticleId);
 
-            Assert.AreEqual(collection.Count(), result.Count());
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(collection.Count(), result.Data.Count());
         }
 
         /// <summary>
@@ -80,9 +81,10 @@ namespace ArticlesTests
 
             mock.Setup(a => a.Comments.GetCollection()).Returns(collection);
 
-            IEnumerable<CommentDto> result = service.GetAll();
+            ResultDto<CommentDto[]> result = service.GetAll();
 
-            Assert.AreEqual(collection.Count(), result.Count());
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(collection.Count(), result.Data.Count());
         }
 
         /// <summary>
@@ -94,9 +96,10 @@ namespace ArticlesTests
             long searchId = 1;
             mock.Setup(a => a.Comments.Get(searchId)).Returns(new Comment());
 
-            CommentDto result = service.Get(searchId);
+            ResultDto<CommentDto> result = service.Get(searchId);
 
-            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Success);
+            Assert.IsNotNull(result.Data);
         }
 
         /// <summary>
@@ -108,23 +111,30 @@ namespace ArticlesTests
             const long SearchId = 1;
             mock.Setup(a => a.Comments.Get(SearchId)).Returns((Comment)null);
 
-            CommentDto result = service.Get(SearchId);
+            ResultDto<CommentDto> result = service.Get(SearchId);
 
-            Assert.IsNull(result);
+            Assert.IsFalse(result.Success);
+            Assert.IsNull(result.Data);
         }
 
         /// <summary>
         /// Запрос создания вызывает метод создания репозитория 1 раз
         /// </summary>
         [Test]
-        public void Create_RequestNewCommentCreate_RunCreateMethodOnce()
+        public void Create_RequestNewValidCommentCreate_RunsRepositoryCreateMethodOnce()
         {
-            var commentToCreate = new CommentDto();
+            var commentToCreate = new CommentDto
+            {
+                ArticleId = 1,
+                Author = "author",
+                Content = "content"
+            };
             var comment = new Comment();
             mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(comment);
 
-            service.Create(commentToCreate);
+            ResultDto<CommentDto> result = service.Create(commentToCreate);
 
+            Assert.IsTrue(result.Success);
             mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Once);
         }
 
@@ -132,30 +142,90 @@ namespace ArticlesTests
         /// Запрос создания возвращает идентификатор созаданной записи
         /// </summary>
         [Test]
-        public void Create_RequestNewCommentCreate_ReturnsCreatedRecordId()
+        public void Create_RequestNewValidCommentCreate_ReturnsCreatedRecordId()
         {
             const long CreatedId = 1;
-            var commentToCreate = new CommentDto();
+            var commentToCreate = new CommentDto
+            {
+                ArticleId = 1,
+                Author = "author",
+                Content = "content"
+            };
             var comment = new Comment { Id = CreatedId };
             mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(comment);
 
-            CommentDto createdComment = service.Create(commentToCreate);
+            ResultDto<CommentDto> result = service.Create(commentToCreate);
 
-            Assert.AreEqual(createdComment.Id, comment.Id);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(result.Data.Id, comment.Id);
+        }
+
+        /// <summary>
+        /// Запрос создания возвращает идентификатор созаданной записи
+        /// </summary>
+        [Test]
+        public void Create_RequestNewInvalidCommentCreate_NererRunsRepositoryCreateMethod()
+        {
+            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
+            var invalidComments = new CommentDto[]
+            {
+                new CommentDto { ArticleId = 0, Author = "author", Content = "content" },
+                new CommentDto { ArticleId = 1, Author = null, Content = "content" },
+                new CommentDto { ArticleId = 1, Author = "author", Content = null },
+            };
+
+            foreach (CommentDto commentToCreate in invalidComments)
+            {
+                ResultDto<CommentDto> result = service.Create(commentToCreate);
+
+                Assert.IsFalse(result.Success);
+            }
+
+            mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Never);
         }
 
         /// <summary>
         /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз
         /// </summary>
         [Test]
-        public void Update_RequestCommentUpdate_RunsRepositoryUpdateMethodOnce()
+        public void Update_RequestCommentValidUpdate_RunsRepositoryUpdateMethodOnce()
         {
-            var commentToUpdate = new CommentDto();
+            var commentToUpdate = new CommentDto
+            {
+                ArticleId = 1,
+                Author = "author",
+                Content = "content"
+            };
             mock.Setup(a => a.Comments.Update(It.IsAny<Comment>()));
 
-            service.Update(commentToUpdate);
+            ResultDto<CommentDto> result = service.Update(commentToUpdate);
 
+            Assert.IsTrue(result.Success);
             mock.Verify(r => r.Comments.Update(It.IsAny<Comment>()), Times.Once);
+        }
+
+        /// <summary>
+        /// Запрос создания возвращает идентификатор созаданной записи
+        /// </summary>
+        [Test]
+        public void Update_RequestCommentValidUpdate_NererRunsRepositoryUpdateMethod()
+        {
+            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
+            var invalidComments = new CommentDto[]
+            {
+                new CommentDto { ArticleId = 0, Author = "author", Content = "content" },
+                new CommentDto { ArticleId = 1, Author = null, Content = "content" },
+                new CommentDto { ArticleId = 1, Author = "author", Content = null },
+            };
+
+            foreach (CommentDto commentToUpdate in invalidComments)
+            {
+                ResultDto<CommentDto> result = service.Update(commentToUpdate);
+
+                Assert.IsFalse(result.Success);
+            }
+
+            mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Never);
         }
 
         /// <summary>
@@ -167,8 +237,9 @@ namespace ArticlesTests
             const long TargetId = 1;
             mock.Setup(m => m.Comments.Delete(TargetId));
 
-            service.Delete(TargetId);
+            ResultDto<CommentDto> result = service.Delete(TargetId);
 
+            Assert.IsTrue(result.Success);
             mock.Verify(r => r.Comments.Delete(TargetId), Times.Once);
         }
     }

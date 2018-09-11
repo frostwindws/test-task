@@ -67,7 +67,7 @@ namespace Articles.Services
         /// <param name="function">Выполняемая функция</param>
         /// <param name="callerName">Имя вызывающего метода (используется для логирования)</param>
         /// <returns>Результат выполнения операции</returns>
-        private ResultDto<T> SaveExecute<T>(Func<ResultDto<T>> function, [CallerMemberName] string callerName = "")
+        private ResultDto<T> SafeExecute<T>(Func<ResultDto<T>> function, [CallerMemberName] string callerName = "")
         {
             const string ErrorLogTemplate = "Error accured while executing \"CommentsService\".{MethodName}";
             try
@@ -89,7 +89,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<CommentDto[]> GetAll()
         {
-            return SaveExecute(() =>
+            return SafeExecute(() =>
             {
                 IOrderedEnumerable<Comment> comments = Context.Comments.GetCollection().OrderByDescending(a => a.Created);
                 return SuccessResult(Mapper.Map<CommentDto[]>(comments));
@@ -99,7 +99,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<CommentDto> Get(long id)
         {
-            return SaveExecute(() =>
+            return SafeExecute(() =>
             {
                 Comment comment = Context.Comments.Get(id);
                 CommentDto data = Mapper.Map<CommentDto>(comment);
@@ -112,7 +112,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<CommentDto[]> GetForArticle(long articleid)
         {
-            return SaveExecute(() =>
+            return SafeExecute(() =>
             {
                 IEnumerable<Comment> comments = Context.Comments.GetForArticle(articleid).OrderByDescending(a => a.Created);
                 return SuccessResult(Mapper.Map<CommentDto[]>(comments));
@@ -122,7 +122,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<CommentDto> Create(CommentDto comment)
         {
-            return SaveExecute(() =>
+            return SafeExecute(() =>
             {
                 ResultDto<CommentDto> result = comment
                     .ToOption()
@@ -143,7 +143,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<CommentDto> Update(CommentDto comment)
         {
-            return SaveExecute(() => {
+            return SafeExecute(() => {
                 ResultDto<CommentDto> result = comment
                     .ToOption()
                     .DoOnEmpty(() => result = FaultResult<CommentDto>("The comment is empty"))
@@ -163,7 +163,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<CommentDto> Delete(long id)
         {
-            return SaveExecute(() => {
+            return SafeExecute(() => {
                 Context.Comments.Delete(id);
                 return SuccessResult<CommentDto>(null);
             });

@@ -77,10 +77,6 @@ namespace ArticlesClient.Models
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        /// Метод вызова события изменения свойства объекта
-        /// </summary>
-        /// <param name="propertyName">Имя изменяемого свойства</param>
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

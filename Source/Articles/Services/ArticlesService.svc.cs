@@ -67,7 +67,7 @@ namespace Articles.Services
         /// <param name="function">Выполняемая функция</param>
         /// <param name="callerName">Имя вызывающего метода (используется для логирования)</param>
         /// <returns>Результат выполнения операции</returns>
-        private ResultDto<T> SaveExecute<T>(Func<ResultDto<T>> function, [CallerMemberName] string callerName = "")
+        private ResultDto<T> SafeExecute<T>(Func<ResultDto<T>> function, [CallerMemberName] string callerName = "")
         {
             const string ErrorLogTemplate = "Error accured while executing \"ArticleService\".{MethodName}";
 
@@ -90,7 +90,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<ArticleDto[]> GetAll()
         {
-            return SaveExecute(() =>
+            return SafeExecute(() =>
             {
                 IEnumerable<Article> articles = Context.Articles.GetCollection().OrderByDescending(a => a.Created);
                 return SuccessResult(Mapper.Map<ArticleDto[]>(articles));
@@ -100,7 +100,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<ArticleDto> Get(long id)
         {
-            return SaveExecute(() =>
+            return SafeExecute(() =>
             {
                 Article article = Context.Articles.Get(id);
                 ArticleDto data = Mapper.Map<ArticleDto>(article);
@@ -118,7 +118,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<ArticleDto> Create(ArticleDto article)
         {
-            return SaveExecute(() =>
+            return SafeExecute(() =>
             {
                 ResultDto<ArticleDto> result = article
                     .ToOption()
@@ -139,7 +139,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<ArticleDto> Update(ArticleDto article)
         {
-            return SaveExecute(() => {
+            return SafeExecute(() => {
                 ResultDto<ArticleDto> result = article
                     .ToOption()
                     .DoOnEmpty(() => result = FaultResult<ArticleDto>("The article is empty"))
@@ -159,7 +159,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<ArticleDto> Delete(long id)
         {
-            return SaveExecute(() => {
+            return SafeExecute(() => {
                 Context.Articles.Delete(id);
                 return SuccessResult<ArticleDto>(null);
             });

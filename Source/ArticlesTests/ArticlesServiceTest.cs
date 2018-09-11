@@ -58,9 +58,10 @@ namespace ArticlesTests
 
             mock.Setup(a => a.Articles.GetCollection()).Returns(collection);
 
-            IEnumerable<ArticleDto> result = service.GetAll();
+            ResultDto<ArticleDto[]> result = service.GetAll();
 
-            Assert.AreEqual(collection.Count(), result.Count());
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(collection.Count(), result.Data.Count());
         }
 
         /// <summary>
@@ -73,9 +74,10 @@ namespace ArticlesTests
             mock.Setup(a => a.Articles.Get(searchId)).Returns(new Article());
             mock.Setup(a => a.Comments.GetForArticle(searchId)).Returns(new Comment[0]);
 
-            ArticleDto result = service.Get(searchId);
+            ResultDto<ArticleDto> result = service.Get(searchId);
 
-            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Success);
+            Assert.IsNotNull(result.Data);
         }
 
         /// <summary>
@@ -87,54 +89,120 @@ namespace ArticlesTests
             const long SearchId = 1;
             mock.Setup(a => a.Articles.Get(SearchId)).Returns((Article)null);
 
-            ArticleDto result = service.Get(SearchId);
+            ResultDto<ArticleDto> result = service.Get(SearchId);
 
-            Assert.IsNull(result);
+            Assert.IsFalse(result.Success);
+            Assert.IsNull(result.Data);
         }
 
         /// <summary>
-        /// Запрос создания вызывает метод создания репозитория 1 раз
+        /// Запрос создания корректной статьи вызывает метод создания репозитория 1 раз
         /// </summary>
         [Test]
-        public void Create_RequestNewArticleCreating_RunsCreateMethodOnce()
+        public void Create_RequestNewValidArticleCreating_RunsRepositoryCreateMethodOnce()
         {
-            var articleToCreate = new ArticleDto();
-            var article = new Article();
-            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(article);
+            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(new Article());
+            var articleToCreate = new ArticleDto
+            {
+                Title = "title",
+                Author = "author",
+                Content = "content"
+            };
 
-            service.Create(articleToCreate);
+            ResultDto<ArticleDto> result = service.Create(articleToCreate);
 
+            Assert.IsTrue(result.Success);
             mock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Once);
         }
 
         /// <summary>
-        /// Запрос создания возвращает идентификатор созаданной записи
+        /// Запрос создания некорректной статьи не вызывает метод создания репозитория
         /// </summary>
         [Test]
-        public void Create_RequestNewArticleCreate_ReturnsRecordWithCreatedId()
+        public void Create_RequestNewInvalidArticleCreating_NeverRunsRepositoryCreateMethod()
+        {
+            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(new Article());
+            var invalidArticles = new[]
+            {
+                new ArticleDto{Title = null,Author = "author",Content = "content"},
+                new ArticleDto{Title = "title",Author = null,Content = "content"},
+                new ArticleDto{Title = "title",Author = "author",Content = null}
+            };
+
+            foreach (ArticleDto articleToCreate in invalidArticles)
+            {
+
+                ResultDto<ArticleDto> result = service.Create(articleToCreate);
+                Assert.IsFalse(result.Success);
+            }
+
+            mock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Never);
+        }
+
+        /// <summary>
+        /// Запрос создания корректной статьи возвращает идентификатор созаданной записи
+        /// </summary>
+        [Test]
+        public void Create_RequestNewValidArticleCreate_ReturnsRecordWithCreatedId()
         {
             const long CreatedId = 1;
-            var articleToCreate = new ArticleDto();
             var article = new Article { Id = CreatedId };
             mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(article);
+            var articleToCreate = new ArticleDto
+            {
+                Title = "title",
+                Author = "author",
+                Content = "content"
+            };
 
-            ArticleDto createdArticle = service.Create(articleToCreate);
+            ResultDto<ArticleDto> result = service.Create(articleToCreate);
 
-            Assert.AreEqual(createdArticle.Id, article.Id);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(result.Data.Id, article.Id);
         }
 
         /// <summary>
         /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз
         /// </summary>
         [Test]
-        public void Update_RequestArticleUpdate_RunsRepositoryUpdateMethodOnce()
+        public void Update_RequestArticleValidUpdate_RunsRepositoryUpdateMethodOnce()
         {
-            var articleToUpdate = new ArticleDto();
+            var articleToUpdate = new ArticleDto
+            {
+                Title = "title",
+                Author = "author",
+                Content = "content"
+            };
+
             mock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
 
-            service.Update(articleToUpdate);
+            ResultDto<ArticleDto> result = service.Update(articleToUpdate);
 
+            Assert.IsTrue(result.Success);
             mock.Verify(r => r.Articles.Update(It.IsAny<Article>()), Times.Once);
+        }
+
+        /// <summary>
+        /// Запрос некорректного обновления записи не выполняет метод обновления записи репозитория
+        /// </summary>
+        [Test]
+        public void Update_RequestArticleValidUpdate_NeverRunsRepositoryUpdateMethod()
+        {
+            mock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
+            var invalidArticles = new[]
+            {
+                new ArticleDto{Title = null,Author = "author",Content = "content"},
+                new ArticleDto{Title = "title",Author = null,Content = "content"},
+                new ArticleDto{Title = "title",Author = "author",Content = null}
+            };
+
+            foreach (ArticleDto articleToUpdate in invalidArticles)
+            {
+                ResultDto<ArticleDto> result = service.Update(articleToUpdate);
+                Assert.IsFalse(result.Success);
+            }
+
+            mock.Verify(r => r.Articles.Update(It.IsAny<Article>()), Times.Never);
         }
 
         /// <summary>
@@ -146,8 +214,9 @@ namespace ArticlesTests
             const long TargetId = 1;
             mock.Setup(m => m.Articles.Delete(TargetId));
 
-            service.Delete(TargetId);
+            ResultDto<ArticleDto> result = service.Delete(TargetId);
 
+            Assert.IsTrue(result.Success);
             mock.Verify(r => r.Articles.Delete(TargetId), Times.Once);
         }
     }

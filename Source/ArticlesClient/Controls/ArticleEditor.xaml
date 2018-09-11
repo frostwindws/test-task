@@ -19,24 +19,56 @@
         <Style x:Key="TitleStyle">
             <Setter Property="Control.FontSize" Value="30"></Setter>
         </Style>
-        <Style x:Key="EditButtonsStyle">
-            <Setter Property="Control.Width" Value="100"></Setter>
-            <Setter Property="Control.Height" Value="30"></Setter>
-            <Setter Property="Control.Margin" Value="10"></Setter>
+        <Style x:Key="EditButtonsStyle" TargetType="Button">
+            <Setter Property="Width" Value="100"></Setter>
+            <Setter Property="Height" Value="30"></Setter>
+            <Setter Property="Margin" Value="10"></Setter>
+        </Style>
+        <Style x:Key="FieldStyle" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border BorderBrush="Red" BorderThickness="0,0,0,1">
+                            <AdornedElementPlaceholder />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
     <Grid Style="{StaticResource EditorStyle}">
         <StackPanel Orientation="Vertical" Margin="10">
             <Label Content="{Binding IsNew, Converter={StaticResource EditorTitleConverter}, ConverterParameter=article}" Style="{StaticResource TitleStyle}"/>
             <Label Content="Title*"/>
-            <TextBox Text="{Binding Title, Mode=TwoWay}" AutomationProperties.IsRequiredForForm="True" />
+            <TextBox Name="TitleField" Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource FieldStyle}" />
             <Label Content="Author*"/>
-            <TextBox Text="{Binding Author, Mode=TwoWay}" IsEnabled="{Binding IsNew}" AutomationProperties.IsRequiredForForm="True"/>
+            <TextBox Name="AuthorField" Text="{Binding Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource FieldStyle}" IsEnabled="{Binding IsNew}"/>
             <Label Content="Content*"/>
-            <TextBox Text="{Binding Content, Mode=TwoWay}" MinLines="7" AcceptsReturn="True" AcceptsTab="True" AutomationProperties.IsRequiredForForm="True"></TextBox>
+            <TextBox Name="ContentField" Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource FieldStyle}" MinLines="7" AcceptsReturn="True" AcceptsTab="True"></TextBox>
         </StackPanel>
         <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Button Content="Save" Style="{StaticResource EditButtonsStyle}" Click="SaveBase_OnClick"/>
+            <Button Content="Save" Click="SaveBase_OnClick" >
+                <Button.Style >
+                    <Style BasedOn="{StaticResource EditButtonsStyle}" TargetType="Button">
+                        <Setter Property="IsEnabled" Value="false" />
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ElementName=TitleField, Path=(Validation.HasError)}" Value="False" />
+                                    <Condition Binding="{Binding ElementName=AuthorField, Path=(Validation.HasError)}" Value="False" />
+                                    <Condition Binding="{Binding ElementName=ContentField, Path=(Validation.HasError)}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="IsEnabled" Value="True" />
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Content="Cancel" Style="{StaticResource EditButtonsStyle}" Click="CancelBase_OnClick"/>
         </DockPanel>
     </Grid>
