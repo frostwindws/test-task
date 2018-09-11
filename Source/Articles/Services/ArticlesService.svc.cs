@@ -17,17 +17,24 @@ namespace Articles.Services
     public class ArticlesService : IArticlesService, IDisposable
     {
         /// <summary>
+        /// Валидатор статей
+        /// </summary>
+        private readonly IModelValidator<Article> validator;
+
+        /// <summary>
         /// Контекст работы с данными
         /// </summary>
-        private IDataContext Context { get; }
+        private readonly IDataContext context;
 
         /// <summary>
         /// Конструктор сервиса
         /// </summary>
         /// <param name="context">Используемый контекст</param>
-        public ArticlesService(IDataContext context)
+        /// <param name="validator">Используемый валидатор статей</param>
+        public ArticlesService(IDataContext context, IModelValidator<Article> validator)
         {
-            Context = context;
+            this.context = context;
+            this.validator = validator;
         }
 
         /// <summary>
@@ -92,7 +99,7 @@ namespace Articles.Services
         {
             return SafeExecute(() =>
             {
-                IEnumerable<Article> articles = Context.Articles.GetCollection().OrderByDescending(a => a.Created);
+                IEnumerable<Article> articles = context.Articles.GetCollection().OrderByDescending(a => a.Created);
                 return SuccessResult(Mapper.Map<ArticleDto[]>(articles));
             });
         }
@@ -102,14 +109,14 @@ namespace Articles.Services
         {
             return SafeExecute(() =>
             {
-                Article article = Context.Articles.Get(id);
+                Article article = context.Articles.Get(id);
                 ArticleDto data = Mapper.Map<ArticleDto>(article);
                 if (article == null)
                 {
                     return FaultResult<ArticleDto>("Article wasn't found");
                 }
 
-                IEnumerable<Comment> comments = Context.Comments.GetForArticle(article.Id);
+                IEnumerable<Comment> comments = context.Comments.GetForArticle(article.Id);
                 data.Comments = Mapper.Map<CommentDto[]>(comments);
                 return SuccessResult(data);
             });
@@ -126,10 +133,10 @@ namespace Articles.Services
                     .Map(a => Mapper.Map<Article>(article))
                     .Map(a =>
                     {
-                        IEnumerable<string> errors = a.Validate();
+                        IEnumerable<string> errors = validator.GetErrors(context.Articles, a);
                         return errors.Any()
                             ? FaultResult<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : SuccessResult(Mapper.Map<ArticleDto>(Context.Articles.Create(a)));
+                            : SuccessResult(Mapper.Map<ArticleDto>(context.Articles.Create(a)));
                     }).Value;
 
                 return result;
@@ -146,10 +153,10 @@ namespace Articles.Services
                     .Map(a => Mapper.Map<Article>(article))
                     .Map(a =>
                     {
-                        IEnumerable<string> errors = a.Validate();
+                        IEnumerable<string> errors = validator.GetErrors(context.Articles, a);
                         return errors.Any()
                             ? FaultResult<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : SuccessResult(Mapper.Map<ArticleDto>(Context.Articles.Update(a)));
+                            : SuccessResult(Mapper.Map<ArticleDto>(context.Articles.Update(a)));
                     }).Value;
 
                 return result;
@@ -160,7 +167,7 @@ namespace Articles.Services
         public ResultDto<ArticleDto> Delete(long id)
         {
             return SafeExecute(() => {
-                Context.Articles.Delete(id);
+                context.Articles.Delete(id);
                 return SuccessResult<ArticleDto>(null);
             });
         }
@@ -168,7 +175,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public void Dispose()
         {
-            if (Context is IDisposable disposableContext)
+            if (context is IDisposable disposableContext)
             {
                 disposableContext.Dispose();
             }

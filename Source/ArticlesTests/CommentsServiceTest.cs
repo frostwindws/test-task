@@ -18,7 +18,8 @@ namespace ArticlesTests
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class CommentsServiceTest
     {
-        private Mock<IDataContext> mock;
+        private Mock<IDataContext> contextMock;
+        private Mock<IModelValidator<Comment>> validatorMock;
         private ICommentsService service;
 
         /// <summary>
@@ -36,8 +37,9 @@ namespace ArticlesTests
         [SetUp]
         public void TestSetUp()
         {
-            mock = new Mock<IDataContext>();
-            service = new CommentsService(mock.Object);
+            contextMock = new Mock<IDataContext>();
+            validatorMock = new Mock<IModelValidator<Comment>>();
+            service = new CommentsService(contextMock.Object, validatorMock.Object);
         }
 
         /// <summary>
@@ -56,12 +58,12 @@ namespace ArticlesTests
                 Created = DateTime.Now.AddHours(-i)
             });
 
-            mock.Setup(a => a.Comments.GetForArticle(ArticleId)).Returns(collection);
+            contextMock.Setup(a => a.Comments.GetForArticle(ArticleId)).Returns(collection);
 
             ResultDto<CommentDto[]> result = service.GetForArticle(ArticleId);
 
             Assert.IsTrue(result.Success);
-            Assert.AreEqual(collection.Count(), result.Data.Count());
+            Assert.AreEqual(collection.Count(), result.Data.Length);
         }
 
         /// <summary>
@@ -79,12 +81,12 @@ namespace ArticlesTests
                 Created = DateTime.Now.AddHours(-i)
             });
 
-            mock.Setup(a => a.Comments.GetCollection()).Returns(collection);
+            contextMock.Setup(a => a.Comments.GetCollection()).Returns(collection);
 
             ResultDto<CommentDto[]> result = service.GetAll();
 
             Assert.IsTrue(result.Success);
-            Assert.AreEqual(collection.Count(), result.Data.Count());
+            Assert.AreEqual(collection.Count(), result.Data.Length);
         }
 
         /// <summary>
@@ -94,7 +96,7 @@ namespace ArticlesTests
         public void Get_RequestExistingRecord_ReturnsNotNull()
         {
             long searchId = 1;
-            mock.Setup(a => a.Comments.Get(searchId)).Returns(new Comment());
+            contextMock.Setup(a => a.Comments.Get(searchId)).Returns(new Comment());
 
             ResultDto<CommentDto> result = service.Get(searchId);
 
@@ -109,7 +111,7 @@ namespace ArticlesTests
         public void Get_RequestNotExistingRecord_ReturnsNull()
         {
             const long SearchId = 1;
-            mock.Setup(a => a.Comments.Get(SearchId)).Returns((Comment)null);
+            contextMock.Setup(a => a.Comments.Get(SearchId)).Returns((Comment)null);
 
             ResultDto<CommentDto> result = service.Get(SearchId);
 
@@ -123,19 +125,13 @@ namespace ArticlesTests
         [Test]
         public void Create_RequestNewValidCommentCreate_RunsRepositoryCreateMethodOnce()
         {
-            var commentToCreate = new CommentDto
-            {
-                ArticleId = 1,
-                Author = "author",
-                Content = "content"
-            };
-            var comment = new Comment();
-            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(comment);
+            contextMock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new string[0]);
 
-            ResultDto<CommentDto> result = service.Create(commentToCreate);
+            ResultDto<CommentDto> result = service.Create(new CommentDto());
 
             Assert.IsTrue(result.Success);
-            mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Once);
+            contextMock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Once);
         }
 
         /// <summary>
@@ -145,16 +141,11 @@ namespace ArticlesTests
         public void Create_RequestNewValidCommentCreate_ReturnsCreatedRecordId()
         {
             const long CreatedId = 1;
-            var commentToCreate = new CommentDto
-            {
-                ArticleId = 1,
-                Author = "author",
-                Content = "content"
-            };
             var comment = new Comment { Id = CreatedId };
-            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(comment);
+            contextMock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(comment);
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new string[0]);
 
-            ResultDto<CommentDto> result = service.Create(commentToCreate);
+            ResultDto<CommentDto> result = service.Create(new CommentDto());
 
             Assert.IsTrue(result.Success);
             Assert.AreEqual(result.Data.Id, comment.Id);
@@ -166,22 +157,13 @@ namespace ArticlesTests
         [Test]
         public void Create_RequestNewInvalidCommentCreate_NererRunsRepositoryCreateMethod()
         {
-            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
-            var invalidComments = new CommentDto[]
-            {
-                new CommentDto { ArticleId = 0, Author = "author", Content = "content" },
-                new CommentDto { ArticleId = 1, Author = null, Content = "content" },
-                new CommentDto { ArticleId = 1, Author = "author", Content = null },
-            };
+            contextMock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new[] { "invalid" });
 
-            foreach (CommentDto commentToCreate in invalidComments)
-            {
-                ResultDto<CommentDto> result = service.Create(commentToCreate);
+            ResultDto<CommentDto> result = service.Create(new CommentDto());
 
-                Assert.IsFalse(result.Success);
-            }
-
-            mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Never);
+            Assert.IsFalse(result.Success);
+            contextMock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Never);
         }
 
         /// <summary>
@@ -190,42 +172,28 @@ namespace ArticlesTests
         [Test]
         public void Update_RequestCommentValidUpdate_RunsRepositoryUpdateMethodOnce()
         {
-            var commentToUpdate = new CommentDto
-            {
-                ArticleId = 1,
-                Author = "author",
-                Content = "content"
-            };
-            mock.Setup(a => a.Comments.Update(It.IsAny<Comment>()));
+            contextMock.Setup(a => a.Comments.Update(It.IsAny<Comment>()));
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new string[0]);
 
-            ResultDto<CommentDto> result = service.Update(commentToUpdate);
+            ResultDto<CommentDto> result = service.Update(new CommentDto());
 
             Assert.IsTrue(result.Success);
-            mock.Verify(r => r.Comments.Update(It.IsAny<Comment>()), Times.Once);
+            contextMock.Verify(r => r.Comments.Update(It.IsAny<Comment>()), Times.Once);
         }
 
         /// <summary>
         /// Запрос создания возвращает идентификатор созаданной записи
         /// </summary>
         [Test]
-        public void Update_RequestCommentValidUpdate_NererRunsRepositoryUpdateMethod()
+        public void Update_RequestCommentValidUpdate_NeverRunsRepositoryUpdateMethod()
         {
-            mock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
-            var invalidComments = new CommentDto[]
-            {
-                new CommentDto { ArticleId = 0, Author = "author", Content = "content" },
-                new CommentDto { ArticleId = 1, Author = null, Content = "content" },
-                new CommentDto { ArticleId = 1, Author = "author", Content = null },
-            };
+            contextMock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new[] { "invalid" });
 
-            foreach (CommentDto commentToUpdate in invalidComments)
-            {
-                ResultDto<CommentDto> result = service.Update(commentToUpdate);
+            ResultDto<CommentDto> result = service.Update(new CommentDto());
 
-                Assert.IsFalse(result.Success);
-            }
-
-            mock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Never);
+            Assert.IsFalse(result.Success);
+            contextMock.Verify(r => r.Comments.Create(It.IsAny<Comment>()), Times.Never);
         }
 
         /// <summary>
@@ -235,12 +203,12 @@ namespace ArticlesTests
         public void Delete_RequestNewCommentDelete_RunsRepositoryDeleteMethodOnce()
         {
             const long TargetId = 1;
-            mock.Setup(m => m.Comments.Delete(TargetId));
+            contextMock.Setup(m => m.Comments.Delete(TargetId));
 
             ResultDto<CommentDto> result = service.Delete(TargetId);
 
             Assert.IsTrue(result.Success);
-            mock.Verify(r => r.Comments.Delete(TargetId), Times.Once);
+            contextMock.Verify(r => r.Comments.Delete(TargetId), Times.Once);
         }
     }
 }

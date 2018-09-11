@@ -15,6 +15,14 @@ namespace Articles.Models
         IEnumerable<T> GetCollection();
 
         /// <summary>
+        /// Проверка наличия записи с таким же свойством
+        /// </summary>
+        /// <param name="propertyName">Имя свойства</param>
+        /// <param name="value">Значение свойства</param>
+        /// <returns>True, если значение уже присутствует</returns>
+        bool Exists(string propertyName, string value);
+
+        /// <summary>
         /// Найти запись по ее идентификатору.
         /// </summary>
         /// <param name="id">Идентификатор записи.</param>

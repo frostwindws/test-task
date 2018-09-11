@@ -5,7 +5,7 @@ using Articles.Models;
 namespace Articles.Dapper
 {
     /// <summary>
-    /// Контекст работы со статьями и комментариями к ним через Dapper
+    /// Контекст работы со статьями и комментариями к ним через Dapper.
     /// </summary>
     public class DapperContext : IDataContext, IDisposable
     {
@@ -18,7 +18,7 @@ namespace Articles.Dapper
         public ICommentsRepository Comments { get; }
 
         /// <summary>
-        /// Конструктор 
+        /// Конструктор контекста.
         /// </summary>
         /// <param name="connection"></param>
         public DapperContext(IDbConnection connection)
@@ -29,7 +29,7 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Освобождение ресурсов
+        /// Освобождение ресурсов.
         /// </summary>
         public void Dispose()
         {

@@ -113,12 +113,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dapper\DapperUnit.cs" />
+    <Compile Include="Models\CommentsValidator.cs" />
+    <Compile Include="Models\ArticlesValidator.cs" />
+    <Compile Include="Dapper\DapperContext.cs" />
     <Compile Include="Initialization\AutofacConfiguration.cs" />
     <Compile Include="Initialization\LoggerInterceptor.cs" />
     <Compile Include="Initialization\MapperConfiguration.cs" />
     <Compile Include="Initialization\SerilogConfiguration.cs" />
     <Compile Include="Models\IDataContext.cs" />
+    <Compile Include="Models\IModelValidator.cs" />
     <Compile Include="Services\ArticlesService.svc.cs">
       <DependentUpon>ArticlesService.svc</DependentUpon>
     </Compile>

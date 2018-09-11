@@ -19,7 +19,8 @@ namespace ArticlesTests
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class ArticlesServiceTest
     {
-        private Mock<IDataContext> mock;
+        private Mock<IDataContext> contextMock;
+        private Mock<IModelValidator<Article>> validatorMock;
         private IArticlesService service;
 
         /// <summary>
@@ -37,8 +38,9 @@ namespace ArticlesTests
         [SetUp]
         public void TestSetUp()
         {
-            mock = new Mock<IDataContext>();
-            service = new ArticlesService(mock.Object);
+            contextMock = new Mock<IDataContext>();
+            validatorMock = new Mock<IModelValidator<Article>>();
+            service = new ArticlesService(contextMock.Object, validatorMock.Object);
         }
 
         /// <summary>
@@ -56,12 +58,12 @@ namespace ArticlesTests
                 Created = DateTime.Now.AddHours(-i)
             });
 
-            mock.Setup(a => a.Articles.GetCollection()).Returns(collection);
+            contextMock.Setup(a => a.Articles.GetCollection()).Returns(collection);
 
             ResultDto<ArticleDto[]> result = service.GetAll();
 
             Assert.IsTrue(result.Success);
-            Assert.AreEqual(collection.Count(), result.Data.Count());
+            Assert.AreEqual(collection.Count(), result.Data.Length);
         }
 
         /// <summary>
@@ -71,8 +73,8 @@ namespace ArticlesTests
         public void Get_RequestExistingRecord_ReturnsNotNull()
         {
             long searchId = 1;
-            mock.Setup(a => a.Articles.Get(searchId)).Returns(new Article());
-            mock.Setup(a => a.Comments.GetForArticle(searchId)).Returns(new Comment[0]);
+            contextMock.Setup(a => a.Articles.Get(searchId)).Returns(new Article());
+            contextMock.Setup(a => a.Comments.GetForArticle(searchId)).Returns(new Comment[0]);
 
             ResultDto<ArticleDto> result = service.Get(searchId);
 
@@ -87,7 +89,7 @@ namespace ArticlesTests
         public void Get_RequestNotExistingRecord_ReturnsNull()
         {
             const long SearchId = 1;
-            mock.Setup(a => a.Articles.Get(SearchId)).Returns((Article)null);
+            contextMock.Setup(a => a.Articles.Get(SearchId)).Returns((Article)null);
 
             ResultDto<ArticleDto> result = service.Get(SearchId);
 
@@ -101,18 +103,13 @@ namespace ArticlesTests
         [Test]
         public void Create_RequestNewValidArticleCreating_RunsRepositoryCreateMethodOnce()
         {
-            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(new Article());
-            var articleToCreate = new ArticleDto
-            {
-                Title = "title",
-                Author = "author",
-                Content = "content"
-            };
+            contextMock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(new Article());
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new string[0]);
 
-            ResultDto<ArticleDto> result = service.Create(articleToCreate);
+            ResultDto<ArticleDto> result = service.Create(new ArticleDto());
 
             Assert.IsTrue(result.Success);
-            mock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Once);
+            contextMock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Once);
         }
 
         /// <summary>
@@ -121,22 +118,13 @@ namespace ArticlesTests
         [Test]
         public void Create_RequestNewInvalidArticleCreating_NeverRunsRepositoryCreateMethod()
         {
-            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(new Article());
-            var invalidArticles = new[]
-            {
-                new ArticleDto{Title = null,Author = "author",Content = "content"},
-                new ArticleDto{Title = "title",Author = null,Content = "content"},
-                new ArticleDto{Title = "title",Author = "author",Content = null}
-            };
+            contextMock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(new Article());
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new[] { "is invalid" });
 
-            foreach (ArticleDto articleToCreate in invalidArticles)
-            {
+            ResultDto<ArticleDto> result = service.Create(new ArticleDto());
+            Assert.IsFalse(result.Success);
 
-                ResultDto<ArticleDto> result = service.Create(articleToCreate);
-                Assert.IsFalse(result.Success);
-            }
-
-            mock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Never);
+            contextMock.Verify(r => r.Articles.Create(It.IsAny<Article>()), Times.Never);
         }
 
         /// <summary>
@@ -145,17 +133,11 @@ namespace ArticlesTests
         [Test]
         public void Create_RequestNewValidArticleCreate_ReturnsRecordWithCreatedId()
         {
-            const long CreatedId = 1;
-            var article = new Article { Id = CreatedId };
-            mock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(article);
-            var articleToCreate = new ArticleDto
-            {
-                Title = "title",
-                Author = "author",
-                Content = "content"
-            };
+            var article = new Article { Id = 1 };
+            contextMock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(article);
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new string[0]);
 
-            ResultDto<ArticleDto> result = service.Create(articleToCreate);
+            ResultDto<ArticleDto> result = service.Create(new ArticleDto());
 
             Assert.IsTrue(result.Success);
             Assert.AreEqual(result.Data.Id, article.Id);
@@ -167,19 +149,13 @@ namespace ArticlesTests
         [Test]
         public void Update_RequestArticleValidUpdate_RunsRepositoryUpdateMethodOnce()
         {
-            var articleToUpdate = new ArticleDto
-            {
-                Title = "title",
-                Author = "author",
-                Content = "content"
-            };
+            contextMock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new string[0]);
 
-            mock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
-
-            ResultDto<ArticleDto> result = service.Update(articleToUpdate);
+            ResultDto<ArticleDto> result = service.Update(new ArticleDto());
 
             Assert.IsTrue(result.Success);
-            mock.Verify(r => r.Articles.Update(It.IsAny<Article>()), Times.Once);
+            contextMock.Verify(r => r.Articles.Update(It.IsAny<Article>()), Times.Once);
         }
 
         /// <summary>
@@ -188,21 +164,13 @@ namespace ArticlesTests
         [Test]
         public void Update_RequestArticleValidUpdate_NeverRunsRepositoryUpdateMethod()
         {
-            mock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
-            var invalidArticles = new[]
-            {
-                new ArticleDto{Title = null,Author = "author",Content = "content"},
-                new ArticleDto{Title = "title",Author = null,Content = "content"},
-                new ArticleDto{Title = "title",Author = "author",Content = null}
-            };
+            contextMock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new[] { "is invalid" });
 
-            foreach (ArticleDto articleToUpdate in invalidArticles)
-            {
-                ResultDto<ArticleDto> result = service.Update(articleToUpdate);
-                Assert.IsFalse(result.Success);
-            }
+            ResultDto<ArticleDto> result = service.Update(new ArticleDto());
 
-            mock.Verify(r => r.Articles.Update(It.IsAny<Article>()), Times.Never);
+            Assert.IsFalse(result.Success);
+            contextMock.Verify(r => r.Articles.Update(It.IsAny<Article>()), Times.Never);
         }
 
         /// <summary>
@@ -212,12 +180,12 @@ namespace ArticlesTests
         public void Delete_RequestArticleDelete_RunsRepositoryDeleteMethodOnce()
         {
             const long TargetId = 1;
-            mock.Setup(m => m.Articles.Delete(TargetId));
+            contextMock.Setup(m => m.Articles.Delete(TargetId));
 
             ResultDto<ArticleDto> result = service.Delete(TargetId);
 
             Assert.IsTrue(result.Success);
-            mock.Verify(r => r.Articles.Delete(TargetId), Times.Once);
+            contextMock.Verify(r => r.Articles.Delete(TargetId), Times.Once);
         }
     }
 }

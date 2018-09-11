@@ -17,17 +17,24 @@ namespace Articles.Services
     public class CommentsService : ICommentsService, IDisposable
     {
         /// <summary>
+        /// Валидатор комментариев
+        /// </summary>
+        private readonly IModelValidator<Comment> validator;
+
+        /// <summary>
         /// Контекст работы с данными
         /// </summary>
-        private IDataContext Context { get; }
+        private readonly IDataContext context;
 
         /// <summary>
         /// Конструктор сервиса
         /// </summary>
         /// <param name="context">Используемый контекст</param>
-        public CommentsService(IDataContext context)
+        /// <param name="validator">Валидатор для комментариев</param>
+        public CommentsService(IDataContext context, IModelValidator<Comment> validator)
         {
-            Context = context;
+            this.context = context;
+            this.validator = validator;
         }
 
         /// <summary>
@@ -91,7 +98,7 @@ namespace Articles.Services
         {
             return SafeExecute(() =>
             {
-                IOrderedEnumerable<Comment> comments = Context.Comments.GetCollection().OrderByDescending(a => a.Created);
+                IOrderedEnumerable<Comment> comments = context.Comments.GetCollection().OrderByDescending(a => a.Created);
                 return SuccessResult(Mapper.Map<CommentDto[]>(comments));
             });
         }
@@ -101,7 +108,7 @@ namespace Articles.Services
         {
             return SafeExecute(() =>
             {
-                Comment comment = Context.Comments.Get(id);
+                Comment comment = context.Comments.Get(id);
                 CommentDto data = Mapper.Map<CommentDto>(comment);
                 return comment == null 
                     ? FaultResult<CommentDto>("Comment wasn't found") 
@@ -114,7 +121,7 @@ namespace Articles.Services
         {
             return SafeExecute(() =>
             {
-                IEnumerable<Comment> comments = Context.Comments.GetForArticle(articleid).OrderByDescending(a => a.Created);
+                IEnumerable<Comment> comments = context.Comments.GetForArticle(articleid).OrderByDescending(a => a.Created);
                 return SuccessResult(Mapper.Map<CommentDto[]>(comments));
             });
         }
@@ -130,10 +137,10 @@ namespace Articles.Services
                     .Map(a => Mapper.Map<Comment>(comment))
                     .Map(a =>
                     {
-                        IEnumerable<string> errors = a.Validate();
+                        IEnumerable<string> errors = validator.GetErrors(context.Comments, a);
                         return errors.Any()
                             ? FaultResult<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : SuccessResult(Mapper.Map<CommentDto>(Context.Comments.Create(a)));
+                            : SuccessResult(Mapper.Map<CommentDto>(context.Comments.Create(a)));
                     }).Value;
 
                 return result;
@@ -150,10 +157,10 @@ namespace Articles.Services
                     .Map(a => Mapper.Map<Comment>(comment))
                     .Map(a =>
                     {
-                        IEnumerable<string> errors = a.Validate();
+                        IEnumerable<string> errors = validator.GetErrors(context.Comments, a);
                         return errors.Any()
                             ? FaultResult<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : SuccessResult(Mapper.Map<CommentDto>(Context.Comments.Update(a)));
+                            : SuccessResult(Mapper.Map<CommentDto>(context.Comments.Update(a)));
                     }).Value;
 
                 return result;
@@ -164,7 +171,7 @@ namespace Articles.Services
         public ResultDto<CommentDto> Delete(long id)
         {
             return SafeExecute(() => {
-                Context.Comments.Delete(id);
+                context.Comments.Delete(id);
                 return SuccessResult<CommentDto>(null);
             });
         }
@@ -172,7 +179,7 @@ namespace Articles.Services
         /// <inheritdoc />
         public void Dispose()
         {
-            if (Context is IDisposable disposableContext)
+            if (context is IDisposable disposableContext)
             {
                 disposableContext.Dispose();
             }

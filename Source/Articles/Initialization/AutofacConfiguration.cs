@@ -21,10 +21,14 @@ namespace Articles.Initialization
         public static void Init()
         {
             var builder = new ContainerBuilder();
-            builder.Register(c => new DapperContext(CreateNpgsqlConnection()))
-                .As<IDataContext>();
-
             builder.RegisterType<LoggerInterceptor>();
+
+            // Классы, используемые при создании сервиса
+            builder.Register(c => new DapperContext(CreateNpgsqlConnection())).As<IDataContext>();
+            builder.RegisterType<ArticlesValidator>().As<IModelValidator<Article>>();
+            builder.RegisterType<CommentsValidator>().As<IModelValidator<Comment>>();
+
+            // Перехват методов сервиса
             builder.RegisterType<ArticlesService>()
                 .As<IArticlesService>()
                 .EnableInterfaceInterceptors()
@@ -34,8 +38,7 @@ namespace Articles.Initialization
                 .As<ICommentsService>()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(LoggerInterceptor));
-            builder.RegisterType<CommentsRepository>().As<ICommentsRepository>();
-
+            
             AutofacHostFactory.Container = builder.Build();
         }
 

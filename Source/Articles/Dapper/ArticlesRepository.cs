@@ -17,6 +17,7 @@ namespace Articles.Dapper
         private const string CreateQuery = "insert into articles(title, author, content) values(@Title, @Author, @Content) returning id, title, author, content, created";
         private const string UpdateQuery = "update articles set title = @Title, author = @Author, content = @Content where id = @Id returning id, title, author, content, created";
         private const string DeleteQuery = "delete from articles where id = @id";
+        private const string ExistsQuery = "select exists(select id from articles a where a.\"{0}\" = @value)";
 
         private readonly IDbConnection connection;
 
@@ -35,6 +36,17 @@ namespace Articles.Dapper
         public IEnumerable<Article> GetCollection()
         {
             return connection.Query<Article>(GetQuery);
+        }
+
+        /// <summary>
+        /// Проверка наличия статьи с указанным свойством
+        /// </summary>
+        /// <param name="propertyName">Имя свойства</param>
+        /// <param name="value">Значение свойства</param>
+        /// <returns>True, если статья с указанным свойством уже существует</returns>
+        public bool Exists(string propertyName, string value)
+        {
+            return connection.QueryFirst<bool>(string.Format(ExistsQuery, propertyName.ToLowerInvariant()), new { value });
         }
 
         /// <summary>

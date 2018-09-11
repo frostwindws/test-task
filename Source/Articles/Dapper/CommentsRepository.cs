@@ -17,6 +17,7 @@ namespace Articles.Dapper
         private const string CreateQuery = "insert into comments(articleid, author, content) values(@ArticleId, @Author, @Content) returning id, articleid, author, content, created";
         private const string UpdateQuery = "update comments set content = @Content where id = @Id returning id, articleid, author, content, created"; // У комментариев может обновляться только контент
         private const string DeleteQuery = "delete from comments where id = @id";
+        private const string ExistsQuery = "select exists(select id from comments a where a.\"{0}\" = @value)";
 
         private readonly IDbConnection connection;
 
@@ -59,6 +60,17 @@ namespace Articles.Dapper
         public Comment Get(long id)
         {
             return connection.QuerySingleOrDefault<Comment>(FindQuery, new { id });
+        }
+
+        /// <summary>
+        /// Проверка наличия комментария с указанным свойством
+        /// </summary>
+        /// <param name="propertyName">Имя свойства</param>
+        /// <param name="value">Значение свойства</param>
+        /// <returns>True, если статья с указанным свойством уже существует</returns>
+        public bool Exists(string propertyName, string value)
+        {
+            return connection.QueryFirst<bool>(string.Format(ExistsQuery, propertyName.ToLowerInvariant()), new { value });
         }
 
         /// <summary>

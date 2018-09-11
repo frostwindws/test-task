@@ -107,3 +107,20 @@ System.Exception: xxx
 12:34:41:2814 [Verbose]: ArticlesService: executing Get
 12:34:49:2306 [Verbose]: ArticlesService: executing Get
 12:34:50:4302 [Verbose]: ArticlesService: executing Get
+15:26:17:8731 [Verbose]: ArticlesService: executing GetAll
+15:26:31:3896 [Verbose]: ArticlesService: executing GetAll
+15:27:11:0010 [Verbose]: ArticlesService: executing Create
+15:27:21:2903 [Verbose]: ArticlesService: executing Create
+15:27:21:2963 [Information]: Created new article (Id=26): "Creating pull requests " by zzz
+15:27:39:3573 [Verbose]: ArticlesService: executing GetAll
+15:27:41:4272 [Verbose]: ArticlesService: executing Get
+15:27:43:0004 [Verbose]: ArticlesService: executing Get
+15:27:45:6869 [Verbose]: ArticlesService: executing Get
+15:27:48:2309 [Verbose]: ArticlesService: executing Delete
+15:27:48:2350 [Information]: Article deleted (Id=26)
+15:27:49:6612 [Verbose]: ArticlesService: executing Get
+15:27:54:5499 [Verbose]: ArticlesService: executing Get
+15:27:55:4945 [Verbose]: ArticlesService: executing Get
+15:28:04:4033 [Verbose]: CommentsService: executing Update
+15:28:04:4354 [Information]: Comment updated (Id=1) by xxxx for article id = 1
+15:28:26:1439 [Verbose]: ArticlesService: executing Create
