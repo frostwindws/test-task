@@ -5,8 +5,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ArticlesClient.ArticlesService;
-using ArticlesClient.Clients;
+using ArticlesClient.Clients.Wcf;
 using ArticlesClient.Models;
 using ArticlesClient.Utils;
 
@@ -22,15 +21,19 @@ namespace ArticlesClient
         /// </summary>
         private readonly ViewDataContainer viewData;
 
+        private DataClientsFactory ReaderFactory => ((App)Application.Current).ReaderFactory;
+
+        private DataClientsFactory WriterFactory => ((App)Application.Current).WriterFactory;
+
         /// <summary>
         /// Конструктор основного окна приложения
         /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            AutomapHelper.InitMapping();
 
             viewData = (ViewDataContainer)DataContext;
+
             RequestArticlesList();
         }
 
@@ -42,7 +45,7 @@ namespace ArticlesClient
             try
             {
                 IsEnabled = false;
-                using (var client = AutofacHelper.Resolve<IDataClient>())
+                using (var client = ReaderFactory.GetClient())
                 {
                     viewData.ArticlesList = new ObservableCollection<ArticleView>(await client.Articles.GetAllAsync());
                 }
@@ -70,7 +73,7 @@ namespace ArticlesClient
                 {
                     viewData.CurrentArticle = null;
                     ArticlesPanel.IsEnabled = false;
-                    using (var client = AutofacHelper.Resolve<IDataClient>())
+                    using (var client = ReaderFactory.GetClient())
                     {
                         viewData.CurrentArticle = await client.Articles.GetAsync(articleId);
                     }
@@ -130,7 +133,7 @@ namespace ArticlesClient
                     try
                     {
                         IsEnabled = false;
-                        using (var client = AutofacHelper.Resolve<IDataClient>())
+                        using (var client = WriterFactory.GetClient())
                         {
                             if (article.IsNew)
                             {
@@ -149,7 +152,7 @@ namespace ArticlesClient
                                 }
 
                                 // Необходима дополнительная подгрузка комментариев
-                                viewData.CurrentArticle = await client.Articles.GetAsync(article.Id);
+                                RequestArticledata(article.Id);
                             }
                         }
                     }
@@ -175,7 +178,7 @@ namespace ArticlesClient
                         if (result == MessageBoxResult.Yes)
                         {
                             IsEnabled = false;
-                            using (var client = AutofacHelper.Resolve<IDataClient>())
+                            using (var client = WriterFactory.GetClient())
                             {
                                 await client.Articles.DeleteAsync(article);
                             }
@@ -228,7 +231,7 @@ namespace ArticlesClient
                     if (result == MessageBoxResult.Yes)
                     {
                         IsEnabled = false;
-                        using (var client = AutofacHelper.Resolve<IDataClient>())
+                        using (var client = WriterFactory.GetClient())
                         {
                             await client.Comments.DeleteAsync(comment);
                         }
@@ -251,7 +254,7 @@ namespace ArticlesClient
                     {
                         IsEnabled = false;
                         ObservableCollection<CommentView> commentsList = viewData.CurrentArticle.Comments;
-                        using (var client = AutofacHelper.Resolve<IDataClient>())
+                        using (var client = WriterFactory.GetClient())
                         {
                             if (comment.IsNew)
                             {

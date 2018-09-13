@@ -38,36 +38,6 @@ namespace Articles.Services
         }
 
         /// <summary>
-        /// Формирование результат успешной операции
-        /// </summary>
-        /// <typeparam name="T">Тип передаваемых данных</typeparam>
-        /// <param name="data">передаваемые в результате данные</param>
-        /// <returns>Результат операции с флагом успешного выполнения</returns>
-        private ResultDto<T> SuccessResult<T>(T data)
-        {
-            return new ResultDto<T>
-            {
-                Success = true,
-                Data = data
-            };
-        }
-
-        /// <summary>
-        /// Формирование результат об ошибке выполнения операции
-        /// </summary>
-        /// <typeparam name="T">Тип передаваемых данных</typeparam>
-        /// <param name="exception">Текст сообщения об ошибке</param>
-        /// <returns>Результат операции с флагом провала выполнения</returns>
-        private ResultDto<T> FaultResult<T>(string exception)
-        {
-            return new ResultDto<T>
-            {
-                Success = false,
-                Message = exception
-            };
-        }
-
-        /// <summary>
         /// Оббертка для выполнения операция со стандартным набором обработчиков ошибок
         /// </summary>
         /// <typeparam name="T">Тип передаваемых на выходе данных</typeparam>
@@ -84,12 +54,12 @@ namespace Articles.Services
             catch (TimeoutException e)
             {
                 Log.Error(e, ErrorLogTemplate, callerName);
-                return FaultResult<T>("Database connection timeout. Please try again later");
+                return ResultBuilder.Fault<T>("Database connection timeout. Please try again later");
             }
             catch (DbException e)
             {
                 Log.Error(e, ErrorLogTemplate, callerName);
-                return FaultResult<T>($"Unexpected database exception: {e.GetBaseException().Message}.\r\nPlease try again later");
+                return ResultBuilder.Fault<T>($"Unexpected database exception: {e.GetBaseException().Message}.\r\nPlease try again later");
             }
         }
 
@@ -99,7 +69,7 @@ namespace Articles.Services
             return SafeExecute(() =>
             {
                 IOrderedEnumerable<Comment> comments = context.Comments.GetCollection().OrderByDescending(a => a.Created);
-                return SuccessResult(Mapper.Map<CommentDto[]>(comments));
+                return ResultBuilder.Success(Mapper.Map<CommentDto[]>(comments));
             });
         }
 
@@ -110,9 +80,9 @@ namespace Articles.Services
             {
                 Comment comment = context.Comments.Get(id);
                 CommentDto data = Mapper.Map<CommentDto>(comment);
-                return comment == null 
-                    ? FaultResult<CommentDto>("Comment wasn't found") 
-                    : SuccessResult(data);
+                return comment == null
+                    ? ResultBuilder.Fault<CommentDto>("Comment wasn't found")
+                    : ResultBuilder.Success(data);
             });
         }
 
@@ -122,7 +92,7 @@ namespace Articles.Services
             return SafeExecute(() =>
             {
                 IEnumerable<Comment> comments = context.Comments.GetForArticle(articleid).OrderByDescending(a => a.Created);
-                return SuccessResult(Mapper.Map<CommentDto[]>(comments));
+                return ResultBuilder.Success(Mapper.Map<CommentDto[]>(comments));
             });
         }
 
@@ -133,14 +103,14 @@ namespace Articles.Services
             {
                 ResultDto<CommentDto> result = comment
                     .ToOption()
-                    .DoOnEmpty(() => result = FaultResult<CommentDto>("The comment is empty"))
+                    .DoOnEmpty(() => result = ResultBuilder.Fault<CommentDto>("The comment is empty"))
                     .Map(a => Mapper.Map<Comment>(comment))
                     .Map(a =>
                     {
                         IEnumerable<string> errors = validator.GetErrors(context.Comments, a);
                         return errors.Any()
-                            ? FaultResult<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : SuccessResult(Mapper.Map<CommentDto>(context.Comments.Create(a)));
+                            ? ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
+                            : ResultBuilder.Success(Mapper.Map<CommentDto>(context.Comments.Create(a)));
                     }).Value;
 
                 return result;
@@ -150,17 +120,18 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<CommentDto> Update(CommentDto comment)
         {
-            return SafeExecute(() => {
+            return SafeExecute(() =>
+            {
                 ResultDto<CommentDto> result = comment
                     .ToOption()
-                    .DoOnEmpty(() => result = FaultResult<CommentDto>("The comment is empty"))
+                    .DoOnEmpty(() => result = ResultBuilder.Fault<CommentDto>("The comment is empty"))
                     .Map(a => Mapper.Map<Comment>(comment))
                     .Map(a =>
                     {
                         IEnumerable<string> errors = validator.GetErrors(context.Comments, a);
                         return errors.Any()
-                            ? FaultResult<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : SuccessResult(Mapper.Map<CommentDto>(context.Comments.Update(a)));
+                            ? ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
+                            : ResultBuilder.Success(Mapper.Map<CommentDto>(context.Comments.Update(a)));
                     }).Value;
 
                 return result;
@@ -170,19 +141,18 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<CommentDto> Delete(long id)
         {
-            return SafeExecute(() => {
+            return SafeExecute(() =>
+            {
                 context.Comments.Delete(id);
-                return SuccessResult<CommentDto>(null);
+                return ResultBuilder.Success<CommentDto>(null);
             });
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
-            if (context is IDisposable disposableContext)
-            {
-                disposableContext.Dispose();
-            }
+            context?.Dispose();
+
         }
     }
 }

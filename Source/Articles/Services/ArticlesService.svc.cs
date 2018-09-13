@@ -38,36 +38,6 @@ namespace Articles.Services
         }
 
         /// <summary>
-        /// Формирование результат успешной операции
-        /// </summary>
-        /// <typeparam name="T">Тип передаваемых данных</typeparam>
-        /// <param name="data">передаваемые в результате данные</param>
-        /// <returns>Результат операции с флагом успешного выполнения</returns>
-        private ResultDto<T> SuccessResult<T>(T data)
-        {
-            return new ResultDto<T>
-            {
-                Success = true,
-                Data = data
-            };
-        }
-
-        /// <summary>
-        /// Формирование результат об ошибке выполнения операции
-        /// </summary>
-        /// <typeparam name="T">Тип передаваемых данных</typeparam>
-        /// <param name="exception">Текст сообщения об ошибке</param>
-        /// <returns>Результат операции с флагом провала выполнения</returns>
-        private ResultDto<T> FaultResult<T>(string exception)
-        {
-            return new ResultDto<T>
-            {
-                Success = false,
-                Message = exception
-            };
-        }
-
-        /// <summary>
         /// Оббертка для выполнения операция со стандартным набором обработчиков ошибок
         /// </summary>
         /// <typeparam name="T">Тип передаваемых на выходе данных</typeparam>
@@ -85,12 +55,12 @@ namespace Articles.Services
             catch (TimeoutException e)
             {
                 Log.Error(e, ErrorLogTemplate, callerName);
-                return FaultResult<T>("Database connection timeout. Please try again later");
+                return ResultBuilder.Fault<T>("Database connection timeout. Please try again later");
             }
             catch (DbException e)
             {
                 Log.Error(e, ErrorLogTemplate, callerName);
-                return FaultResult<T>($"Unexpected database exception: {e.GetBaseException().Message}.\r\nPlease try again later");
+                return ResultBuilder.Fault<T>($"Unexpected database exception: {e.GetBaseException().Message}.\r\nPlease try again later");
             }
         }
 
@@ -100,7 +70,7 @@ namespace Articles.Services
             return SafeExecute(() =>
             {
                 IEnumerable<Article> articles = context.Articles.GetCollection().OrderByDescending(a => a.Created);
-                return SuccessResult(Mapper.Map<ArticleDto[]>(articles));
+                return ResultBuilder.Success(Mapper.Map<ArticleDto[]>(articles));
             });
         }
 
@@ -113,12 +83,12 @@ namespace Articles.Services
                 ArticleDto data = Mapper.Map<ArticleDto>(article);
                 if (article == null)
                 {
-                    return FaultResult<ArticleDto>("Article wasn't found");
+                    return ResultBuilder.Fault<ArticleDto>("Article wasn't found");
                 }
 
                 IEnumerable<Comment> comments = context.Comments.GetForArticle(article.Id);
                 data.Comments = Mapper.Map<CommentDto[]>(comments);
-                return SuccessResult(data);
+                return ResultBuilder.Success(data);
             });
         }
 
@@ -129,14 +99,14 @@ namespace Articles.Services
             {
                 ResultDto<ArticleDto> result = article
                     .ToOption()
-                    .DoOnEmpty(() => result = FaultResult<ArticleDto>("The article is empty"))
+                    .DoOnEmpty(() => result = ResultBuilder.Fault<ArticleDto>("The article is empty"))
                     .Map(a => Mapper.Map<Article>(article))
                     .Map(a =>
                     {
                         IEnumerable<string> errors = validator.GetErrors(context.Articles, a);
                         return errors.Any()
-                            ? FaultResult<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : SuccessResult(Mapper.Map<ArticleDto>(context.Articles.Create(a)));
+                            ? ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
+                            : ResultBuilder.Success(Mapper.Map<ArticleDto>(context.Articles.Create(a)));
                     }).Value;
 
                 return result;
@@ -146,17 +116,18 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<ArticleDto> Update(ArticleDto article)
         {
-            return SafeExecute(() => {
+            return SafeExecute(() =>
+            {
                 ResultDto<ArticleDto> result = article
                     .ToOption()
-                    .DoOnEmpty(() => result = FaultResult<ArticleDto>("The article is empty"))
+                    .DoOnEmpty(() => result = ResultBuilder.Fault<ArticleDto>("The article is empty"))
                     .Map(a => Mapper.Map<Article>(article))
                     .Map(a =>
                     {
                         IEnumerable<string> errors = validator.GetErrors(context.Articles, a);
                         return errors.Any()
-                            ? FaultResult<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : SuccessResult(Mapper.Map<ArticleDto>(context.Articles.Update(a)));
+                            ? ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
+                            : ResultBuilder.Success(Mapper.Map<ArticleDto>(context.Articles.Update(a)));
                     }).Value;
 
                 return result;
@@ -166,19 +137,17 @@ namespace Articles.Services
         /// <inheritdoc />
         public ResultDto<ArticleDto> Delete(long id)
         {
-            return SafeExecute(() => {
+            return SafeExecute(() =>
+            {
                 context.Articles.Delete(id);
-                return SuccessResult<ArticleDto>(null);
+                return ResultBuilder.Success<ArticleDto>(null);
             });
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
-            if (context is IDisposable disposableContext)
-            {
-                disposableContext.Dispose();
-            }
+            context?.Dispose();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Articles.Models
     /// <summary>
     /// Базовый абстрактный контекст работы со статьями комментариями
     /// </summary>
-    public interface IDataContext
+    public interface IDataContext: IDisposable
     {
         /// <summary>
         /// Репозиторий статей

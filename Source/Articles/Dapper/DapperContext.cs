@@ -7,7 +7,7 @@ namespace Articles.Dapper
     /// <summary>
     /// Контекст работы со статьями и комментариями к ним через Dapper.
     /// </summary>
-    public class DapperContext : IDataContext, IDisposable
+    public class DapperContext : IDataContext
     {
         private readonly IDbConnection connection;
 

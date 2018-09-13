@@ -62,9 +62,12 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Content="Add Comment" Style="{StaticResource EditButton}" Click="AddComment_OnClick"/>
-                <Button Grid.Row="1" Grid.Column="0" Content="Refresh" Style="{StaticResource EditButton}" Click="RefreshArticle_OnClick"/>
-                <Button Grid.Row="0" Grid.Column="1" Content="Edit" Style="{StaticResource EditButton}" Click="EditArticle_OnClick"/>
+                <Button Grid.Row="0" Grid.Column="0" Content="Add Comment" Style="{StaticResource EditButton}"
+                        Click="AddComment_OnClick" />
+                <Button Grid.Row="1" Grid.Column="0" Content="Refresh" Style="{StaticResource EditButton}"
+                        Click="RefreshArticle_OnClick" />
+                <Button Grid.Row="0" Grid.Column="1" Content="Edit" Style="{StaticResource EditButton}"
+                        Click="EditArticle_OnClick" />
                 <Button Grid.Row="1" Grid.Column="1" Content="Delete" Style="{StaticResource EditButton}" Click="DeleteArticle_OnClick"/>
             </Grid>
             <TextBlock Text="{Binding Content}" Style="{StaticResource Content}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />

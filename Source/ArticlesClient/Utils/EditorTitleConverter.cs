@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace ArticlesClient.Converters
+namespace ArticlesClient.Utils
 {
     /// <summary>
     /// Конвертер флага в заголовок окна редактирования

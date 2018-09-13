@@ -43,8 +43,17 @@
     <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
+    </Reference>
     <Reference Include="Nelibur.Sword, Version=3.2.0.9, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Nelibur.Sword.3.2.2\lib\net40\Nelibur.Sword.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RabbitMQ.Client.5.1.0\lib\net451\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -72,6 +81,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Clients\Rabbit\Operations.cs" />
+    <Compile Include="Clients\Rabbit\RabbitArticlesRepository.cs" />
+    <Compile Include="Clients\Rabbit\RabbitClient.cs" />
+    <Compile Include="Clients\Rabbit\RabbitCommentsRepository.cs" />
+    <Compile Include="Clients\Rabbit\Converters\IMessageBodyConverter.cs" />
+    <Compile Include="Clients\Rabbit\Converters\JsonMessageBodyConverter.cs" />
+    <Compile Include="Clients\Rabbit\RabbitRequestProvider.cs" />
     <Page Include="Controls\ArticleEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -106,7 +122,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Utils\AutofacHelper.cs" />
+    <Compile Include="Clients\Rabbit\RabbitResult.cs" />
     <Compile Include="Clients\Wcf\ArticlesRepository.cs" />
     <Compile Include="Clients\IDataClient.cs" />
     <Compile Include="Clients\IRepository.cs" />
@@ -125,6 +141,7 @@
       <DependentUpon>CommentViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\AutomapHelper.cs" />
+    <Compile Include="Utils\DataClientsFactory.cs" />
     <Compile Include="Utils\EditorTitleConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -231,5 +248,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

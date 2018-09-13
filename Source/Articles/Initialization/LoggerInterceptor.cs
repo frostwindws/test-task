@@ -15,14 +15,14 @@ namespace Articles.Initialization
         /// <param name="invocation">Данные вызываемого метода</param>
         public void Intercept(IInvocation invocation)
         {
-            Log.Verbose($"{invocation.TargetType.Name}: executing {invocation.Method.Name}");
+            Log.Information("{TypeName}: executing {MethodName}", invocation.TargetType.Name, invocation.Method.Name);
             try
             {
                 invocation.Proceed();
             }
             catch (Exception e)
             {
-                Log.Error(e, $"Error accured while executing {invocation.TargetType.Name}.{invocation.Method.Name}");
+                Log.Error(e, "Error accured while executing {TypeName}.{MethodName}", invocation.TargetType.Name, invocation.Method.Name);
                 throw;
             }
         }

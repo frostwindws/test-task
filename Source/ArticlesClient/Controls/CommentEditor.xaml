@@ -2,12 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:converters="clr-namespace:ArticlesClient.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:utils="clr-namespace:ArticlesClient.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="800" Height="250">
     <UserControl.Resources>
-        <converters:EditorTitleConverter x:Key="EditorTitleConverter"/>
+        <utils:EditorTitleConverter x:Key="EditorTitleConverter"/>
         <SolidColorBrush x:Key="BordersBrush" Color="#FF555555"/>
         <Style x:Key="EditorStyle" TargetType="Border">
             <Setter Property="Control.Background" Value="WhiteSmoke"></Setter>
@@ -19,14 +19,14 @@
             <Setter Property="Control.FontSize" Value="20"></Setter>
         </Style>
         <Style x:Key="EditButtonsStyle">
-            <Setter Property="Control.Width" Value="100"></Setter>
-            <Setter Property="Control.Height" Value="30"></Setter>
-            <Setter Property="Control.Margin" Value="10"></Setter>
+            <Setter Property="Control.Width" Value="100" />
+            <Setter Property="Control.Height" Value="30" />
+            <Setter Property="Control.Margin" Value="10" />
         </Style>
         <Style x:Key="FieldStyle" TargetType="TextBox">
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"></Setter>
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
                 </Trigger>
             </Style.Triggers>
             <Setter Property="Validation.ErrorTemplate">
@@ -42,14 +42,20 @@
     </UserControl.Resources>
     <Border Style="{StaticResource EditorStyle}">
         <Grid>
-            <StackPanel Orientation="Vertical" Margin="10">
-                <Label Content="{Binding IsNew, Converter={StaticResource EditorTitleConverter}, ConverterParameter=comment}" Style="{StaticResource TitleStyle}"/>
-                <Label Content="Author*"/>
-                <TextBox Name="AuthorField" Text="{Binding Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsNew}" Style="{StaticResource FieldStyle}"/>
-                <Label Content="Content*"/>
-                <TextBox Name="ContentField" Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" MinLines="3" MaxLines="3" AcceptsReturn="True" AcceptsTab="True" Style="{StaticResource FieldStyle}"></TextBox>
-            </StackPanel>
-            <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Label Content="{Binding IsNew, Converter={StaticResource EditorTitleConverter}, ConverterParameter=comment}" Style="{StaticResource TitleStyle}"/>
+                    <Label Content="Author*"/>
+                    <TextBox Name="AuthorField" Text="{Binding Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsNew}" Style="{StaticResource FieldStyle}"/>
+                    <Label Content="Content*"/>
+                    <TextBox Name="ContentField" Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Style="{StaticResource FieldStyle}" />
+                </StackPanel>
+            </ScrollViewer>
+            <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1">
                 <Button Content="Save" Click="SaveButton_OnClick">
                     <Button.Style >
                         <Style BasedOn="{StaticResource EditButtonsStyle}" TargetType="Button">
@@ -71,3 +77,34 @@
         </Grid>
     </Border>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
