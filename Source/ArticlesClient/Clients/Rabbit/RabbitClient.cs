@@ -3,26 +3,26 @@
 namespace ArticlesClient.Clients.Rabbit
 {
     /// <summary>
-    /// Клиент обращения к Rabbit MQ
+    /// Клиент обращения к Rabbit MQ.
     /// </summary>
     public class RabbitClient : IDataClient
     {
         private readonly RabbitRequestProvider provider;
 
         /// <summary>
-        /// Репозиторий статей
+        /// Репозиторий статей.
         /// </summary>
         public IRepository<ArticleView> Articles { get; set; }
 
         /// <summary>
-        /// Репозиторий комментариев
+        /// Репозиторий комментариев.
         /// </summary>
         public IRepository<CommentView> Comments { get; set; }
 
         /// <summary>
-        /// Конструктор клиента обращения к Rabbit MQ
+        /// Конструктор клиента обращения к Rabbit MQ.
         /// </summary>
-        /// <param name="provider">Провайдер обращения к Rabbit</param>
+        /// <param name="provider">Провайдер обращения к Rabbit.</param>
         public RabbitClient(RabbitRequestProvider provider)
         {
             this.provider = provider;
@@ -31,7 +31,7 @@ namespace ArticlesClient.Clients.Rabbit
         }
 
         /// <summary>
-        /// Освобождение ресурсов
+        /// Освобождение ресурсов.
         /// </summary>
         public void Dispose()
         {

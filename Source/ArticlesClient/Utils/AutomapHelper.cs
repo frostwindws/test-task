@@ -5,7 +5,7 @@ using AutoMapper;
 namespace ArticlesClient.Utils
 {
     /// <summary>
-    /// Класс-помошник для работы маппера
+    /// Класс-помошник для работы маппера.
     /// </summary>
     public static class AutomapHelper
     {

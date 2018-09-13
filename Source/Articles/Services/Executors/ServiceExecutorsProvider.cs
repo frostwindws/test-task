@@ -11,7 +11,7 @@ using Serilog;
 namespace Articles.Services.Executors
 {
     /// <summary>
-    /// Провайдер исполнителей функций сервисов
+    /// Провайдер исполнителей функций сервисов.
     /// </summary>
     public class ServiceExecutorsProvider : IExecutorsProvider
     {
@@ -22,12 +22,12 @@ namespace Articles.Services.Executors
         private Dictionary<string, ICommandExecutor> executors;
 
         /// <summary>
-        /// Конструктор провайдера
+        /// Конструктор провайдера.
         /// </summary>
-        /// <param name="contextFactory">Фабрика формирования контекстов</param>
-        /// <param name="converter">Конвертер тела сообщения</param>
-        /// <param name="articleValidator">Валидатор статей</param>
-        /// <param name="commentValidator">Валидатор комментариев</param>
+        /// <param name="contextFactory">Фабрика формирования контекстов.</param>
+        /// <param name="converter">Конвертер тела сообщения.</param>
+        /// <param name="articleValidator">Валидатор статей.</param>
+        /// <param name="commentValidator">Валидатор комментариев.</param>
         public ServiceExecutorsProvider(DataContextFactory contextFactory, IMessageBodyConverter converter, IModelValidator<Article> articleValidator, IModelValidator<Comment> commentValidator)
         {
             this.contextFactory = contextFactory;
@@ -37,14 +37,14 @@ namespace Articles.Services.Executors
         }
 
         /// <summary>
-        /// Набор исполнителей
+        /// Набор исполнителей.
         /// </summary>
         private Dictionary<string, ICommandExecutor> Executors => executors ?? (executors = InitExecutorsCollection());
 
         /// <summary>
-        /// Получить исполнителя по его имени
+        /// Получить исполнителя по его имени.
         /// </summary>
-        /// <param name="name">Имя исполнителя</param>
+        /// <param name="name">Имя исполнителя.</param>
         public ICommandExecutor Get(string name)
         {
             return Executors.TryGetValue(name, out ICommandExecutor executor) ? executor : null;
@@ -64,12 +64,12 @@ namespace Articles.Services.Executors
         }
 
         /// <summary>
-        /// Оббертка метода в дополнительную конвертацию
+        /// Оббертка метода в дополнительную конвертацию.
         /// </summary>
-        /// <typeparam name="TIn">Тип входящего параметра метода</typeparam>
-        /// <typeparam name="TOut">Тип исходящего параметра метода</typeparam>
-        /// <param name="func">Исходная функция</param>
-        /// <returns>Функция оббертки в конвертацию</returns>
+        /// <typeparam name="TIn">Тип входящего параметра метода.</typeparam>
+        /// <typeparam name="TOut">Тип исходящего параметра метода.</typeparam>
+        /// <param name="func">Исходная функция.</param>
+        /// <returns>Функция оббертки в конвертацию.</returns>
         private Func<byte[], byte[]> WrapInConvertion<TIn, TOut>(Func<TIn, TOut> func)
         {
             const string ErrorLogTemplate = "Error accured while executing {MethodName}";
@@ -95,10 +95,10 @@ namespace Articles.Services.Executors
         }
 
         /// <summary>
-        /// Метод создания статьи
+        /// Метод создания статьи.
         /// </summary>
-        /// <param name="article">Создаваемая статья</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <param name="article">Создаваемая статья.</param>
+        /// <returns>Результат выполнения операции.</returns>
         private ResultDto<ArticleDto> CreateArticle(ArticleDto article)
         {
             using (IDataContext context = contextFactory.GetContext())
@@ -117,10 +117,10 @@ namespace Articles.Services.Executors
         }
 
         /// <summary>
-        /// Метод обновления статьи
+        /// Метод обновления статьи.
         /// </summary>
-        /// <param name="article">Обновляемая статья</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <param name="article">Обновляемая статья.</param>
+        /// <returns>Результат выполнения операции.</returns>
         private ResultDto<ArticleDto> UpdateArticle(ArticleDto article)
         {
             using (IDataContext context = contextFactory.GetContext())
@@ -140,10 +140,10 @@ namespace Articles.Services.Executors
         }
 
         /// <summary>
-        /// Метод удаления статьи
+        /// Метод удаления статьи.
         /// </summary>
-        /// <param name="article">Удаляемая статья</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <param name="article">Удаляемая статья.</param>
+        /// <returns>Результат выполнения операции.</returns>
         private ResultDto<ArticleDto> DeleteArticle(ArticleDto article)
         {
             using (IDataContext context = contextFactory.GetContext())
@@ -154,10 +154,10 @@ namespace Articles.Services.Executors
         }
 
         /// <summary>
-        /// Метод создания комментария
+        /// Метод создания комментария.
         /// </summary>
-        /// <param name="comment">Создаваемый коментарий</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <param name="comment">Создаваемый коментарий.</param>
+        /// <returns>Результат выполнения операции.</returns>
         private ResultDto<CommentDto> CreateComment(CommentDto comment)
         {
             using (IDataContext context = contextFactory.GetContext())
@@ -176,10 +176,10 @@ namespace Articles.Services.Executors
         }
 
         /// <summary>
-        /// Метод обновления комментария
+        /// Метод обновления комментария.
         /// </summary>
-        /// <param name="comment">Обновляемый комментарий</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <param name="comment">Обновляемый комментарий.</param>
+        /// <returns>Результат выполнения операции.</returns>
         private ResultDto<CommentDto> UpdateComment(CommentDto comment)
         {
             using (IDataContext context = contextFactory.GetContext())
@@ -198,10 +198,10 @@ namespace Articles.Services.Executors
         }
 
         /// <summary>
-        /// Удаление комментария
+        /// Удаление комментария.
         /// </summary>
-        /// <param name="comment">Удаляемый коментарий</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <param name="comment">Удаляемый коментарий.</param>
+        /// <returns>Результат выполнения операции.</returns>
         private ResultDto<CommentDto> DeleteComment(CommentDto comment)
         {
             using (IDataContext context = contextFactory.GetContext())

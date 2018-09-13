@@ -1,27 +1,27 @@
 ﻿namespace Articles.Messaging
 {
     /// <summary>
-    /// Структура данных сообщения
+    /// Структура данных сообщения.
     /// </summary>
     public struct Message
     {
         /// <summary>
-        /// Идентификатор сообщения
+        /// Идентификатор сообщения.
         /// </summary>
         public string Id { get; set; }
 
         /// <summary>
-        /// Ключ очереди ожидания ответа
+        /// Ключ очереди ожидания ответа.
         /// </summary>
         public string ReplyTo { get; set; }
 
         /// <summary>
-        /// Тип сообщения
+        /// Тип сообщения.
         /// </summary>
         public string Type { get; set; }
         
         /// <summary>
-        /// Данные запроса
+        /// Данные запроса.
         /// </summary>
         public byte[] Body { get; set; }
     }

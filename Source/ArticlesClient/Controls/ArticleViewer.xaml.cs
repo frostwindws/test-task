@@ -5,42 +5,42 @@ using ArticlesClient.Models;
 namespace ArticlesClient.Controls
 {
     /// <summary>
-    /// Компонент просмотра статьи
+    /// Компонент просмотра статьи.
     /// </summary>
     public partial class ArticleViewer
     {
         /// <summary>
-        /// Событие запроса на редактирование статьи
+        /// Событие запроса на редактирование статьи.
         /// </summary>
         public event EventHandler<ArticleView> DoArticleEdit;
 
         /// <summary>
-        /// Событие запроса на удаление статьи
+        /// Событие запроса на удаление статьи.
         /// </summary>
         public event EventHandler<ArticleView> DoArticleDelete;
 
         /// <summary>
-        /// Событие запроса на добавление коментария
+        /// Событие запроса на добавление коментария.
         /// </summary>
         public event EventHandler<ArticleView> DoCommentAdd;
 
         /// <summary>
-        /// Событие запроса на обновление статьи
+        /// Событие запроса на обновление статьи.
         /// </summary>
         public event EventHandler<ArticleView> DoRefresh;
 
         /// <summary>
-        /// Событие запроса на редактирование коментария
+        /// Событие запроса на редактирование коментария.
         /// </summary>
         public event EventHandler<CommentView> DoCommentEdit;
 
         /// <summary>
-        /// Событие запроса на удаление коментария
+        /// Событие запроса на удаление коментария.
         /// </summary>
         public event EventHandler<CommentView> DoCommentDelete;
 
         /// <summary>
-        /// Конструктор компонента
+        /// Конструктор компонента.
         /// </summary>
         public ArticleViewer()
         {

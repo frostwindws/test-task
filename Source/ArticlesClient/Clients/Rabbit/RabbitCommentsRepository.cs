@@ -9,16 +9,16 @@ using AutoMapper;
 namespace ArticlesClient.Clients.Rabbit
 {
     /// <summary>
-    /// Rabbit MQ репозиторий комментариев
+    /// Rabbit MQ репозиторий комментариев.
     /// </summary>
     class RabbitCommentsRepository : IRepository<CommentView>
     {
         private readonly RabbitRequestProvider provider;
 
         /// <summary>
-        /// Конструктор репозитория комментариев
+        /// Конструктор репозитория комментариев.
         /// </summary>
-        /// <param name="provider">Используемый провайдер для обращения к Rabbit</param>
+        /// <param name="provider">Используемый провайдер для обращения к Rabbit.</param>
         public RabbitCommentsRepository(RabbitRequestProvider provider)
         {
             this.provider = provider;
@@ -26,9 +26,9 @@ namespace ArticlesClient.Clients.Rabbit
 
         /// <summary>
         /// Получить все комментарии
-        /// Метод не используется
+        /// Метод не используется.
         /// </summary>
-        /// <returns>Полный список всех комментариев в системе</returns>
+        /// <returns>Полный список всех комментариев в системе.</returns>
         public Task<IEnumerable<CommentView>> GetAllAsync()
         {
             throw new NotImplementedException();
@@ -36,20 +36,20 @@ namespace ArticlesClient.Clients.Rabbit
 
         /// <summary>
         /// Получить комментарий по его идентификатору
-        /// Метод не используется
+        /// Метод не используется.
         /// </summary>
-        /// <param name="id">Идентификатор искомого комментария</param>
-        /// <returns>Найденный комментарий, либо null  в случае отсутствия комментария с указанным идентификатором</returns>
+        /// <param name="id">Идентификатор искомого комментария.</param>
+        /// <returns>Найденный комментарий, либо null  в случае отсутствия комментария с указанным идентификатором.</returns>
         public Task<CommentView> GetAsync(long id)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Добавление нового комментария
+        /// Добавление нового комментария.
         /// </summary>
-        /// <param name="record">Добавляемый комментарий</param>
-        /// <returns>Данные созданного комментария</returns>
+        /// <param name="record">Добавляемый комментарий.</param>
+        /// <returns>Данные созданного комментария.</returns>
         public async Task<CommentView> AddAsync(CommentView record)
         {
             RabbitResult<CommentDto> result = await provider.SendRequest<RabbitResult<CommentDto>>(Operations.CreateComment, Mapper.Map<CommentDto>(record));
@@ -62,10 +62,10 @@ namespace ArticlesClient.Clients.Rabbit
         }
 
         /// <summary>
-        /// Обновление существующего комментария
+        /// Обновление существующего комментария.
         /// </summary>
-        /// <param name="record">Данные комментария для его обновления</param>
-        /// <returns>Обновленный комментарий</returns>
+        /// <param name="record">Данные комментария для его обновления.</param>
+        /// <returns>Обновленный комментарий.</returns>
 
         public async Task<CommentView> UpdateAsync(CommentView record)
         {
@@ -79,9 +79,9 @@ namespace ArticlesClient.Clients.Rabbit
         }
 
         /// <summary>
-        /// Удаление существующегно комментария
+        /// Удаление существующегно комментария.
         /// </summary>
-        /// <param name="record">Удаляемый комментарий</param>
+        /// <param name="record">Удаляемый комментарий.</param>
         public async Task DeleteAsync(CommentView record)
         {
             RabbitResult<CommentDto> result = await provider.SendRequest<RabbitResult<CommentDto>>(Operations.DeleteComment, Mapper.Map<CommentDto>(record));

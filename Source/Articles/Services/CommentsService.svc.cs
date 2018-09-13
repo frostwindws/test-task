@@ -12,25 +12,25 @@ using Serilog;
 namespace Articles.Services
 {
     /// <summary>
-    /// Сервис работы с комментариями к статьям
+    /// Сервис работы с комментариями к статьям.
     /// </summary>
     public class CommentsService : ICommentsService, IDisposable
     {
         /// <summary>
-        /// Валидатор комментариев
+        /// Валидатор комментариев.
         /// </summary>
         private readonly IModelValidator<Comment> validator;
 
         /// <summary>
-        /// Контекст работы с данными
+        /// Контекст работы с данными.
         /// </summary>
         private readonly IDataContext context;
 
         /// <summary>
-        /// Конструктор сервиса
+        /// Конструктор сервиса.
         /// </summary>
-        /// <param name="context">Используемый контекст</param>
-        /// <param name="validator">Валидатор для комментариев</param>
+        /// <param name="context">Используемый контекст.</param>
+        /// <param name="validator">Валидатор для комментариев.</param>
         public CommentsService(IDataContext context, IModelValidator<Comment> validator)
         {
             this.context = context;
@@ -38,12 +38,12 @@ namespace Articles.Services
         }
 
         /// <summary>
-        /// Оббертка для выполнения операция со стандартным набором обработчиков ошибок
+        /// Оббертка для выполнения операция со стандартным набором обработчиков ошибок.
         /// </summary>
-        /// <typeparam name="T">Тип передаваемых на выходе данных</typeparam>
-        /// <param name="function">Выполняемая функция</param>
-        /// <param name="callerName">Имя вызывающего метода (используется для логирования)</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <typeparam name="T">Тип передаваемых на выходе данных.</typeparam>
+        /// <param name="function">Выполняемая функция.</param>
+        /// <param name="callerName">Имя вызывающего метода (используется для логирования).</param>
+        /// <returns>Результат выполнения операции.</returns>
         private ResultDto<T> SafeExecute<T>(Func<ResultDto<T>> function, [CallerMemberName] string callerName = "")
         {
             const string ErrorLogTemplate = "Error accured while executing \"CommentsService\".{MethodName}";

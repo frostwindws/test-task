@@ -9,28 +9,28 @@ using AutoMapper;
 namespace ArticlesClient.Clients.Wcf
 {
     /// <summary>
-    /// Wcf репозиторий комментариев
+    /// Wcf репозиторий комментариев.
     /// </summary>
     public class CommentsRepository : IRepository<CommentView>
     {
         /// <summary>
-        /// Wcf сервис для запроса данных
+        /// Wcf сервис для запроса данных.
         /// </summary>
         private readonly ICommentsService commentsService;
 
         /// <summary>
-        /// Конструктор репозитория комментариев
+        /// Конструктор репозитория комментариев.
         /// </summary>
-        /// <param name="service">Используемый WCF сервис для запроса данных</param>
+        /// <param name="service">Используемый WCF сервис для запроса данных.</param>
         public CommentsRepository(ICommentsService service)
         {
             commentsService = service;
         }
 
         /// <summary>
-        /// Получить все комментарии
+        /// Получить все комментарии.
         /// </summary>
-        /// <returns>Полный список всех комментариев в системе</returns>
+        /// <returns>Полный список всех комментариев в системе.</returns>
         public async Task<IEnumerable<CommentView>> GetAllAsync()
         {
             var result =  await commentsService.GetAllAsync();
@@ -43,10 +43,10 @@ namespace ArticlesClient.Clients.Wcf
         }
 
         /// <summary>
-        /// Получить комментарий по его идентификатору
+        /// Получить комментарий по его идентификатору.
         /// </summary>
-        /// <param name="id">Идентификатор искомого комментария</param>
-        /// <returns>Найденный комментарий, либо null  в случае отсутствия комментария с указанным идентификатором</returns>
+        /// <param name="id">Идентификатор искомого комментария.</param>
+        /// <returns>Найденный комментарий, либо null  в случае отсутствия комментария с указанным идентификатором.</returns>
         public async Task<CommentView> GetAsync(long id)
         {
             var result = await commentsService.GetAsync(id);
@@ -59,10 +59,10 @@ namespace ArticlesClient.Clients.Wcf
         }
 
         /// <summary>
-        /// Добавление нового комментария
+        /// Добавление нового комментария.
         /// </summary>
-        /// <param name="record">Добавляемый комментарий</param>
-        /// <returns>Данные созданного комментария</returns>
+        /// <param name="record">Добавляемый комментарий.</param>
+        /// <returns>Данные созданного комментария.</returns>
         public async Task<CommentView> AddAsync(CommentView record)
         {
             var result = await commentsService.CreateAsync(Mapper.Map<CommentDto>(record));
@@ -75,10 +75,10 @@ namespace ArticlesClient.Clients.Wcf
         }
 
         /// <summary>
-        /// Обновление существующего комментария
+        /// Обновление существующего комментария.
         /// </summary>
-        /// <param name="record">Данные комментария для его обновления</param>
-        /// <returns>Обновленный комментарий</returns>
+        /// <param name="record">Данные комментария для его обновления.</param>
+        /// <returns>Обновленный комментарий.</returns>
         public async Task<CommentView> UpdateAsync(CommentView record)
         {
             var result = await commentsService.UpdateAsync(Mapper.Map<CommentDto>(record));
@@ -91,9 +91,9 @@ namespace ArticlesClient.Clients.Wcf
         }
 
         /// <summary>
-        /// Удаление существующегно комментария
+        /// Удаление существующегно комментария.
         /// </summary>
-        /// <param name="record">Удаляемый комментарий</param>
+        /// <param name="record">Удаляемый комментарий.</param>
         public async Task DeleteAsync(CommentView record)
         {
             var result = await commentsService.DeleteAsync(record.Id);

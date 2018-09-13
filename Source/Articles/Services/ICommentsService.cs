@@ -4,7 +4,7 @@ using Articles.Services.Models;
 namespace Articles.Services
 {
     /// <summary>
-    /// Сервис работы с комментариями к статьям
+    /// Сервис работы с комментариями к статьям.
     /// </summary>
     [ServiceContract]
     public interface ICommentsService
@@ -17,7 +17,7 @@ namespace Articles.Services
         ResultDto<CommentDto[]> GetAll();
 
         /// <summary>
-        /// Получить отдельный комментарий
+        /// Получить отдельный комментарий.
         /// </summary>
         /// <param name="id">Идентификатор комментария.</param>
         /// <returns>Возвращает объект запрашиваемого комментария.</returns>
@@ -33,9 +33,9 @@ namespace Articles.Services
         ResultDto<CommentDto[]> GetForArticle(long id);
 
         /// <summary>
-        /// Создание комментария
+        /// Создание комментария.
         /// </summary>
-        /// <param name="comment">Создаваемый комментарий</param>
+        /// <param name="comment">Создаваемый комментарий.</param>
         /// <returns></returns>
         [OperationContract]
         ResultDto<CommentDto> Create(CommentDto comment);
@@ -43,15 +43,15 @@ namespace Articles.Services
         /// <summary>
         /// Обновление имеющегося комментария.
         /// </summary>
-        /// <param name="comment">Обновляемый комментарий</param>
+        /// <param name="comment">Обновляемый комментарий.</param>
         /// <returns></returns>
         [OperationContract]
         ResultDto<CommentDto> Update(CommentDto comment);
 
         /// <summary>
-        /// Удаление комментария
+        /// Удаление комментария.
         /// </summary>
-        /// <param name="id">Идентификатор удаляемого комментария</param>
+        /// <param name="id">Идентификатор удаляемого комментария.</param>
         [OperationContract]
         ResultDto<CommentDto> Delete(long id);
     }

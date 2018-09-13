@@ -6,12 +6,12 @@ using Serilog.Events;
 namespace Articles.Initialization
 {
     /// <summary>
-    /// Конфигурация библиотеки Serilog
+    /// Конфигурация библиотеки Serilog.
     /// </summary>
     internal static class SerilogConfiguration
     {
         /// <summary>
-        /// Инициализация конфигурации
+        /// Инициализация конфигурации.
         /// </summary>
         public static void Init()
         {

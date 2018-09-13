@@ -7,7 +7,7 @@ using Serilog;
 namespace Articles.Dapper
 {
     /// <summary>
-    /// Репозиторий коментариев
+    /// Репозиторий коментариев.
     /// </summary>
     public class CommentsRepository : ICommentsRepository
     {
@@ -30,7 +30,7 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Получить все имеющиеся комментарии
+        /// Получить все имеющиеся комментарии.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Comment> GetCollection()
@@ -39,10 +39,10 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Получить список комментариев для статьи
+        /// Получить список комментариев для статьи.
         /// </summary>
-        /// <param name="articleId">Идентификатор статьи</param>
-        /// <returns>Возвращает список комментариев для указанной статьи</returns>
+        /// <param name="articleId">Идентификатор статьи.</param>
+        /// <returns>Возвращает список комментариев для указанной статьи.</returns>
         public IEnumerable<Comment> GetForArticle(long articleId)
         {
             return connection.Query<Comment>(GetForArticleQuery, new { articleId });
@@ -63,21 +63,21 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Проверка наличия комментария с указанным свойством
+        /// Проверка наличия комментария с указанным свойством.
         /// </summary>
-        /// <param name="propertyName">Имя свойства</param>
-        /// <param name="value">Значение свойства</param>
-        /// <returns>True, если статья с указанным свойством уже существует</returns>
+        /// <param name="propertyName">Имя свойства.</param>
+        /// <param name="value">Значение свойства.</param>
+        /// <returns>True, если статья с указанным свойством уже существует.</returns>
         public bool Exists(string propertyName, string value)
         {
             return connection.QueryFirst<bool>(string.Format(ExistsQuery, propertyName.ToLowerInvariant()), new { value });
         }
 
         /// <summary>
-        /// Создать новый комментарий
+        /// Создать новый комментарий.
         /// </summary>
-        /// <param name="comment">Создаваемый комментарий</param>
-        /// <returns>Возвращает идентификатор созданного комментария</returns>
+        /// <param name="comment">Создаваемый комментарий.</param>
+        /// <returns>Возвращает идентификатор созданного комментария.</returns>
         public Comment Create(Comment comment)
         {
             Comment createdComment = connection.QuerySingle<Comment>(CreateQuery, comment);
@@ -86,9 +86,9 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Обновить имеющийся комментарий
+        /// Обновить имеющийся комментарий.
         /// </summary>
-        /// <param name="comment">Обновляемый комментарий</param>
+        /// <param name="comment">Обновляемый комментарий.</param>
         public Comment Update(Comment comment)
         {
             Comment updatedComment = connection.QuerySingle<Comment>(UpdateQuery, comment);
@@ -97,9 +97,9 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Удалить комментарий
+        /// Удалить комментарий.
         /// </summary>
-        /// <param name="id">Идентификатор комментария</param>
+        /// <param name="id">Идентификатор комментария.</param>
         public void Delete(long id)
         {
             connection.Execute(DeleteQuery, new { id });

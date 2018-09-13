@@ -15,34 +15,34 @@ namespace ArticlesClient
     public partial class App : Application
     {
         /// <summary>
-        /// Фабрика формирования соединений с RabbitMQ
+        /// Фабрика формирования соединений с RabbitMQ.
         /// </summary>
         private ConnectionFactory rabbitConnectionFactory;
 
         /// <summary>
-        /// Текущее соединение с RabbitMQ
+        /// Текущее соединение с RabbitMQ.
         /// </summary>
         private IConnection rabbitConnection;
 
         /// <summary>
-        /// Используемая для запросов через RabbitMQ очередь
+        /// Используемая для запросов через RabbitMQ очередь.
         /// </summary>
         private string RoutingKey => ConfigurationManager.AppSettings["RabbitRoutingKey"];
 
         /// <summary>
-        /// Фабрика клиентов для получения данных
+        /// Фабрика клиентов для получения данных.
         /// </summary>
         public DataClientsFactory ReaderFactory { get; private set; }
 
         /// <summary>
-        /// Фабрика клиентов для чтения данных
+        /// Фабрика клиентов для чтения данных.
         /// </summary>
         public DataClientsFactory WriterFactory { get; private set; }
 
         /// <summary>
-        /// Инициализация приложения
+        /// Инициализация приложения.
         /// </summary>
-        /// <param name="e">Аргументы события старта приложения</param>
+        /// <param name="e">Аргументы события старта приложения.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
@@ -64,7 +64,7 @@ namespace ArticlesClient
         }
 
         /// <summary>
-        /// Инициализация используемых фабрик
+        /// Инициализация используемых фабрик.
         /// </summary>
         private void InitFactories()
         {
@@ -77,9 +77,9 @@ namespace ArticlesClient
         }
 
         /// <summary>
-        /// Инициализация клинета Rabbit MQ
+        /// Инициализация клинета Rabbit MQ.
         /// </summary>
-        /// <returns>Сформированный клиент Rabbit MQ</returns>
+        /// <returns>Сформированный клиент Rabbit MQ.</returns>
         private RabbitClient InitRabbitClient()
         {
             // Если по какой либо причине соединение было разорвано - оно открывается снова

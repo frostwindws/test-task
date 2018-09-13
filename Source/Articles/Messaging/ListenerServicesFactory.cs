@@ -6,12 +6,12 @@ namespace Articles.Messaging
     public class ListenerServicesFactory : IDisposable
     {
         /// <summary>
-        /// Контейнер построения сервиса прослушивания
+        /// Контейнер построения сервиса прослушивания.
         /// </summary>
         private readonly IContainer container;
 
         /// <summary>
-        /// Конструктор фабрики листенеров
+        /// Конструктор фабрики листенеров.
         /// </summary>
         /// <param name="container"></param>
         public ListenerServicesFactory(IContainer container)
@@ -20,7 +20,7 @@ namespace Articles.Messaging
         }
 
         /// <summary>
-        /// Запрос на получение сервиса прослушивания сообщений
+        /// Запрос на получение сервиса прослушивания сообщений.
         /// </summary>
         /// <returns></returns>
         public IListenerService GetListenerService()
@@ -29,7 +29,7 @@ namespace Articles.Messaging
         }
 
         /// <summary>
-        /// Освобождение ресурсов
+        /// Освобождение ресурсов.
         /// </summary>
         public void Dispose()
         {

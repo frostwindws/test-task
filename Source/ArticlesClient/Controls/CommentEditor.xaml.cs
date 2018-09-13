@@ -10,12 +10,12 @@ namespace ArticlesClient.Controls
     public partial class CommentEditor
     {
         /// <summary>
-        /// Событие принятия редактирования статьи
+        /// Событие принятия редактирования статьи.
         /// </summary>
         public event EventHandler<CommentView> CommitEdit;
 
         /// <summary>
-        /// Событие отмены редактирования статьи
+        /// Событие отмены редактирования статьи.
         /// </summary>
         public event EventHandler<CommentView> CancelEdit;
 

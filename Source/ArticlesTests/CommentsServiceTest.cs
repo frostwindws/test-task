@@ -13,7 +13,7 @@ using MapperConfiguration = Articles.Initialization.MapperConfiguration;
 namespace ArticlesTests
 {
     /// <summary>
-    /// Тест сервиса коментариев 
+    /// Тест сервиса коментариев .
     /// </summary>
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class CommentsServiceTest
@@ -23,7 +23,7 @@ namespace ArticlesTests
         private ICommentsService service;
 
         /// <summary>
-        /// Конструктор теста сервиса коментариев
+        /// Конструктор теста сервиса коментариев.
         /// </summary>
         public CommentsServiceTest()
         {
@@ -32,7 +32,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Инициализация тестов
+        /// Инициализация тестов.
         /// </summary>
         [SetUp]
         public void TestSetUp()
@@ -43,7 +43,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// По запросу комментариев к статье сервис возвращает то же количество записей, что и репозиторий
+        /// По запросу комментариев к статье сервис возвращает то же количество записей, что и репозиторий.
         /// </summary>
         [Test]
         public void GetForArticle_RequestCommentsForArticle_ReturnsRepositorySameLengthResult()
@@ -67,7 +67,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Сервис возвращает то же количество записей, что и репозиторий
+        /// Сервис возвращает то же количество записей, что и репозиторий.
         /// </summary>
         [Test]
         public void GetAll_RequestRecords_ReturnsRepositorySameLengthResult()
@@ -90,7 +90,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос имеющейся записи возвращает не пустой результат
+        /// Запрос имеющейся записи возвращает не пустой результат.
         /// </summary>
         [Test]
         public void Get_RequestExistingRecord_ReturnsNotNull()
@@ -105,7 +105,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос отсутствующей записи возвращает null 
+        /// Запрос отсутствующей записи возвращает null .
         /// </summary>
         [Test]
         public void Get_RequestNotExistingRecord_ReturnsNull()
@@ -120,7 +120,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос создания вызывает метод создания репозитория 1 раз
+        /// Запрос создания вызывает метод создания репозитория 1 раз.
         /// </summary>
         [Test]
         public void Create_RequestNewValidCommentCreate_RunsRepositoryCreateMethodOnce()
@@ -135,7 +135,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос создания возвращает идентификатор созаданной записи
+        /// Запрос создания возвращает идентификатор созаданной записи.
         /// </summary>
         [Test]
         public void Create_RequestNewValidCommentCreate_ReturnsCreatedRecordId()
@@ -152,7 +152,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос создания возвращает идентификатор созаданной записи
+        /// Запрос создания возвращает идентификатор созаданной записи.
         /// </summary>
         [Test]
         public void Create_RequestNewInvalidCommentCreate_NererRunsRepositoryCreateMethod()
@@ -167,7 +167,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз
+        /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз.
         /// </summary>
         [Test]
         public void Update_RequestCommentValidUpdate_RunsRepositoryUpdateMethodOnce()
@@ -182,7 +182,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос создания возвращает идентификатор созаданной записи
+        /// Запрос создания возвращает идентификатор созаданной записи.
         /// </summary>
         [Test]
         public void Update_RequestCommentValidUpdate_NeverRunsRepositoryUpdateMethod()
@@ -197,7 +197,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос удаления записи выполняет метод удаления репозитория 1 раз
+        /// Запрос удаления записи выполняет метод удаления репозитория 1 раз.
         /// </summary>
         [Test]
         public void Delete_RequestNewCommentDelete_RunsRepositoryDeleteMethodOnce()

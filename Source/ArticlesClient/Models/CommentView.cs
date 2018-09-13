@@ -9,7 +9,7 @@ using Nelibur.Sword.Extensions;
 namespace ArticlesClient.Models
 {
     /// <summary>
-    /// Модель комментария к статье для отображения
+    /// Модель комментария к статье для отображения.
     /// </summary>
     public sealed class CommentView : INotifyPropertyChanged, IDataErrorInfo
     {
@@ -17,17 +17,17 @@ namespace ArticlesClient.Models
         private string content;
 
         /// <summary>
-        /// Идентификатор
+        /// Идентификатор.
         /// </summary>
         public long Id { get; set; }
 
         /// <summary>
-        /// Идентификатор статьи
+        /// Идентификатор статьи.
         /// </summary>
         public long ArticleId { get; set; }
 
         /// <summary>
-        /// Автор
+        /// Автор.
         /// </summary>
         public string Author
         {
@@ -40,7 +40,7 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Текст
+        /// Текст.
         /// </summary>
         public string Content
         {
@@ -53,17 +53,17 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Флаг нового объекта
+        /// Флаг нового объекта.
         /// </summary>
         public bool IsNew { get; set; }
 
         /// <summary>
-        /// Дата создания
+        /// Дата создания.
         /// </summary>
         public DateTime Created { get; set; }
 
         /// <summary>
-        /// Событие обновления свойства модели представления
+        /// Событие обновления свойства модели представления.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 

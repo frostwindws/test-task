@@ -7,7 +7,7 @@ using Serilog;
 namespace Articles.Dapper
 {
     /// <summary>
-    /// Репозиторий статей
+    /// Репозиторий статей.
     /// </summary>
     public class ArticlesRepository : IArticlesRepository
     {
@@ -39,11 +39,11 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Проверка наличия статьи с указанным свойством
+        /// Проверка наличия статьи с указанным свойством.
         /// </summary>
-        /// <param name="propertyName">Имя свойства</param>
-        /// <param name="value">Значение свойства</param>
-        /// <returns>True, если статья с указанным свойством уже существует</returns>
+        /// <param name="propertyName">Имя свойства.</param>
+        /// <param name="value">Значение свойства.</param>
+        /// <returns>True, если статья с указанным свойством уже существует.</returns>
         public bool Exists(string propertyName, string value)
         {
             return connection.QueryFirst<bool>(string.Format(ExistsQuery, propertyName.ToLowerInvariant()), new { value });
@@ -52,20 +52,20 @@ namespace Articles.Dapper
         /// <summary>
         /// Найти статью по ее идентификатору.
         /// </summary>
-        /// <param name="id">Идентификатор искомой статьи</param>
+        /// <param name="id">Идентификатор искомой статьи.</param>
         /// <returns>
         /// Возвращает найденую статью.
-        /// Если статья отсутствует - возвращает null</returns>
+        /// Если статья отсутствует - возвращает null.</returns>
         public Article Get(long id)
         {
             return connection.QuerySingleOrDefault<Article>(FindQuery, new { id });
         }
 
         /// <summary>
-        /// Создать новую статью
+        /// Создать новую статью.
         /// </summary>
-        /// <param name="record">Создаваемая статья</param>
-        /// <returns>Возвращает идентификатор созданной статьи</returns>
+        /// <param name="record">Создаваемая статья.</param>
+        /// <returns>Возвращает идентификатор созданной статьи.</returns>
         public Article Create(Article record)
         {
             var createdArticle = connection.QuerySingle<Article>(CreateQuery, record);
@@ -74,9 +74,9 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Обновление имеющейся статьи
+        /// Обновление имеющейся статьи.
         /// </summary>
-        /// <param name="record">Обновляемая статья</param>
+        /// <param name="record">Обновляемая статья.</param>
         public Article Update(Article record)
         {
             var updatedArticle = connection.QuerySingle<Article>(UpdateQuery, record);
@@ -85,9 +85,9 @@ namespace Articles.Dapper
         }
 
         /// <summary>
-        /// Удалить статью
+        /// Удалить статью.
         /// </summary>
-        /// <param name="id">Идентификатор удаляемой статьи</param>
+        /// <param name="id">Идентификатор удаляемой статьи.</param>
         public void Delete(long id)
         {
             connection.Execute(DeleteQuery, new { id });

@@ -6,7 +6,7 @@ using ArticlesClient.Models;
 namespace ArticlesClient.Clients.Wcf
 {
     /// <summary>
-    /// Клиент получения данных через WCF сервис
+    /// Клиент получения данных через WCF сервис.
     /// </summary>
     public class WcfDataClient : IDataClient
     {
@@ -14,17 +14,17 @@ namespace ArticlesClient.Clients.Wcf
         private readonly ICommentsService commentsService;
 
         /// <summary>
-        /// Репозиторий статей
+        /// Репозиторий статей.
         /// </summary>
         public IRepository<ArticleView> Articles { get; set; }
 
         /// <summary>
-        /// Репозиторий комментариев
+        /// Репозиторий комментариев.
         /// </summary>
         public IRepository<CommentView> Comments { get; set; }
 
         /// <summary>
-        /// Конструктор клиента данных
+        /// Конструктор клиента данных.
         /// </summary>
         public WcfDataClient() : this(new ArticlesServiceClient(), new CommentsServiceClient())
         {
@@ -32,10 +32,10 @@ namespace ArticlesClient.Clients.Wcf
 
         /// <summary>
         /// Конструктор клиента данных c использованием кастомнымных сервисов
-        /// (Для тестирования)
+        /// (Для тестирования).
         /// </summary>
-        /// <param name="articlesService">Сервис статей</param>
-        /// <param name="commentsService">Сервис комментариев</param>
+        /// <param name="articlesService">Сервис статей.</param>
+        /// <param name="commentsService">Сервис комментариев.</param>
         public WcfDataClient(IArticlesService articlesService, ICommentsService commentsService)
         {
             this.articlesService = articlesService;
@@ -45,7 +45,7 @@ namespace ArticlesClient.Clients.Wcf
         }
 
         /// <summary>
-        /// Освобождение ресурсов
+        /// Освобождение ресурсов.
         /// </summary>
         public void Dispose()
         {

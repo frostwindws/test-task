@@ -5,43 +5,43 @@ using System.Runtime.Serialization;
 namespace Articles.Services.Models
 {
     /// <summary>
-    /// Модель статьи
+    /// Модель статьи.
     /// </summary>
     [DataContract]
     public class ArticleDto
     {
         /// <summary>
-        /// Идентификатор
+        /// Идентификатор.
         /// </summary>
         [DataMember]
         public long Id { get; set; }
 
         /// <summary>
-        /// Заголовок
+        /// Заголовок.
         /// </summary>
         [DataMember]
         public string Title { get; set; }
 
         /// <summary>
-        /// Автор
+        /// Автор.
         /// </summary>
         [DataMember]
         public string Author { get; set; }
 
         /// <summary>
-        /// Текст
+        /// Текст.
         /// </summary>
         [DataMember]
         public string Content { get; set; }
 
         /// <summary>
-        /// Дата создания
+        /// Дата создания.
         /// </summary>
         [DataMember]
         public DateTime Created { get; set; }
 
         /// <summary>
-        /// Набор комментариев к статье
+        /// Набор комментариев к статье.
         /// </summary>
         [DataMember]
         public IEnumerable<CommentDto> Comments { get; set; }

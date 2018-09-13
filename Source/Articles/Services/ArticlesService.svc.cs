@@ -12,25 +12,25 @@ using Serilog;
 namespace Articles.Services
 {
     /// <summary>
-    /// Сервис работы со статьями
+    /// Сервис работы со статьями.
     /// </summary>
     public class ArticlesService : IArticlesService, IDisposable
     {
         /// <summary>
-        /// Валидатор статей
+        /// Валидатор статей.
         /// </summary>
         private readonly IModelValidator<Article> validator;
 
         /// <summary>
-        /// Контекст работы с данными
+        /// Контекст работы с данными.
         /// </summary>
         private readonly IDataContext context;
 
         /// <summary>
-        /// Конструктор сервиса
+        /// Конструктор сервиса.
         /// </summary>
-        /// <param name="context">Используемый контекст</param>
-        /// <param name="validator">Используемый валидатор статей</param>
+        /// <param name="context">Используемый контекст.</param>
+        /// <param name="validator">Используемый валидатор статей.</param>
         public ArticlesService(IDataContext context, IModelValidator<Article> validator)
         {
             this.context = context;
@@ -38,12 +38,12 @@ namespace Articles.Services
         }
 
         /// <summary>
-        /// Оббертка для выполнения операция со стандартным набором обработчиков ошибок
+        /// Оббертка для выполнения операция со стандартным набором обработчиков ошибок.
         /// </summary>
-        /// <typeparam name="T">Тип передаваемых на выходе данных</typeparam>
-        /// <param name="function">Выполняемая функция</param>
-        /// <param name="callerName">Имя вызывающего метода (используется для логирования)</param>
-        /// <returns>Результат выполнения операции</returns>
+        /// <typeparam name="T">Тип передаваемых на выходе данных.</typeparam>
+        /// <param name="function">Выполняемая функция.</param>
+        /// <param name="callerName">Имя вызывающего метода (используется для логирования).</param>
+        /// <returns>Результат выполнения операции.</returns>
         private ResultDto<T> SafeExecute<T>(Func<ResultDto<T>> function, [CallerMemberName] string callerName = "")
         {
             const string ErrorLogTemplate = "Error accured while executing \"ArticleService\".{MethodName}";

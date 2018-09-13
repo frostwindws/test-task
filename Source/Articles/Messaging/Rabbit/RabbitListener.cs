@@ -9,17 +9,17 @@ using Serilog;
 namespace Articles.Messaging.Rabbit
 {
     /// <summary>
-    /// Класс, обеспечивающий работу с шиной RabbitMQ
+    /// Класс, обеспечивающий работу с шиной RabbitMQ.
     /// </summary>
     public class RabbitListener : IRequestListener
     {
         /// <summary>
-        /// Максимальное количество попыток переподключений подряд
+        /// Максимальное количество попыток переподключений подряд.
         /// </summary>
         private const short ConnectionRetryMaxCount = 10;
 
         /// <summary>
-        /// Таймаут для попыток переподключений
+        /// Таймаут для попыток переподключений.
         /// </summary>
         private readonly TimeSpan connectionRetryTimeout = TimeSpan.FromSeconds(10);
 
@@ -29,17 +29,17 @@ namespace Articles.Messaging.Rabbit
         private IConnection connection;
 
         /// <summary>
-        /// Количество текущих попыток переподключений подряд
+        /// Количество текущих попыток переподключений подряд.
         /// </summary>
         private short connectionRetryCount;
 
         /// <summary>
-        /// Событие получения сообщения
+        /// Событие получения сообщения.
         /// </summary>
         public event EventHandler<Message> AcceptMessage;
 
         /// <summary>
-        /// Используемое соединение
+        /// Используемое соединение.
         /// </summary>
         private IConnection Connection
         {
@@ -56,10 +56,10 @@ namespace Articles.Messaging.Rabbit
         }
 
         /// <summary>
-        /// Конструктор класса
+        /// Конструктор класса.
         /// </summary>
-        /// <param name="connectionFactory">Фабрика, используемая для создания соединений</param>
-        /// <param name="queue">Имя используемой очереди</param>
+        /// <param name="connectionFactory">Фабрика, используемая для создания соединений.</param>
+        /// <param name="queue">Имя используемой очереди.</param>
         public RabbitListener(ConnectionFactory connectionFactory, string queue)
         {
             // передается фабрика, а не конечное соединение для обеспечения возможности слушателя 
@@ -69,10 +69,10 @@ namespace Articles.Messaging.Rabbit
         }
 
         /// <summary>
-        /// Запуск задачи прослушивания
+        /// Запуск задачи прослушивания.
         /// </summary>
-        /// <param name="cancellationToken">Маркер отмены прослушивания</param>
-        /// <returns>Задача прослушивания очереди сообщений</returns>
+        /// <param name="cancellationToken">Маркер отмены прослушивания.</param>
+        /// <returns>Задача прослушивания очереди сообщений.</returns>
         public async Task Listen(CancellationToken cancellationToken)
         {
             try
@@ -137,11 +137,11 @@ namespace Articles.Messaging.Rabbit
         }
 
         /// <summary>
-        /// Отправка оповещения
+        /// Отправка оповещения.
         /// </summary>
-        /// <param name="replyTo">Адреса ответа</param>
-        /// <param name="message">Передаваемое сообщение</param>
-        /// <returns>Задача отправки сообщения</returns>
+        /// <param name="replyTo">Адреса ответа.</param>
+        /// <param name="message">Передаваемое сообщение.</param>
+        /// <returns>Задача отправки сообщения.</returns>
         public void Reply(string replyTo, Message message)
         {
             using (var сhannel = Connection.CreateModel())
@@ -155,7 +155,7 @@ namespace Articles.Messaging.Rabbit
         }
 
         /// <summary>
-        /// Освобождение ресурсов
+        /// Освобождение ресурсов.
         /// </summary>
         public void Dispose()
         {

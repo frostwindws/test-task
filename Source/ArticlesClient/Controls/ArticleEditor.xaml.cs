@@ -5,22 +5,22 @@ using ArticlesClient.Models;
 namespace ArticlesClient.Controls
 {
     /// <summary>
-    /// Форма редактировния статьи
+    /// Форма редактировния статьи.
     /// </summary>
     public partial class ArticleEditor
     {
         /// <summary>
-        /// Событие принятия редактирования статьи
+        /// Событие принятия редактирования статьи.
         /// </summary>
         public event EventHandler<ArticleView> CommitEdit;
 
         /// <summary>
-        /// Событие отмены редактирования статьи
+        /// Событие отмены редактирования статьи.
         /// </summary>
         public event EventHandler<ArticleView> CancelEdit;
 
         /// <summary>
-        /// Конструктор формы редактирования статьи
+        /// Конструктор формы редактирования статьи.
         /// </summary>
         public ArticleEditor()
         {

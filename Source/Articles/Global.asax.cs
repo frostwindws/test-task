@@ -3,24 +3,20 @@ using System.Web;
 using System.Web.Hosting;
 using Articles.Initialization;
 using Articles.Messaging;
-using Articles.Messaging.Converters;
-using Articles.Models;
-using Articles.Services;
-using Articles.Services.Executors;
 using Serilog;
 
 namespace Articles
 {
     /// <summary>
-    /// Глобальный класс веб приложения
+    /// Глобальный класс веб приложения.
     /// </summary>
     public class Global : HttpApplication
     {
         /// <summary>
-        /// Запуск приложения
+        /// Запуск приложения.
         /// </summary>
-        /// <param name="sender">Источник события</param>
-        /// <param name="e">Аргументы события</param>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="e">Аргументы события.</param>
         protected void Application_Start(object sender, EventArgs e)
         {
             MapperConfiguration.Init();
@@ -32,7 +28,7 @@ namespace Articles
         }
 
         /// <summary>
-        /// Запуск прослушивания очереди запросов
+        /// Запуск прослушивания очереди запросов.
         /// </summary>
         private void StartBackgroundListener()
         {
@@ -49,10 +45,10 @@ namespace Articles
         } 
 
         /// <summary>
-        /// Остановка приложения
+        /// Остановка приложения.
         /// </summary>
-        /// <param name="sender">Источник события</param>
-        /// <param name="e">Аргументы события</param>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="e">Аргументы события.</param>
         protected void Application_End(object sender, EventArgs e)
         {
             Log.Information("Articles server has stopped");

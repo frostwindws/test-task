@@ -13,7 +13,7 @@ using MapperConfiguration = Articles.Initialization.MapperConfiguration;
 namespace ArticlesTests
 {
     /// <summary>
-    /// Класс теста сервиса статей
+    /// Класс теста сервиса статей.
     /// </summary>
     [TestFixture]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -24,7 +24,7 @@ namespace ArticlesTests
         private IArticlesService service;
 
         /// <summary>
-        /// Конструктор теста сервиса статей
+        /// Конструктор теста сервиса статей.
         /// </summary>
         public ArticlesServiceTest()
         {
@@ -33,7 +33,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Инициализация тестов
+        /// Инициализация тестов.
         /// </summary>
         [SetUp]
         public void TestSetUp()
@@ -44,7 +44,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Сервис возвращает то же количество записей, что и репозиторий
+        /// Сервис возвращает то же количество записей, что и репозиторий.
         /// </summary>
         [Test]
         public void GetAll_RequestRecords_ReturnsRepositorySameLengthResult()
@@ -67,7 +67,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос имеющейся записи возвращает не пустой результат
+        /// Запрос имеющейся записи возвращает не пустой результат.
         /// </summary>
         [Test]
         public void Get_RequestExistingRecord_ReturnsNotNull()
@@ -83,7 +83,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос отсутствующей записи возвращает null 
+        /// Запрос отсутствующей записи возвращает null .
         /// </summary>
         [Test]
         public void Get_RequestNotExistingRecord_ReturnsNull()
@@ -98,7 +98,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос создания корректной статьи вызывает метод создания репозитория 1 раз
+        /// Запрос создания корректной статьи вызывает метод создания репозитория 1 раз.
         /// </summary>
         [Test]
         public void Create_RequestNewValidArticleCreating_RunsRepositoryCreateMethodOnce()
@@ -113,7 +113,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос создания некорректной статьи не вызывает метод создания репозитория
+        /// Запрос создания некорректной статьи не вызывает метод создания репозитория.
         /// </summary>
         [Test]
         public void Create_RequestNewInvalidArticleCreating_NeverRunsRepositoryCreateMethod()
@@ -128,7 +128,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос создания корректной статьи возвращает идентификатор созаданной записи
+        /// Запрос создания корректной статьи возвращает идентификатор созаданной записи.
         /// </summary>
         [Test]
         public void Create_RequestNewValidArticleCreate_ReturnsRecordWithCreatedId()
@@ -144,7 +144,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз
+        /// Запрос обновления записи выполняет метод обновления записи репозитория 1 раз.
         /// </summary>
         [Test]
         public void Update_RequestArticleValidUpdate_RunsRepositoryUpdateMethodOnce()
@@ -159,7 +159,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос некорректного обновления записи не выполняет метод обновления записи репозитория
+        /// Запрос некорректного обновления записи не выполняет метод обновления записи репозитория.
         /// </summary>
         [Test]
         public void Update_RequestArticleValidUpdate_NeverRunsRepositoryUpdateMethod()
@@ -174,7 +174,7 @@ namespace ArticlesTests
         }
 
         /// <summary>
-        /// Запрос удаления записи выполняет метод удаления репозитория 1 раз
+        /// Запрос удаления записи выполняет метод удаления репозитория 1 раз.
         /// </summary>
         [Test]
         public void Delete_RequestArticleDelete_RunsRepositoryDeleteMethodOnce()

@@ -7,7 +7,7 @@ using Serilog;
 namespace Articles.Services
 {
     /// <summary>
-    /// Сервис прослушивания сообщений
+    /// Сервис прослушивания сообщений.
     /// </summary>
     public class RabbitListenerService : IListenerService
     {
@@ -15,10 +15,10 @@ namespace Articles.Services
         private readonly IExecutorsProvider executorsProvider;
 
         /// <summary>
-        /// Конструктор сервиса прослушивания сообщений
+        /// Конструктор сервиса прослушивания сообщений.
         /// </summary>
-        /// <param name="listenersFactory">Фабрика прослушивателей</param>
-        /// <param name="executorsProvider">Провайдер для исполнителей команд</param>
+        /// <param name="listenersFactory">Фабрика прослушивателей.</param>
+        /// <param name="executorsProvider">Провайдер для исполнителей команд.</param>
         public RabbitListenerService(ListenersFactory listenersFactory, IExecutorsProvider executorsProvider)
         {
             this.listenersFactory = listenersFactory;
@@ -26,9 +26,9 @@ namespace Articles.Services
         }
 
         /// <summary>
-        /// Запуск прослушивания сообщений
+        /// Запуск прослушивания сообщений.
         /// </summary>
-        /// <param name="cancellationToken">Маркер отмены действия</param>
+        /// <param name="cancellationToken">Маркер отмены действия.</param>
         /// <returns></returns>
         public async Task StartListenning(CancellationToken cancellationToken)
         {
@@ -40,10 +40,10 @@ namespace Articles.Services
         }
 
         /// <summary>
-        /// Обработчик события получения комманды
+        /// Обработчик события получения комманды.
         /// </summary>
-        /// <param name="sender">Источник события</param>
-        /// <param name="message">Полученное сообщение</param>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="message">Полученное сообщение.</param>
         private void ListenerOnAcceptMessage(object sender, Message message)
         {
             ICommandExecutor executor = executorsProvider.Get(message.Type);
@@ -58,11 +58,11 @@ namespace Articles.Services
         }
 
         /// <summary>
-        /// Выполнение команды
+        /// Выполнение команды.
         /// </summary>
-        /// <param name="listener">Слушатель запросов</param>
-        /// <param name="executor">Экземпляр исполнителя</param>
-        /// <param name="message">Сообщение запроса</param>
+        /// <param name="listener">Слушатель запросов.</param>
+        /// <param name="executor">Экземпляр исполнителя.</param>
+        /// <param name="message">Сообщение запроса.</param>
         /// <returns></returns>
         private void ExecuteCommand(IRequestListener listener, ICommandExecutor executor, Message message)
         {

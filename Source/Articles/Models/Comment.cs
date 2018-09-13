@@ -5,32 +5,32 @@ using Nelibur.Sword.Extensions;
 namespace Articles.Models
 {
     /// <summary>
-    /// Модель комментария к статье
+    /// Модель комментария к статье.
     /// </summary>
     public class Comment
     {
         /// <summary>
-        /// Идентификатор
+        /// Идентификатор.
         /// </summary>
         public long Id { get; set; }
 
         /// <summary>
-        /// Идентификатор статьи
+        /// Идентификатор статьи.
         /// </summary>
         public long ArticleId { get; set; }
 
         /// <summary>
-        /// Автор
+        /// Автор.
         /// </summary>
         public string Author { get; set; }
 
         /// <summary>
-        /// Текст
+        /// Текст.
         /// </summary>
         public string Content { get; set; }
 
         /// <summary>
-        /// Дата создания
+        /// Дата создания.
         /// </summary>
         public DateTime Created { get; set; }
     }

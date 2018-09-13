@@ -5,16 +5,16 @@ using Nelibur.Sword.Extensions;
 namespace Articles.Models
 {
     /// <summary>
-    /// Валидатор соделей статей
+    /// Валидатор соделей статей.
     /// </summary>
     public class ArticlesValidator : IModelValidator<Article>
     {
         /// <summary>
-        /// Получение списка ошибок
+        /// Получение списка ошибок.
         /// </summary>
-        /// <param name="repository">Используемый ропозиторий</param>
-        /// <param name="record">Проверяемая запись</param>
-        /// <returns>Перечисление ошибок</returns>
+        /// <param name="repository">Используемый ропозиторий.</param>
+        /// <param name="record">Проверяемая запись.</param>
+        /// <returns>Перечисление ошибок.</returns>
         public IEnumerable<string> GetErrors(IRepository<Article> repository, Article record)
         {
             var errors = new List<string>();

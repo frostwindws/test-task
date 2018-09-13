@@ -9,17 +9,17 @@ namespace Articles.Models
     public interface IRepository<T>
     {
         /// <summary>
-        /// Получение полного списка всех записей
+        /// Получение полного списка всех записей.
         /// </summary>
-        /// <returns>Возвращает список всех записей, имеющихся в репозитарии</returns>
+        /// <returns>Возвращает список всех записей, имеющихся в репозитарии.</returns>
         IEnumerable<T> GetCollection();
 
         /// <summary>
-        /// Проверка наличия записи с таким же свойством
+        /// Проверка наличия записи с таким же свойством.
         /// </summary>
-        /// <param name="propertyName">Имя свойства</param>
-        /// <param name="value">Значение свойства</param>
-        /// <returns>True, если значение уже присутствует</returns>
+        /// <param name="propertyName">Имя свойства.</param>
+        /// <param name="value">Значение свойства.</param>
+        /// <returns>True, если значение уже присутствует.</returns>
         bool Exists(string propertyName, string value);
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Articles.Models
         T Get(long id);
 
         /// <summary>
-        /// Создать новую запись
+        /// Создать новую запись.
         /// </summary>
         /// <param name="record">Объект создаваемой записи.</param>
         /// <returns>Возвращает данные созданной записи.</returns>

@@ -4,19 +4,19 @@ using Articles.Messaging.Converters;
 namespace Articles.Services.Executors
 {
     /// <summary>
-    /// Исполнитель команд сообщений
+    /// Исполнитель команд сообщений.
     /// </summary>
     public class CommandExecutor : ICommandExecutor
     {
         private readonly Func<byte[], byte[]> method;
 
         /// <summary>
-        /// Имя исполнямой команды
+        /// Имя исполнямой команды.
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Выполнение команды
+        /// Выполнение команды.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

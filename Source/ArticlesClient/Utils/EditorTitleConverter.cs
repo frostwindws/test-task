@@ -5,18 +5,18 @@ using System.Windows.Data;
 namespace ArticlesClient.Utils
 {
     /// <summary>
-    /// Конвертер флага в заголовок окна редактирования
+    /// Конвертер флага в заголовок окна редактирования.
     /// </summary>
     internal class EditorTitleConverter: IValueConverter
     {
         /// <summary>
-        /// Конверт значения
+        /// Конверт значения.
         /// </summary>
-        /// <param name="value">Значение флага</param>
-        /// <param name="targetType">Целевой тип конвертации</param>
-        /// <param name="parameter">Дополнительный параметр конвертации</param>
-        /// <param name="culture">Информация о текущей культуре</param>
-        /// <returns>Результат конвертации (Текст о редактировании, либо создании)</returns>
+        /// <param name="value">Значение флага.</param>
+        /// <param name="targetType">Целевой тип конвертации.</param>
+        /// <param name="parameter">Дополнительный параметр конвертации.</param>
+        /// <param name="culture">Информация о текущей культуре.</param>
+        /// <returns>Результат конвертации (Текст о редактировании, либо создании).</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return (bool)value ? $"Add new {parameter}" : $"Edit {parameter}";

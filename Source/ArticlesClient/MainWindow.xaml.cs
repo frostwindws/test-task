@@ -12,12 +12,12 @@ using ArticlesClient.Utils;
 namespace ArticlesClient
 {
     /// <summary>
-    /// Основное окно приложения
+    /// Основное окно приложения.
     /// </summary>
     public partial class MainWindow
     {
         /// <summary>
-        /// Контейнер данных для работы с окном
+        /// Контейнер данных для работы с окном.
         /// </summary>
         private readonly ViewDataContainer viewData;
 
@@ -26,7 +26,7 @@ namespace ArticlesClient
         private DataClientsFactory WriterFactory => ((App)Application.Current).WriterFactory;
 
         /// <summary>
-        /// Конструктор основного окна приложения
+        /// Конструктор основного окна приложения.
         /// </summary>
         public MainWindow()
         {
@@ -38,7 +38,7 @@ namespace ArticlesClient
         }
 
         /// <summary>
-        /// Запросить список статей
+        /// Запросить список статей.
         /// </summary>
         private async void RequestArticlesList()
         {
@@ -61,9 +61,9 @@ namespace ArticlesClient
         }
 
         /// <summary>
-        /// Запросить данные отдельной статьи
+        /// Запросить данные отдельной статьи.
         /// </summary>
-        /// <param name="articleId">Идентификатор статьи</param>
+        /// <param name="articleId">Идентификатор статьи.</param>
         /// <returns></returns>
         private void RequestArticledata(long articleId)
         {
@@ -86,9 +86,9 @@ namespace ArticlesClient
         }
 
         /// <summary>
-        /// Обращение к клиенту данных со стандартной обработкой ошибок коммуникации
+        /// Обращение к клиенту данных со стандартной обработкой ошибок коммуникации.
         /// </summary>
-        /// <param name="request">Метод обращения</param>
+        /// <param name="request">Метод обращения.</param>
         private async void DoSafeRequest(Func<Task> request)
         {
             try

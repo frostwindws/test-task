@@ -18,14 +18,14 @@ using Serilog;
 namespace Articles.Initialization
 {
     /// <summary>
-    /// Класс конфигурации библиотеки Autofac
+    /// Класс конфигурации библиотеки Autofac.
     /// </summary>
     internal static class DependencyConfiguration
     {
 
 
         /// <summary>
-        /// Инициализация настроек Autofac
+        /// Инициализация настроек Autofac.
         /// </summary>
         public static void InitWcfServicesFactory()
         {
@@ -52,7 +52,7 @@ namespace Articles.Initialization
         }
 
         /// <summary>
-        /// Получение фабрики для сервисов прослушивания сообщений
+        /// Получение фабрики для сервисов прослушивания сообщений.
         /// </summary>
         /// <returns></returns>
         public static ListenerServicesFactory GetListenerServicesFactory()
@@ -71,7 +71,7 @@ namespace Articles.Initialization
         }
 
         /// <summary>
-        /// Функция построение контекста данных
+        /// Функция построение контекста данных.
         /// </summary>
         /// <returns></returns>
         private static IDataContext DataContextBuilder()
@@ -80,7 +80,7 @@ namespace Articles.Initialization
         }
 
         /// <summary>
-        /// Функция построения слушателя запросов
+        /// Функция построения слушателя запросов.
         /// </summary>
         private static IRequestListener ListenersBuilder()
         {
@@ -96,16 +96,16 @@ namespace Articles.Initialization
         }
 
         /// <summary>
-        /// Получение Uri для обращения к RabbitMQ
+        /// Получение Uri для обращения к RabbitMQ.
         /// </summary>
-        /// <returns>Сформированный Uri</returns>
+        /// <returns>Сформированный Uri.</returns>
         private static Uri GetListenerUri()
         {
             return new Uri(ConfigurationManager.ConnectionStrings["RabbitConnection"].ConnectionString);
         }
 
         /// <summary>
-        /// Получение настроек RabbitMQ
+        /// Получение настроек RabbitMQ.
         /// </summary>
         /// <returns></returns>
         private static string GetRabbitQueueName()
@@ -114,9 +114,9 @@ namespace Articles.Initialization
         }
 
         /// <summary>
-        /// Создание соединения для работы с PostgreSQL
+        /// Создание соединения для работы с PostgreSQL.
         /// </summary>
-        /// <returns>Новое соединение</returns>
+        /// <returns>Новое соединение.</returns>
         private static IDbConnection CreateNpgsqlConnection()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["PostgreConnection"].ConnectionString;

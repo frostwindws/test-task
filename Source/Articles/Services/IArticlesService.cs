@@ -4,7 +4,7 @@ using Articles.Services.Models;
 namespace Articles.Services
 {
     /// <summary>
-    /// Интерфейс сервиса статей
+    /// Интерфейс сервиса статей.
     /// </summary>
     [ServiceContract]
     public interface IArticlesService
@@ -17,7 +17,7 @@ namespace Articles.Services
         ResultDto<ArticleDto[]> GetAll();
 
         /// <summary>
-        /// Получить отдельную статью
+        /// Получить отдельную статью.
         /// </summary>
         /// <param name="id">Идентификатор статьи.</param>
         /// <returns>Возвращает объект запрашиваемой статьи.</returns>
@@ -25,23 +25,23 @@ namespace Articles.Services
         ResultDto<ArticleDto> Get(long id);
 
         /// <summary>
-        /// Создать новую статью
+        /// Создать новую статью.
         /// </summary>
-        /// <param name="article">Объект создаваемой стаьи</param>
+        /// <param name="article">Объект создаваемой стаьи.</param>
         [OperationContract]
         ResultDto<ArticleDto> Create(ArticleDto article);
 
         /// <summary>
-        /// Обновить имеющуюся статью
+        /// Обновить имеющуюся статью.
         /// </summary>
-        /// <param name="article">Объект обновляемой статьи</param>
+        /// <param name="article">Объект обновляемой статьи.</param>
         [OperationContract]
         ResultDto<ArticleDto> Update(ArticleDto article);
 
         /// <summary>
-        /// Удалить статью
+        /// Удалить статью.
         /// </summary>
-        /// <param name="id">Идентификатор удаляемой статьи</param>
+        /// <param name="id">Идентификатор удаляемой статьи.</param>
         [OperationContract]
         ResultDto<ArticleDto> Delete(long id);
     }

@@ -10,7 +10,7 @@ using Nelibur.Sword.Extensions;
 namespace ArticlesClient.Models
 {
     /// <summary>
-    /// Модель статьи для отображения
+    /// Модель статьи для отображения.
     /// </summary>
     public sealed class ArticleView : INotifyPropertyChanged, IDataErrorInfo
     {
@@ -19,12 +19,12 @@ namespace ArticlesClient.Models
         private string content;
 
         /// <summary>
-        /// Идентификатор
+        /// Идентификатор.
         /// </summary>
         public long Id { get; set; }
 
         /// <summary>
-        /// Заголовок
+        /// Заголовок.
         /// </summary>
         public string Title
         {
@@ -37,7 +37,7 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Автор
+        /// Автор.
         /// </summary>
         public string Author
         {
@@ -50,7 +50,7 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Текст
+        /// Текст.
         /// </summary>
         public string Content
         {
@@ -63,22 +63,22 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Дата создания
+        /// Дата создания.
         /// </summary>
         public DateTime Created { get; set; }
 
         /// <summary>
-        /// Флаг нового объекта
+        /// Флаг нового объекта.
         /// </summary>
         public bool IsNew { get; set; }
 
         /// <summary>
-        /// Коллекция комментариев
+        /// Коллекция комментариев.
         /// </summary>
         public ObservableCollection<CommentView> Comments { get; set; }
 
         /// <summary>
-        /// Событие обновления свойства модели представления
+        /// Событие обновления свойства модели представления.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -89,9 +89,9 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Получение ошибки по имени свойства
+        /// Получение ошибки по имени свойства.
         /// </summary>
-        /// <param name="columnName">Имя свойства</param>
+        /// <param name="columnName">Имя свойства.</param>
         /// <returns></returns>
         public string this[string columnName]
         {

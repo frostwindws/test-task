@@ -6,7 +6,7 @@ using ArticlesClient.Annotations;
 namespace ArticlesClient.Models
 {
     /// <summary>
-    /// Контейнер даннях для отображения в окне приложения
+    /// Контейнер даннях для отображения в окне приложения.
     /// </summary>
     internal sealed class ViewDataContainer : INotifyPropertyChanged
     {
@@ -16,7 +16,7 @@ namespace ArticlesClient.Models
         private CommentView editableComment;
 
         /// <summary>
-        /// Коллекция отображаемых статей
+        /// Коллекция отображаемых статей.
         /// </summary>
         public ObservableCollection<ArticleView> ArticlesList
         {
@@ -29,7 +29,7 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Отображаемая в основном окне статья
+        /// Отображаемая в основном окне статья.
         /// </summary>
         public ArticleView CurrentArticle
         {
@@ -45,7 +45,7 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Редактируемая статья
+        /// Редактируемая статья.
         /// </summary>
         public ArticleView EditableArticle
         {
@@ -60,7 +60,7 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Редактируемыей комментарий
+        /// Редактируемыей комментарий.
         /// </summary>
         public CommentView EditableComment
         {
@@ -73,7 +73,7 @@ namespace ArticlesClient.Models
         }
 
         /// <summary>
-        /// Событие обновления свойства объекта
+        /// Событие обновления свойства объекта.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -10,7 +10,7 @@ using RabbitMQ.Client.Events;
 namespace ArticlesClient.Clients.Rabbit
 {
     /// <summary>
-    /// Провайдер запросов к RabbitMQ
+    /// Провайдер запросов к RabbitMQ.
     /// </summary>
     public class RabbitRequestProvider : IDisposable
     {
@@ -23,12 +23,12 @@ namespace ArticlesClient.Clients.Rabbit
         private readonly TimeSpan requestTimeout = TimeSpan.FromSeconds(10);
 
         /// <summary>
-        /// Конструктор запроса
+        /// Конструктор запроса.
         /// </summary>
-        /// <param name="connection">Используемое соединение</param>
-        /// <param name="ownConnection">Флаг владения провайдером соединением (если True, то провайдер отвечает за его освобождение)</param>
-        /// <param name="queueName">Имя используемой очереди</param>
-        /// <param name="bodyConverter">Конвертер, используемый для преобразований</param>
+        /// <param name="connection">Используемое соединение.</param>
+        /// <param name="ownConnection">Флаг владения провайдером соединением (если True, то провайдер отвечает за его освобождение).</param>
+        /// <param name="queueName">Имя используемой очереди.</param>
+        /// <param name="bodyConverter">Конвертер, используемый для преобразований.</param>
         public RabbitRequestProvider(IConnection connection, bool ownConnection, string queueName, IMessageBodyConverter bodyConverter)
         {
             this.connection = connection;
@@ -38,12 +38,12 @@ namespace ArticlesClient.Clients.Rabbit
         }
 
         /// <summary>
-        /// Отправка запроса
+        /// Отправка запроса.
         /// </summary>
-        /// <typeparam name="T">Тип ожидаемого результата</typeparam>
-        /// <param name="type">Тип запроса</param>
-        /// <param name="requestObject">Объект, передаваемый в запросе</param>
-        /// <returns>Результат ответа на запрос</returns>
+        /// <typeparam name="T">Тип ожидаемого результата.</typeparam>
+        /// <param name="type">Тип запроса.</param>
+        /// <param name="requestObject">Объект, передаваемый в запросе.</param>
+        /// <returns>Результат ответа на запрос.</returns>
         public async Task<T> SendRequest<T>(string type, object requestObject)
         {
             using (var channel = connection.CreateModel())
@@ -92,7 +92,7 @@ namespace ArticlesClient.Clients.Rabbit
         }
 
         /// <summary>
-        /// Освобождение ресурсов
+        /// Освобождение ресурсов.
         /// </summary>
         public void Dispose()
         {
