@@ -9,7 +9,7 @@ namespace Articles.Dapper
     /// <summary>
     /// Репозиторий коментариев.
     /// </summary>
-    public class CommentsRepository : ICommentsRepository
+    public class DapperCommentsRepository : ICommentsRepository
     {
         private const string GetQuery = "select id, articleid, author, content, created  from comments";
         private const string GetForArticleQuery = GetQuery + " where articleid = @articleId";
@@ -24,7 +24,7 @@ namespace Articles.Dapper
         /// <summary>
         /// Конструктор репозитория коментариев.
         /// </summary>
-        public CommentsRepository(IDbConnection connection)
+        public DapperCommentsRepository(IDbConnection connection)
         {
             this.connection = connection;
         }
@@ -47,7 +47,6 @@ namespace Articles.Dapper
         {
             return connection.Query<Comment>(GetForArticleQuery, new { articleId });
         }
-
 
         /// <summary>
         /// Найти комментарий по его идентификатору.

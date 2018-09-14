@@ -104,9 +104,16 @@ namespace Articles.Services
                     .Map(a =>
                     {
                         IEnumerable<string> errors = validator.GetErrors(context.Articles, a);
-                        return errors.Any()
-                            ? ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : ResultBuilder.Success(Mapper.Map<ArticleDto>(context.Articles.Create(a)));
+                        if (errors.Any())
+                        {
+                            return ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
+                        }
+                        else
+                        {
+                            var createdArticle = context.Articles.Create(a);
+                            context.Commit();
+                            return ResultBuilder.Success(Mapper.Map<ArticleDto>(createdArticle));
+                        }
                     }).Value;
 
                 return result;
@@ -125,9 +132,16 @@ namespace Articles.Services
                     .Map(a =>
                     {
                         IEnumerable<string> errors = validator.GetErrors(context.Articles, a);
-                        return errors.Any()
-                            ? ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : ResultBuilder.Success(Mapper.Map<ArticleDto>(context.Articles.Update(a)));
+                        if (errors.Any())
+                        {
+                            return ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
+                        }
+                        else
+                        {
+                            var updatedArticle = context.Articles.Update(a);
+                            context.Commit();
+                            return ResultBuilder.Success(Mapper.Map<ArticleDto>(updatedArticle));
+                        }
                     }).Value;
 
                 return result;
@@ -140,6 +154,7 @@ namespace Articles.Services
             return SafeExecute(() =>
             {
                 context.Articles.Delete(id);
+                context.Commit();
                 return ResultBuilder.Success<ArticleDto>(null);
             });
         }

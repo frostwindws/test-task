@@ -110,9 +110,16 @@ namespace Articles.Services.Executors
 
                 Article dbArticle = Mapper.Map<Article>(article);
                 IEnumerable<string> errors = articleValidator.GetErrors(context.Articles, dbArticle);
-                return errors.Any()
-                    ? ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                    : ResultBuilder.Success(Mapper.Map<ArticleDto>(context.Articles.Create(dbArticle)));
+                if (errors.Any())
+                {
+                    return ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
+                }
+                else
+                {
+                    var createdArticle = context.Articles.Create(dbArticle);
+                    context.Commit();
+                    return ResultBuilder.Success(Mapper.Map<ArticleDto>(createdArticle));
+                }
             }
         }
 
@@ -132,10 +139,16 @@ namespace Articles.Services.Executors
 
                 Article dbArticle = Mapper.Map<Article>(article);
                 IEnumerable<string> errors = articleValidator.GetErrors(context.Articles, dbArticle);
-
-                return errors.Any()
-                    ? ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                    : ResultBuilder.Success(Mapper.Map<ArticleDto>(context.Articles.Update(dbArticle)));
+                if (errors.Any())
+                {
+                    return ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
+                }
+                else
+                {
+                    var updatedArticle = context.Articles.Update(dbArticle);
+                    context.Commit();
+                    return ResultBuilder.Success(Mapper.Map<ArticleDto>(updatedArticle));
+                }
             }
         }
 
@@ -149,6 +162,7 @@ namespace Articles.Services.Executors
             using (IDataContext context = contextFactory.GetContext())
             {
                 context.Articles.Delete(article.Id);
+                context.Commit();
                 return ResultBuilder.Success<ArticleDto>(null);
             }
         }
@@ -169,9 +183,21 @@ namespace Articles.Services.Executors
 
                 Comment dbComment = Mapper.Map<Comment>(comment);
                 IEnumerable<string> errors = commentValidator.GetErrors(context.Comments, dbComment);
-                return errors.Any()
-                    ? ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                    : ResultBuilder.Success(Mapper.Map<CommentDto>(context.Comments.Create(dbComment)));
+                if (errors.Any())
+                {
+                    return ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
+                }
+                else
+                {
+                    if (dbComment.Article == null)
+                    {
+                        dbComment.Article = new Article { Id = comment.ArticleId };
+                    }
+
+                    var createdComment = context.Comments.Create(dbComment);
+                    context.Commit();
+                    return ResultBuilder.Success(Mapper.Map<CommentDto>(createdComment));
+                }
             }
         }
 
@@ -191,9 +217,16 @@ namespace Articles.Services.Executors
 
                 Comment dbComment = Mapper.Map<Comment>(comment);
                 IEnumerable<string> errors = commentValidator.GetErrors(context.Comments, dbComment);
-                return errors.Any()
-                    ? ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                    : ResultBuilder.Success(Mapper.Map<CommentDto>(context.Comments.Update(dbComment)));
+                if (errors.Any())
+                {
+                    return ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
+                }
+                else
+                {
+                    var updatedComment = context.Comments.Update(dbComment);
+                    context.Commit();
+                    return ResultBuilder.Success(Mapper.Map<CommentDto>(updatedComment));
+                }
             }
         }
 
@@ -207,6 +240,7 @@ namespace Articles.Services.Executors
             using (IDataContext context = contextFactory.GetContext())
             {
                 context.Comments.Delete(comment.Id);
+                context.Commit();
                 return ResultBuilder.Success<CommentDto>(null);
             }
         }

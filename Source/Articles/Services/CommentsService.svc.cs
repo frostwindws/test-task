@@ -103,14 +103,22 @@ namespace Articles.Services
             {
                 ResultDto<CommentDto> result = comment
                     .ToOption()
-                    .DoOnEmpty(() => result = ResultBuilder.Fault<CommentDto>("The comment is empty"))
-                    .Map(a => Mapper.Map<Comment>(comment))
-                    .Map(a =>
+                    .DoOnEmpty(() => ResultBuilder.Fault<CommentDto>("The comment is empty"))
+                    .Map(c => Mapper.Map<Comment>(c))
+                    .Map(c =>
                     {
-                        IEnumerable<string> errors = validator.GetErrors(context.Comments, a);
-                        return errors.Any()
-                            ? ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : ResultBuilder.Success(Mapper.Map<CommentDto>(context.Comments.Create(a)));
+                        IEnumerable<string> errors = validator.GetErrors(context.Comments, c);
+                        if (errors.Any())
+                        {
+                            return ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
+                        }
+                        else
+                        {
+                            c.Article = new Article { Id = c.ArticleId };
+                            var createdComment = context.Comments.Create(c);
+                            context.Commit();
+                            return ResultBuilder.Success(Mapper.Map<CommentDto>(createdComment));
+                        }
                     }).Value;
 
                 return result;
@@ -129,9 +137,16 @@ namespace Articles.Services
                     .Map(a =>
                     {
                         IEnumerable<string> errors = validator.GetErrors(context.Comments, a);
-                        return errors.Any()
-                            ? ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}")
-                            : ResultBuilder.Success(Mapper.Map<CommentDto>(context.Comments.Update(a)));
+                        if (errors.Any())
+                        {
+                            return ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
+                        }
+                        else
+                        {
+                            var updatedComment = context.Comments.Update(a);
+                            context.Commit();
+                            return ResultBuilder.Success(Mapper.Map<CommentDto>(updatedComment));
+                        }
                     }).Value;
 
                 return result;
@@ -144,6 +159,7 @@ namespace Articles.Services
             return SafeExecute(() =>
             {
                 context.Comments.Delete(id);
+                context.Commit();
                 return ResultBuilder.Success<CommentDto>(null);
             });
         }

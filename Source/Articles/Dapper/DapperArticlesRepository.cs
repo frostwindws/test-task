@@ -9,13 +9,13 @@ namespace Articles.Dapper
     /// <summary>
     /// Репозиторий статей.
     /// </summary>
-    public class ArticlesRepository : IArticlesRepository
+    public class DapperArticlesRepository : IArticlesRepository
     {
         // Для сокращения объема запрашиваемых данных текст передается только при запросе отдельной статьи
         private const string GetQuery = "select id, title, author, created from articles"; 
         private const string FindQuery = "select id, title, author, content, created from articles where id = @id";
         private const string CreateQuery = "insert into articles(title, author, content) values(@Title, @Author, @Content) returning id, title, author, content, created";
-        private const string UpdateQuery = "update articles set title = @Title, author = @Author, content = @Content where id = @Id returning id, title, author, content, created";
+        private const string UpdateQuery = "update articles set title = @Title, content = @Content where id = @Id returning id, title, author, content, created";
         private const string DeleteQuery = "delete from articles where id = @id";
         private const string ExistsQuery = "select exists(select id from articles a where a.\"{0}\" = @value)";
 
@@ -24,7 +24,7 @@ namespace Articles.Dapper
         /// <summary>
         /// Конструктор репозитория статей.
         /// </summary>
-        public ArticlesRepository(IDbConnection connection)
+        public DapperArticlesRepository(IDbConnection connection)
         {
             this.connection = connection;
         }

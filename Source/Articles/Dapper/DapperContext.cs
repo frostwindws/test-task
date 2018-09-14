@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using Articles.Models;
 
 namespace Articles.Dapper
@@ -24,8 +23,22 @@ namespace Articles.Dapper
         public DapperContext(IDbConnection connection)
         {
             this.connection = connection;
-            Articles = new ArticlesRepository(connection);
-            Comments = new CommentsRepository(connection);
+            Articles = new DapperArticlesRepository(connection);
+            Comments = new DapperCommentsRepository(connection);
+        }
+
+        /// <summary>
+        /// Сохранение изменений
+        /// </summary>
+        public void Commit()
+        {
+        }
+
+        /// <summary>
+        /// Отмена изменений
+        /// </summary>
+        public void Rollback()
+        {
         }
 
         /// <summary>

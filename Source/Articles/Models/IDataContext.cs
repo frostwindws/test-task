@@ -16,5 +16,15 @@ namespace Articles.Models
         /// Репозиторий коментариев.
         /// </summary>
         ICommentsRepository Comments { get; }
+        
+        /// <summary>
+        /// Сохранение изменений
+        /// </summary>
+        void Commit();
+
+        /// <summary>
+        /// Отмена изменений
+        /// </summary>
+        void Rollback();
     }
 }

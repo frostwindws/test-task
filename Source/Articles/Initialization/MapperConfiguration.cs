@@ -10,8 +10,11 @@ namespace Articles.Initialization
         {
             Mapper.Initialize(c =>
             {
-                c.CreateMap<Article, ArticleDto>();
-                c.CreateMap<Comment, CommentDto>();
+                c.CreateMap<Article, ArticleDto>()
+                    .ReverseMap();
+                c.CreateMap<Comment, CommentDto>()
+                    .ReverseMap()
+                    .ForMember(d => d.Article, m => m.Ignore());
             });
         }
     }

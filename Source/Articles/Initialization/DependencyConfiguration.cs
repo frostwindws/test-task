@@ -6,11 +6,16 @@ using Articles.Messaging;
 using Articles.Messaging.Converters;
 using Articles.Messaging.Rabbit;
 using Articles.Models;
+using Articles.Nhibernate;
+using Articles.Nhibernate.Mapping;
 using Articles.Services;
 using Articles.Services.Executors;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Autofac.Integration.Wcf;
+using NHibernate.Cfg;
+using NHibernate.Dialect;
+using NHibernate.Mapping.ByCode;
 using Npgsql;
 using RabbitMQ.Client;
 using Serilog;
@@ -22,7 +27,23 @@ namespace Articles.Initialization
     /// </summary>
     internal static class DependencyConfiguration
     {
+        private static readonly string contextMode = ConfigurationManager.AppSettings["ContextMode"];
 
+        private static Func<IDataContext> ContextBulder
+        {
+            get
+            {
+                switch (contextMode)
+                {
+                    case "NHibernate":
+                        return BuildNhibernateContext;
+                    case "Dapper":
+                        return BuildDapperContext;
+                    default:
+                        throw new InvalidExpressionException("Invalid ContextMode setting avalaible settings: NHibernate or Dapper");
+                }
+            }
+        }
 
         /// <summary>
         /// Инициализация настроек Autofac.
@@ -33,7 +54,7 @@ namespace Articles.Initialization
             builder.RegisterType<LoggerInterceptor>();
 
             // Классы, используемые при создании сервиса
-            builder.Register(c => DataContextBuilder()).As<IDataContext>();
+            builder.Register(c => ContextBulder()).As<IDataContext>();
             builder.RegisterType<ArticlesValidator>().As<IModelValidator<Article>>();
             builder.RegisterType<CommentsValidator>().As<IModelValidator<Comment>>();
 
@@ -51,6 +72,25 @@ namespace Articles.Initialization
             AutofacHostFactory.Container = builder.Build();
         }
 
+        private static NhibernateContext BuildNhibernateContext()
+        {
+            var configuration = new NHibernate.Cfg.Configuration()
+                .DataBaseIntegration(db =>
+                {
+                    db.ConnectionStringName = "PostgreConnection";
+                    db.Dialect<PostgreSQLDialect>();
+                });
+
+            var mapper = new ModelMapper();
+            mapper.AddMappings(new[] { typeof(ArticleMap), typeof(CommentMap) });
+            configuration.AddMapping(mapper.CompileMappingForAllExplicitlyAddedEntities());
+
+            using (var factory = configuration.BuildSessionFactory())
+            {
+                return new NhibernateContext(factory.OpenSession());
+            }
+        }
+
         /// <summary>
         /// Получение фабрики для сервисов прослушивания сообщений.
         /// </summary>
@@ -60,7 +100,7 @@ namespace Articles.Initialization
             var builder = new ContainerBuilder();
             builder.RegisterType<RabbitListenerService>().As<IListenerService>();
             builder.Register(c => new ListenersFactory(ListenersBuilder)).As<ListenersFactory>();
-            builder.Register(c => new DataContextFactory(DataContextBuilder)).As<DataContextFactory>();
+            builder.Register(c => new DataContextFactory(ContextBulder)).As<DataContextFactory>();
             builder.RegisterType<ServiceExecutorsProvider>().As<IExecutorsProvider>();
             builder.RegisterType<ServiceExecutorsProvider>().As<IExecutorsProvider>();
             builder.RegisterType<JsonMessageBodyConverter>().As<IMessageBodyConverter>();
@@ -74,7 +114,7 @@ namespace Articles.Initialization
         /// Функция построение контекста данных.
         /// </summary>
         /// <returns></returns>
-        private static IDataContext DataContextBuilder()
+        private static IDataContext BuildDapperContext()
         {
             return new DapperContext(CreateNpgsqlConnection());
         }

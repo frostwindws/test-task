@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Nelibur.Sword.Extensions;
+// ReSharper disable ClassWithVirtualMembersNeverInherited.Global
 
 namespace Articles.Models
 {
@@ -12,26 +11,29 @@ namespace Articles.Models
         /// <summary>
         /// Идентификатор.
         /// </summary>
-        public long Id { get; set; }
+        public virtual long Id { get; set; }
 
         /// <summary>
         /// Идентификатор статьи.
         /// </summary>
-        public long ArticleId { get; set; }
+        public virtual long ArticleId { get; set; }
 
         /// <summary>
         /// Автор.
         /// </summary>
-        public string Author { get; set; }
+        public virtual string Author { get; set; }
 
         /// <summary>
         /// Текст.
         /// </summary>
-        public string Content { get; set; }
+        public virtual string Content { get; set; }
 
         /// <summary>
         /// Дата создания.
         /// </summary>
-        public DateTime Created { get; set; }
+        public virtual DateTime Created { get; set; }
+
+
+        public virtual Article Article { get; set; }
     }
 }
