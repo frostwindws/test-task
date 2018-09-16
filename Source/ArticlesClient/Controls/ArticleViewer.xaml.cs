@@ -20,7 +20,7 @@ namespace ArticlesClient.Controls
         public event EventHandler<ArticleView> DoArticleDelete;
 
         /// <summary>
-        /// Событие запроса на добавление коментария.
+        /// Событие запроса на добавление комментария.
         /// </summary>
         public event EventHandler<ArticleView> DoCommentAdd;
 
@@ -30,12 +30,12 @@ namespace ArticlesClient.Controls
         public event EventHandler<ArticleView> DoRefresh;
 
         /// <summary>
-        /// Событие запроса на редактирование коментария.
+        /// Событие запроса на редактирование комментария.
         /// </summary>
         public event EventHandler<CommentView> DoCommentEdit;
 
         /// <summary>
-        /// Событие запроса на удаление коментария.
+        /// Событие запроса на удаление комментария.
         /// </summary>
         public event EventHandler<CommentView> DoCommentDelete;
 

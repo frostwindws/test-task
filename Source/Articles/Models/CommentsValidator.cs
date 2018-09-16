@@ -12,10 +12,10 @@ namespace Articles.Models
         /// <summary>
         /// Получение списка ошибок.
         /// </summary>
-        /// <param name="repository">Используемый репозиторий.</param>
+        /// <param name="context">Контекст данных.</param>
         /// <param name="record">Проверяемая запись.</param>
         /// <returns>Перечисление ошибок.</returns>
-        public IEnumerable<string> GetErrors(IRepository<Comment> repository, Comment record)
+        public IEnumerable<string> GetErrors(IDataContext context, Comment record)
         {
             var errors = new List<string>();
             record

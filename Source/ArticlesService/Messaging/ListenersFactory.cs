@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Articles.Messaging
+namespace ArticlesService.Messaging
 {
     /// <summary>
     /// Фабрика формирования слушателей запросов.

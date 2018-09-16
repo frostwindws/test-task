@@ -13,7 +13,7 @@ using MapperConfiguration = Articles.Initialization.MapperConfiguration;
 namespace ArticlesTests
 {
     /// <summary>
-    /// Тест сервиса коментариев .
+    /// Тест сервиса комментариев .
     /// </summary>
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class CommentsServiceTest
@@ -23,7 +23,7 @@ namespace ArticlesTests
         private ICommentsService service;
 
         /// <summary>
-        /// Конструктор теста сервиса коментариев.
+        /// Конструктор теста сервиса комментариев.
         /// </summary>
         public CommentsServiceTest()
         {
@@ -126,7 +126,7 @@ namespace ArticlesTests
         public void Create_RequestNewValidCommentCreate_RunsRepositoryCreateMethodOnce()
         {
             contextMock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new string[0]);
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Comment>())).Returns(new string[0]);
 
             ResultDto<CommentDto> result = service.Create(new CommentDto());
 
@@ -143,7 +143,7 @@ namespace ArticlesTests
             const long CreatedId = 1;
             var comment = new Comment { Id = CreatedId };
             contextMock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(comment);
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new string[0]);
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Comment>())).Returns(new string[0]);
 
             ResultDto<CommentDto> result = service.Create(new CommentDto());
 
@@ -158,7 +158,7 @@ namespace ArticlesTests
         public void Create_RequestNewInvalidCommentCreate_NererRunsRepositoryCreateMethod()
         {
             contextMock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new[] { "invalid" });
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Comment>())).Returns(new[] { "invalid" });
 
             ResultDto<CommentDto> result = service.Create(new CommentDto());
 
@@ -173,7 +173,7 @@ namespace ArticlesTests
         public void Update_RequestCommentValidUpdate_RunsRepositoryUpdateMethodOnce()
         {
             contextMock.Setup(a => a.Comments.Update(It.IsAny<Comment>()));
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new string[0]);
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Comment>())).Returns(new string[0]);
 
             ResultDto<CommentDto> result = service.Update(new CommentDto());
 
@@ -188,7 +188,7 @@ namespace ArticlesTests
         public void Update_RequestCommentValidUpdate_NeverRunsRepositoryUpdateMethod()
         {
             contextMock.Setup(a => a.Comments.Create(It.IsAny<Comment>())).Returns(new Comment());
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Comment>>(), It.IsAny<Comment>())).Returns(new[] { "invalid" });
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Comment>())).Returns(new[] { "invalid" });
 
             ResultDto<CommentDto> result = service.Update(new CommentDto());
 

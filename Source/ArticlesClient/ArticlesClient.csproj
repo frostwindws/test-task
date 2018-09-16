@@ -83,7 +83,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Clients\Rabbit\Operations.cs" />
     <Compile Include="Clients\Rabbit\RabbitArticlesRepository.cs" />
     <Compile Include="Clients\Rabbit\RabbitClient.cs" />
     <Compile Include="Clients\Rabbit\RabbitCommentsRepository.cs" />
@@ -114,6 +113,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\AnnounceCommandsInvoker.cs" />
+    <Compile Include="Commands\Articles\CreateArticleCommand.cs" />
+    <Compile Include="Commands\Articles\DeleteArticleCommand.cs" />
+    <Compile Include="Commands\Articles\UpdateArticleCommand.cs" />
+    <Compile Include="Commands\CommandNames.cs" />
+    <Compile Include="Commands\Comments\CreateCommentCommand.cs" />
+    <Compile Include="Commands\Comments\DeleteCommentCommand.cs" />
+    <Compile Include="Commands\Comments\UpdateCommentCommand.cs" />
+    <Compile Include="Commands\IRequestCommand.cs" />
     <Compile Include="Connected Services\ArticlesService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

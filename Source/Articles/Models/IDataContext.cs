@@ -13,7 +13,7 @@ namespace Articles.Models
         IArticlesRepository Articles { get; }
 
         /// <summary>
-        /// Репозиторий коментариев.
+        /// Репозиторий комментариев.
         /// </summary>
         ICommentsRepository Comments { get; }
         

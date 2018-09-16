@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using ArticlesClient.ArticlesService;
+using ArticlesClient.Clients.Rabbit.Converters;
 using ArticlesClient.Models;
 using AutoMapper;
 
@@ -11,17 +12,23 @@ namespace ArticlesClient.Clients.Rabbit
     /// <summary>
     /// Rabbit MQ репозиторий статей.
     /// </summary>
-    class RabbitArticlesRepository : IRepository<ArticleView>
+    internal class RabbitArticlesRepository : IRepository<ArticleView>
     {
         private readonly RabbitRequestProvider provider;
+        private readonly string requestQueue;
+        private readonly IMessageBodyConverter bodyConverter;
 
         /// <summary>
         /// Конструктор репозитория статей.
         /// </summary>
-        /// <param name="provider">Используемый провайдер для обращения к Rabbit.</param>
-        public RabbitArticlesRepository(RabbitRequestProvider provider)
+        /// <param name="provider">Используемый провайдер для обращения к RabbitMQ.</param>
+        /// <param name="requestQueue">Очередь для отправки сообщений.</param>
+        /// <param name="bodyConverter">Ковертер тел сообщения.</param>
+        public RabbitArticlesRepository(RabbitRequestProvider provider, string requestQueue, IMessageBodyConverter bodyConverter)
         {
             this.provider = provider;
+            this.requestQueue = requestQueue;
+            this.bodyConverter = bodyConverter;
         }
 
         /// <summary>
@@ -52,7 +59,9 @@ namespace ArticlesClient.Clients.Rabbit
         /// <returns>Данные созданной статьи.</returns>
         public async Task<ArticleView> AddAsync(ArticleView record)
         {
-            RabbitResult<ArticleDto> result = await provider.SendRequest<RabbitResult<ArticleDto>>(Operations.CreateArticle, Mapper.Map<ArticleDto>(record));
+            byte[] message = bodyConverter.ToBody(Mapper.Map<ArticleDto>(record));
+            byte[] response = await provider.SendRequest(requestQueue, CommandNames.CreateArticle, message);
+            var result = bodyConverter.FromBody<RabbitResult<ArticleDto>>(response);
             if (!result.Success)
             {
                 throw new CommunicationException(result.Message);
@@ -68,7 +77,9 @@ namespace ArticlesClient.Clients.Rabbit
         /// <returns>Обновленная статья.</returns>
         public async Task<ArticleView> UpdateAsync(ArticleView record)
         {
-            RabbitResult<ArticleDto> result = await provider.SendRequest<RabbitResult<ArticleDto>>(Operations.UpdateArticle, Mapper.Map<ArticleDto>(record));
+            byte[] message = bodyConverter.ToBody(Mapper.Map<ArticleDto>(record));
+            byte[] response = await provider.SendRequest(requestQueue, CommandNames.UpdateArticle, message);
+            var result = bodyConverter.FromBody<RabbitResult<ArticleDto>>(response);
             if (!result.Success)
             {
                 throw new CommunicationException(result.Message);
@@ -83,7 +94,9 @@ namespace ArticlesClient.Clients.Rabbit
         /// <param name="record">Удаляемая статья.</param>
         public async Task DeleteAsync(ArticleView record)
         {
-            RabbitResult<ArticleDto> result = await provider.SendRequest<RabbitResult<ArticleDto>>(Operations.DeleteArticle, record);
+            byte[] message = bodyConverter.ToBody(Mapper.Map<ArticleDto>(record));
+            byte[] response = await provider.SendRequest(requestQueue, CommandNames.DeleteArticle, message);
+            var result = bodyConverter.FromBody<RabbitResult<ArticleDto>>(response);
             if (!result.Success)
             {
                 throw new CommunicationException(result.Message);

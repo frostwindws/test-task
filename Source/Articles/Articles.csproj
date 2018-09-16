@@ -145,7 +145,6 @@
   <ItemGroup>
     <Compile Include="Messaging\Converters\IMessageBodyConverter.cs" />
     <Compile Include="Messaging\Converters\JsonMessageBodyConverter.cs" />
-    <Compile Include="Messaging\ListenersFactory.cs" />
     <Compile Include="Models\CommentsValidator.cs" />
     <Compile Include="Models\ArticlesValidator.cs" />
     <Compile Include="Dapper\DapperContext.cs" />
@@ -167,17 +166,22 @@
     <Compile Include="Services\ArticlesService.svc.cs">
       <DependentUpon>ArticlesService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Services\Commands\Articles\CreateArticleCommand.cs" />
+    <Compile Include="Services\Commands\Articles\DeleteArticleCommand.cs" />
+    <Compile Include="Services\Commands\Articles\UpdateArticleCommand.cs" />
+    <Compile Include="Services\Commands\Comments\CreateCommentCommand.cs" />
+    <Compile Include="Services\Commands\Comments\DeleteCommentCommand.cs" />
+    <Compile Include="Services\Commands\Comments\UpdateCommentCommand.cs" />
+    <Compile Include="Services\Commands\IRequestCommand.cs" />
+    <Compile Include="Services\Commands\IRequestCommandInvoker.cs" />
+    <Compile Include="Services\Commands\UpdateCommandsInvoker.cs" />
     <Compile Include="Services\CommentsService.svc.cs">
       <DependentUpon>CommentsService.svc</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Services\Executors\ICommandExecutor.cs" />
-    <Compile Include="Services\Executors\IExecutorsProvider.cs" />
-    <Compile Include="Services\Executors\ServiceExecutorsProvider.cs" />
     <Compile Include="Services\IArticlesService.cs" />
-    <Compile Include="Services\Executors\CommandExecutor.cs" />
     <Compile Include="Services\ICommentsService.cs" />
     <Compile Include="Models\Article.cs" />
     <Compile Include="Dapper\DapperArticlesRepository.cs" />
@@ -195,9 +199,7 @@
     <Compile Include="Services\Models\CommentDto.cs" />
     <Compile Include="Services\Models\ResultDto.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Web.Debug.config">

@@ -1,4 +1,4 @@
-﻿namespace Articles.Services.Executors
+﻿namespace ArticlesService.Services.Executors
 {
     /// <summary>
     /// Интерфейс провайдера исполнителей.

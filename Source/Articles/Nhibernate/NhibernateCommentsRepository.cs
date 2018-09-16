@@ -79,6 +79,7 @@ namespace Articles.Nhibernate
         /// <returns>Возвращает идентификатор созданного комментария.</returns>
         public Comment Create(Comment comment)
         {
+            comment.Article = new Article{ Id = comment.ArticleId };
             session.Save(comment);
             return comment;
         }

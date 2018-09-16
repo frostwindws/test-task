@@ -1,13 +1,13 @@
-﻿using System;
+﻿using ArticlesClient.Clients.Rabbit;
+using ArticlesClient.Models;
+using ArticlesClient.Utils;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ArticlesClient.Clients.Wcf;
-using ArticlesClient.Models;
-using ArticlesClient.Utils;
 
 namespace ArticlesClient
 {
@@ -21,10 +21,16 @@ namespace ArticlesClient
         /// </summary>
         private readonly ViewDataContainer viewData;
 
+        /// <summary>
+        /// Фабрика соединений на чтение данных
+        /// </summary>
         private DataClientsFactory ReaderFactory => ((App)Application.Current).ReaderFactory;
 
-        private DataClientsFactory WriterFactory => ((App)Application.Current).WriterFactory;
-
+        /// <summary>
+        /// Клиент подключения к Rabbit
+        /// </summary>
+        private RabbitClient RabbitClient => ((App)Application.Current).RabbitClient;
+                
         /// <summary>
         /// Конструктор основного окна приложения.
         /// </summary>
@@ -33,6 +39,8 @@ namespace ArticlesClient
             InitializeComponent();
 
             viewData = (ViewDataContainer)DataContext;
+
+            RabbitClient.SubscribeToAnnounce(viewData);
 
             RequestArticlesList();
         }
@@ -133,27 +141,24 @@ namespace ArticlesClient
                     try
                     {
                         IsEnabled = false;
-                        using (var client = WriterFactory.GetClient())
+                        if (article.IsNew)
                         {
-                            if (article.IsNew)
-                            {
-                                article = await client.Articles.AddAsync(article);
-                                viewData.ArticlesList.Insert(0, article);
-                                viewData.CurrentArticle = article;
-                            }
-                            else
-                            {
-                                article = await client.Articles.UpdateAsync(article);
-                                int index = viewData.ArticlesList.IndexOf(viewData.ArticlesList.First(a => a.Id == article.Id));
+                            article = await RabbitClient.Articles.AddAsync(article);
+                            viewData.ArticlesList.Insert(0, article);
+                            viewData.CurrentArticle = article;
+                        }
+                        else
+                        {
+                            article = await RabbitClient.Articles.UpdateAsync(article);
+                            int index = viewData.ArticlesList.IndexOf(viewData.ArticlesList.First(a => a.Id == article.Id));
 
-                                if (index >= 0)
-                                {
-                                    viewData.ArticlesList[index] = article;
-                                }
-
-                                // Необходима дополнительная подгрузка комментариев
-                                RequestArticledata(article.Id);
+                            if (index >= 0)
+                            {
+                                viewData.ArticlesList[index] = article;
                             }
+
+                            // Необходима дополнительная подгрузка комментариев
+                            RequestArticledata(article.Id);
                         }
                     }
                     finally
@@ -178,10 +183,7 @@ namespace ArticlesClient
                         if (result == MessageBoxResult.Yes)
                         {
                             IsEnabled = false;
-                            using (var client = WriterFactory.GetClient())
-                            {
-                                await client.Articles.DeleteAsync(article);
-                            }
+                            await RabbitClient.Articles.DeleteAsync(article);
 
                             long articleId = article.Id;
                             article = viewData.ArticlesList.FirstOrDefault(a => a.Id == articleId);
@@ -231,10 +233,7 @@ namespace ArticlesClient
                     if (result == MessageBoxResult.Yes)
                     {
                         IsEnabled = false;
-                        using (var client = WriterFactory.GetClient())
-                        {
-                            await client.Comments.DeleteAsync(comment);
-                        }
+                        await RabbitClient.Comments.DeleteAsync(comment);
 
                         viewData.CurrentArticle.Comments.Remove(comment);
                     }
@@ -254,21 +253,18 @@ namespace ArticlesClient
                     {
                         IsEnabled = false;
                         ObservableCollection<CommentView> commentsList = viewData.CurrentArticle.Comments;
-                        using (var client = WriterFactory.GetClient())
+                        if (comment.IsNew)
                         {
-                            if (comment.IsNew)
+                            comment = await RabbitClient.Comments.AddAsync(comment);
+                            commentsList.Add(comment);
+                        }
+                        else
+                        {
+                            comment = await RabbitClient.Comments.UpdateAsync(comment);
+                            int index = commentsList.IndexOf(commentsList.First(a => a.Id == comment.Id));
+                            if (index >= 0)
                             {
-                                comment = await client.Comments.AddAsync(comment);
-                                commentsList.Add(comment);
-                            }
-                            else
-                            {
-                                comment = await client.Comments.UpdateAsync(comment);
-                                int index = commentsList.IndexOf(commentsList.First(a => a.Id == comment.Id));
-                                if (index >= 0)
-                                {
-                                    commentsList[index] = comment;
-                                }
+                                commentsList[index] = comment;
                             }
                         }
 

@@ -3,7 +3,7 @@
     /// <summary>
     /// Допустимые типы запросов для отправки на RabbitMQ.
     /// </summary>
-    public static class Operations
+    public static class CommandNames
     {
         /// <summary>
         /// Запрос на добавление статьи.

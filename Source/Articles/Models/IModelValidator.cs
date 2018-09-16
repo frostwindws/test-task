@@ -11,9 +11,9 @@ namespace Articles.Models
         /// <summary>
         /// Получение ошибок модели.
         /// </summary>
-        /// <param name="repository">Используемый репозиторий.</param>
+        /// <param name="context">Используемый контекст данных.</param>
         /// <param name="record">Проверямеая запись.</param>
-        /// <returns></returns>
-        IEnumerable<string> GetErrors(IRepository<T> repository, T record);
+        /// <returns>Перечисление ошибок модели.</returns>
+        IEnumerable<string> GetErrors(IDataContext context, T record);
     }
 }

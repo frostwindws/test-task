@@ -8,7 +8,7 @@ using Articles.Services.Models;
 using AutoMapper;
 using Serilog;
 
-namespace Articles.Services.Executors
+namespace ArticlesService.Services.Executors
 {
     /// <summary>
     /// Провайдер исполнителей функций сервисов.

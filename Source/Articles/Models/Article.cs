@@ -35,7 +35,7 @@ namespace Articles.Models
         public virtual DateTime Created { get; set; }
 
         /// <summary>
-        /// Комментарии к статье
+        /// Комментарии к статье.
         /// </summary>
         public virtual ICollection<Comment> Comments { get; set; }
     }

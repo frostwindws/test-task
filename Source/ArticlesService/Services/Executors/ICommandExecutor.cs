@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Articles.Services.Executors
+namespace ArticlesService.Services.Executors
 {
     /// <summary>
     /// Исполнитель команд сообщений.

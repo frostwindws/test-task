@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Articles.Models;
+using Articles.Services.Executors;
 using Articles.Services.Models;
 using AutoMapper;
 using Nelibur.Sword.Extensions;
@@ -27,6 +28,11 @@ namespace Articles.Services
         private readonly IDataContext context;
 
         /// <summary>
+        /// Исполнитель команд обновления данных
+        /// </summary>
+        private readonly UpdateCommandsInvoker commandsInvoker;
+
+        /// <summary>
         /// Конструктор сервиса.
         /// </summary>
         /// <param name="context">Используемый контекст.</param>
@@ -35,6 +41,7 @@ namespace Articles.Services
         {
             this.context = context;
             this.validator = validator;
+            commandsInvoker = new UpdateCommandsInvoker();
         }
 
         /// <summary>
@@ -55,16 +62,24 @@ namespace Articles.Services
             catch (TimeoutException e)
             {
                 Log.Error(e, ErrorLogTemplate, callerName);
-                return ResultBuilder.Fault<T>("Database connection timeout. Please try again later");
+                return ResultBuilder.Fault<T>("Database connection timeout.\r\nPlease try again later");
             }
-            catch (DbException e)
+            catch (ArgumentException e)
             {
                 Log.Error(e, ErrorLogTemplate, callerName);
-                return ResultBuilder.Fault<T>($"Unexpected database exception: {e.GetBaseException().Message}.\r\nPlease try again later");
+                return ResultBuilder.Fault<T>(e.GetBaseException().Message);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, ErrorLogTemplate, callerName);
+                return ResultBuilder.Fault<T>($"Unexpected exception: {e.GetBaseException().Message}.\r\nPlease try again later");
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Получить список статей.
+        /// </summary>
+        /// <returns>Возвращает массив всех имеющихся статей.</returns>
         public ResultDto<ArticleDto[]> GetAll()
         {
             return SafeExecute(() =>
@@ -74,7 +89,11 @@ namespace Articles.Services
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Получить отдельную статью.
+        /// </summary>
+        /// <param name="id">Идентификатор статьи.</param>
+        /// <returns>Возвращает объект запрашиваемой статьи.</returns>
         public ResultDto<ArticleDto> Get(long id)
         {
             return SafeExecute(() =>
@@ -92,74 +111,48 @@ namespace Articles.Services
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Создать новую статью.
+        /// </summary>
+        /// <param name="article">Объект создаваемой стаьи.</param>
         public ResultDto<ArticleDto> Create(ArticleDto article)
         {
-            return SafeExecute(() =>
-            {
-                ResultDto<ArticleDto> result = article
-                    .ToOption()
-                    .DoOnEmpty(() => result = ResultBuilder.Fault<ArticleDto>("The article is empty"))
-                    .Map(a => Mapper.Map<Article>(article))
-                    .Map(a =>
-                    {
-                        IEnumerable<string> errors = validator.GetErrors(context.Articles, a);
-                        if (errors.Any())
-                        {
-                            return ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
-                        }
-                        else
-                        {
-                            var createdArticle = context.Articles.Create(a);
-                            context.Commit();
-                            return ResultBuilder.Success(Mapper.Map<ArticleDto>(createdArticle));
-                        }
-                    }).Value;
-
-                return result;
+            return SafeExecute(() => {
+                Article dbArticle = Mapper.Map<Article>(article);
+                dbArticle =  commandsInvoker.ExecuteForArticle("article-create", context, dbArticle, validator);
+                return ResultBuilder.Success(Mapper.Map<ArticleDto>(dbArticle));
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Обновить имеющуюся статью.
+        /// </summary>
+        /// <param name="article">Объект обновляемой статьи.</param>
         public ResultDto<ArticleDto> Update(ArticleDto article)
         {
-            return SafeExecute(() =>
-            {
-                ResultDto<ArticleDto> result = article
-                    .ToOption()
-                    .DoOnEmpty(() => result = ResultBuilder.Fault<ArticleDto>("The article is empty"))
-                    .Map(a => Mapper.Map<Article>(article))
-                    .Map(a =>
-                    {
-                        IEnumerable<string> errors = validator.GetErrors(context.Articles, a);
-                        if (errors.Any())
-                        {
-                            return ResultBuilder.Fault<ArticleDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
-                        }
-                        else
-                        {
-                            var updatedArticle = context.Articles.Update(a);
-                            context.Commit();
-                            return ResultBuilder.Success(Mapper.Map<ArticleDto>(updatedArticle));
-                        }
-                    }).Value;
-
-                return result;
+            return SafeExecute(() => {
+                Article dbArticle = Mapper.Map<Article>(article);
+                dbArticle = commandsInvoker.ExecuteForArticle("article-update", context, dbArticle, validator);
+                return ResultBuilder.Success(Mapper.Map<ArticleDto>(dbArticle));
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Удалить статью.
+        /// </summary>
+        /// <param name="id">Идентификатор удаляемой статьи.</param>
         public ResultDto<ArticleDto> Delete(long id)
         {
-            return SafeExecute(() =>
-            {
-                context.Articles.Delete(id);
-                context.Commit();
+            return SafeExecute(() => {
+                Article dbArticle = new Article() { Id = id };
+                commandsInvoker.ExecuteForArticle("article-delete", context, dbArticle, validator);
                 return ResultBuilder.Success<ArticleDto>(null);
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Освобождение ресурсов.
+        /// </summary>
         public void Dispose()
         {
             context?.Dispose();

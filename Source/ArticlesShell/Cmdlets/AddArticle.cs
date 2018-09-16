@@ -11,9 +11,19 @@ namespace ArticlesShell.Cmdlets
     /// <summary>
     /// Командлет добавления новой статьи
     /// </summary>
-    [Cmdlet(VerbsCommon.Add, "Article")]
+    [Cmdlet(VerbsCommon.Add, nameof(Article))]
     public class AddArticle : Cmdlet, IDisposable
     {
+        /// <summary>
+        /// Адрес шины RabbitQM по умолчанию
+        /// </summary>
+        private const string DefaultRabbitUri = "amqp://guest:guest@localhost:5672/";
+
+        /// <summary>
+        /// Имя очереди по умолчанию
+        /// </summary>
+        private const string DefaultQueue = "articles-requests";
+
         /// <summary>
         /// Клиент подключения к RabbitMQ
         /// </summary>
@@ -44,12 +54,26 @@ namespace ArticlesShell.Cmdlets
         public string Content { get; set; }
 
         /// <summary>
+        /// Параметр адреса шины RabbitQM
+        /// </summary>
+        [Parameter(Position = 1, Mandatory = false, HelpMessage = "RabbitQM Uri (default: \"" + DefaultRabbitUri + "\")")]
+        public string RabbitUri { get; set; }
+
+        /// <summary>
+        /// Параметр используемой для запросов очереди
+        /// </summary>
+        [Parameter(Position = 2, Mandatory = false, HelpMessage = "RabbitQM queue name (default: \"" + DefaultQueue + "\"")]
+        public string Queue { get; set; }
+
+        /// <summary>
         /// Запуск обработки
         /// </summary>
         protected override void BeginProcessing()
         {
-            var factory = new ConnectionFactory { HostName = "localhost" };
-            rabbitClient = new RabbitClient(factory.CreateConnection(), "articles-requests-queue", new JsonMessageBodyConverter());
+            string rabbitUri = string.IsNullOrWhiteSpace(RabbitUri) ? DefaultRabbitUri : RabbitUri;
+            string queue = string.IsNullOrWhiteSpace(Queue) ? DefaultQueue : Queue;
+            var factory = new ConnectionFactory { Uri = new Uri(rabbitUri) };
+            rabbitClient = new RabbitClient(factory.CreateConnection(), queue, new JsonMessageBodyConverter());
         }
 
         /// <summary>

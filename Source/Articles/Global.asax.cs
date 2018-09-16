@@ -34,13 +34,11 @@ namespace Articles
         {
             HostingEnvironment.QueueBackgroundWorkItem(async ct =>
             {
-                IListenerService service;
                 using (var listenerServicesFactory = DependencyConfiguration.GetListenerServicesFactory())
                 {
-                    service = listenerServicesFactory.GetListenerService();
+                    IListenerService service = listenerServicesFactory.GetListenerService();
+                    await service.StartListenning(ct);
                 }
-
-                await service.StartListenning(ct);
             });
         } 
 

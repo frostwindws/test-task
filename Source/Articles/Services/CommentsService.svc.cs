@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Articles.Models;
+using Articles.Services.Executors;
 using Articles.Services.Models;
 using AutoMapper;
 using Nelibur.Sword.Extensions;
@@ -27,6 +28,11 @@ namespace Articles.Services
         private readonly IDataContext context;
 
         /// <summary>
+        /// Исполнитель команд обновления данных
+        /// </summary>
+        private readonly UpdateCommandsInvoker commandsInvoker;
+
+        /// <summary>
         /// Конструктор сервиса.
         /// </summary>
         /// <param name="context">Используемый контекст.</param>
@@ -35,6 +41,7 @@ namespace Articles.Services
         {
             this.context = context;
             this.validator = validator;
+            commandsInvoker = new UpdateCommandsInvoker();
         }
 
         /// <summary>
@@ -56,6 +63,11 @@ namespace Articles.Services
                 Log.Error(e, ErrorLogTemplate, callerName);
                 return ResultBuilder.Fault<T>("Database connection timeout. Please try again later");
             }
+            catch (ArgumentException e)
+            {
+                Log.Error(e, ErrorLogTemplate, callerName);
+                return ResultBuilder.Fault<T>(e.GetBaseException().Message);
+            }
             catch (DbException e)
             {
                 Log.Error(e, ErrorLogTemplate, callerName);
@@ -63,7 +75,10 @@ namespace Articles.Services
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Получить список комментариев.
+        /// </summary>
+        /// <returns>Возвращает массив всех имеющихся статей.</returns>
         public ResultDto<CommentDto[]> GetAll()
         {
             return SafeExecute(() =>
@@ -73,7 +88,11 @@ namespace Articles.Services
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Получить отдельный комментарий.
+        /// </summary>
+        /// <param name="id">Идентификатор комментария.</param>
+        /// <returns>Возвращает объект запрашиваемого комментария.</returns>
         public ResultDto<CommentDto> Get(long id)
         {
             return SafeExecute(() =>
@@ -86,7 +105,11 @@ namespace Articles.Services
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Запрос списка комментариев к статье.
+        /// </summary>
+        /// <param name="id">Идентификатор статьи.</param>
+        /// <returns>Возвращает массив комментариев к указанной статье.</returns>
         public ResultDto<CommentDto[]> GetForArticle(long articleid)
         {
             return SafeExecute(() =>
@@ -96,75 +119,50 @@ namespace Articles.Services
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Создание комментария.
+        /// </summary>
+        /// <param name="comment">Создаваемый комментарий.</param>
+        /// <returns></returns>
         public ResultDto<CommentDto> Create(CommentDto comment)
         {
-            return SafeExecute(() =>
-            {
-                ResultDto<CommentDto> result = comment
-                    .ToOption()
-                    .DoOnEmpty(() => ResultBuilder.Fault<CommentDto>("The comment is empty"))
-                    .Map(c => Mapper.Map<Comment>(c))
-                    .Map(c =>
-                    {
-                        IEnumerable<string> errors = validator.GetErrors(context.Comments, c);
-                        if (errors.Any())
-                        {
-                            return ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
-                        }
-                        else
-                        {
-                            c.Article = new Article { Id = c.ArticleId };
-                            var createdComment = context.Comments.Create(c);
-                            context.Commit();
-                            return ResultBuilder.Success(Mapper.Map<CommentDto>(createdComment));
-                        }
-                    }).Value;
-
-                return result;
+            return SafeExecute(() => {
+                Comment dbComment = Mapper.Map<Comment>(comment);
+                dbComment = commandsInvoker.ExecuteForComment("comment-create", context, dbComment, validator);
+                return ResultBuilder.Success(Mapper.Map<CommentDto>(dbComment));
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Обновление имеющегося комментария.
+        /// </summary>
+        /// <param name="comment">Обновляемый комментарий.</param>
+        /// <returns></returns>
         public ResultDto<CommentDto> Update(CommentDto comment)
         {
-            return SafeExecute(() =>
-            {
-                ResultDto<CommentDto> result = comment
-                    .ToOption()
-                    .DoOnEmpty(() => result = ResultBuilder.Fault<CommentDto>("The comment is empty"))
-                    .Map(a => Mapper.Map<Comment>(comment))
-                    .Map(a =>
-                    {
-                        IEnumerable<string> errors = validator.GetErrors(context.Comments, a);
-                        if (errors.Any())
-                        {
-                            return ResultBuilder.Fault<CommentDto>($"Validation failure:\r\n\t{string.Join(";\r\n\t", errors)}");
-                        }
-                        else
-                        {
-                            var updatedComment = context.Comments.Update(a);
-                            context.Commit();
-                            return ResultBuilder.Success(Mapper.Map<CommentDto>(updatedComment));
-                        }
-                    }).Value;
-
-                return result;
+            return SafeExecute(() => {
+                Comment dbComment = Mapper.Map<Comment>(comment);
+                dbComment = commandsInvoker.ExecuteForComment("comment-update", context, dbComment, validator);
+                return ResultBuilder.Success(Mapper.Map<CommentDto>(dbComment));
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Удаление комментария.
+        /// </summary>
+        /// <param name="id">Идентификатор удаляемого комментария.</param>
         public ResultDto<CommentDto> Delete(long id)
         {
-            return SafeExecute(() =>
-            {
-                context.Comments.Delete(id);
-                context.Commit();
+            return SafeExecute(() => {
+                Comment dbComment = new Comment() { Id = id };
+                commandsInvoker.ExecuteForComment("comment-delete", context, dbComment, validator);
                 return ResultBuilder.Success<CommentDto>(null);
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Освобождение ресурсов.
+        /// </summary>
         public void Dispose()
         {
             context?.Dispose();

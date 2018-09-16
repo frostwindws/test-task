@@ -22,12 +22,12 @@ namespace ArticlesClient.Controls
     public partial class CommentViewer : UserControl
     {
         /// <summary>
-        /// Событие запроса на редактирование коментария.
+        /// Событие запроса на редактирование комментария.
         /// </summary>
         public event EventHandler<CommentView> DoCommentEdit;
 
         /// <summary>
-        /// Событие запроса на удаление коментария.
+        /// Событие запроса на удаление комментария.
         /// </summary>
         public event EventHandler<CommentView> DoCommentDelete;
 

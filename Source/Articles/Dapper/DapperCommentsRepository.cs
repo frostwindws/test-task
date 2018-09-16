@@ -7,7 +7,7 @@ using Serilog;
 namespace Articles.Dapper
 {
     /// <summary>
-    /// Репозиторий коментариев.
+    /// Репозиторий комментариев.
     /// </summary>
     public class DapperCommentsRepository : ICommentsRepository
     {
@@ -22,7 +22,7 @@ namespace Articles.Dapper
         private readonly IDbConnection connection;
 
         /// <summary>
-        /// Конструктор репозитория коментариев.
+        /// Конструктор репозитория комментариев.
         /// </summary>
         public DapperCommentsRepository(IDbConnection connection)
         {

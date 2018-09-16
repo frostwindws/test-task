@@ -104,7 +104,7 @@ namespace ArticlesTests
         public void Create_RequestNewValidArticleCreating_RunsRepositoryCreateMethodOnce()
         {
             contextMock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(new Article());
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new string[0]);
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Article>())).Returns(new string[0]);
 
             ResultDto<ArticleDto> result = service.Create(new ArticleDto());
 
@@ -119,7 +119,7 @@ namespace ArticlesTests
         public void Create_RequestNewInvalidArticleCreating_NeverRunsRepositoryCreateMethod()
         {
             contextMock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(new Article());
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new[] { "is invalid" });
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Article>())).Returns(new[] { "is invalid" });
 
             ResultDto<ArticleDto> result = service.Create(new ArticleDto());
             Assert.IsFalse(result.Success);
@@ -135,7 +135,7 @@ namespace ArticlesTests
         {
             var article = new Article { Id = 1 };
             contextMock.Setup(a => a.Articles.Create(It.IsAny<Article>())).Returns(article);
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new string[0]);
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Article>())).Returns(new string[0]);
 
             ResultDto<ArticleDto> result = service.Create(new ArticleDto());
 
@@ -150,7 +150,7 @@ namespace ArticlesTests
         public void Update_RequestArticleValidUpdate_RunsRepositoryUpdateMethodOnce()
         {
             contextMock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new string[0]);
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Article>())).Returns(new string[0]);
 
             ResultDto<ArticleDto> result = service.Update(new ArticleDto());
 
@@ -165,7 +165,7 @@ namespace ArticlesTests
         public void Update_RequestArticleValidUpdate_NeverRunsRepositoryUpdateMethod()
         {
             contextMock.Setup(a => a.Articles.Update(It.IsAny<Article>()));
-            validatorMock.Setup(v => v.GetErrors(It.IsAny<IRepository<Article>>(), It.IsAny<Article>())).Returns(new[] { "is invalid" });
+            validatorMock.Setup(v => v.GetErrors(It.IsAny<IDataContext>(), It.IsAny<Article>())).Returns(new[] { "is invalid" });
 
             ResultDto<ArticleDto> result = service.Update(new ArticleDto());
 

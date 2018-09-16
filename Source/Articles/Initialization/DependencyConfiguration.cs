@@ -99,10 +99,9 @@ namespace Articles.Initialization
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<RabbitListenerService>().As<IListenerService>();
-            builder.Register(c => new ListenersFactory(ListenersBuilder)).As<ListenersFactory>();
+            builder.Register(c => BuildListener()).As<IRequestListener>();
             builder.Register(c => new DataContextFactory(ContextBulder)).As<DataContextFactory>();
-            builder.RegisterType<ServiceExecutorsProvider>().As<IExecutorsProvider>();
-            builder.RegisterType<ServiceExecutorsProvider>().As<IExecutorsProvider>();
+            builder.RegisterType<UpdateCommandsInvoker>().As<IRequestCommandInvoker>();
             builder.RegisterType<JsonMessageBodyConverter>().As<IMessageBodyConverter>();
             builder.RegisterType<ArticlesValidator>().As<IModelValidator<Article>>();
             builder.RegisterType<CommentsValidator>().As<IModelValidator<Comment>>();
@@ -122,35 +121,28 @@ namespace Articles.Initialization
         /// <summary>
         /// Функция построения слушателя запросов.
         /// </summary>
-        private static IRequestListener ListenersBuilder()
+        private static IRequestListener BuildListener()
         {
             try
             {
-                return new RabbitListener(new ConnectionFactory { Uri = GetListenerUri() }, GetRabbitQueueName());
+                Uri rabbitUri = new Uri(ConfigurationManager.ConnectionStrings["RabbitConnection"].ConnectionString);
+                string exchange = ConfigurationManager.AppSettings["RabbitExchange"];
+                string listenningQueue = ConfigurationManager.AppSettings["RabbitListenningQueue"];
+                string announceQueue = ConfigurationManager.AppSettings["RabbitAnnounceQueue"];
+
+                var factory = new ConnectionFactory
+                {
+                    Uri = rabbitUri,
+                    AutomaticRecoveryEnabled = true
+                };
+
+                return new RabbitListener(factory.CreateConnection(), exchange, listenningQueue, announceQueue);
             }
             catch (Exception e)
             {
                 Log.Error(e, "Error was occured while connecting to Rabbit MQ Server. Listener wasn't created");
                 throw;
             }
-        }
-
-        /// <summary>
-        /// Получение Uri для обращения к RabbitMQ.
-        /// </summary>
-        /// <returns>Сформированный Uri.</returns>
-        private static Uri GetListenerUri()
-        {
-            return new Uri(ConfigurationManager.ConnectionStrings["RabbitConnection"].ConnectionString);
-        }
-
-        /// <summary>
-        /// Получение настроек RabbitMQ.
-        /// </summary>
-        /// <returns></returns>
-        private static string GetRabbitQueueName()
-        {
-            return ConfigurationManager.AppSettings["RabbitQueue"];
         }
 
         /// <summary>

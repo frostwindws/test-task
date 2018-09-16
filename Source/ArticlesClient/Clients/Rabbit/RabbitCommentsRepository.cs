@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using ArticlesClient.ArticlesService;
+using ArticlesClient.Clients.Rabbit.Converters;
 using ArticlesClient.Models;
 using AutoMapper;
 
@@ -11,17 +12,23 @@ namespace ArticlesClient.Clients.Rabbit
     /// <summary>
     /// Rabbit MQ репозиторий комментариев.
     /// </summary>
-    class RabbitCommentsRepository : IRepository<CommentView>
+    internal class RabbitCommentsRepository : IRepository<CommentView>
     {
         private readonly RabbitRequestProvider provider;
+        private readonly string requestQueue;
+        private readonly IMessageBodyConverter bodyConverter;
 
         /// <summary>
         /// Конструктор репозитория комментариев.
         /// </summary>
-        /// <param name="provider">Используемый провайдер для обращения к Rabbit.</param>
-        public RabbitCommentsRepository(RabbitRequestProvider provider)
+        /// <param name="provider">Используемый провайдер для обращения к RabbitMQ</param>
+        /// <param name="requestQueue">Очередь для отправки сообщений.</param>
+        /// <param name="bodyConverter">Ковертер тел сообщения для шины RabbitMQ.</param>
+        public RabbitCommentsRepository(RabbitRequestProvider provider, string requestQueue, IMessageBodyConverter bodyConverter)
         {
             this.provider = provider;
+            this.requestQueue = requestQueue;
+            this.bodyConverter = bodyConverter;
         }
 
         /// <summary>
@@ -52,7 +59,9 @@ namespace ArticlesClient.Clients.Rabbit
         /// <returns>Данные созданного комментария.</returns>
         public async Task<CommentView> AddAsync(CommentView record)
         {
-            RabbitResult<CommentDto> result = await provider.SendRequest<RabbitResult<CommentDto>>(Operations.CreateComment, Mapper.Map<CommentDto>(record));
+            byte[] message = bodyConverter.ToBody(Mapper.Map<CommentDto>(record));
+            byte[] response = await provider.SendRequest(requestQueue, CommandNames.CreateComment, message);
+            var result = bodyConverter.FromBody<RabbitResult<CommentDto>>(response);
             if (!result.Success)
             {
                 throw new CommunicationException(result.Message);
@@ -69,7 +78,9 @@ namespace ArticlesClient.Clients.Rabbit
 
         public async Task<CommentView> UpdateAsync(CommentView record)
         {
-            RabbitResult<CommentDto> result = await provider.SendRequest<RabbitResult<CommentDto>>(Operations.UpdateComment, Mapper.Map<CommentDto>(record));
+            byte[] message = bodyConverter.ToBody(Mapper.Map<CommentDto>(record));
+            byte[] response = await provider.SendRequest(requestQueue, CommandNames.UpdateComment, message);
+            var result = bodyConverter.FromBody<RabbitResult<CommentDto>>(response);
             if (!result.Success)
             {
                 throw new CommunicationException(result.Message);
@@ -84,7 +95,9 @@ namespace ArticlesClient.Clients.Rabbit
         /// <param name="record">Удаляемый комментарий.</param>
         public async Task DeleteAsync(CommentView record)
         {
-            RabbitResult<CommentDto> result = await provider.SendRequest<RabbitResult<CommentDto>>(Operations.DeleteComment, Mapper.Map<CommentDto>(record));
+            byte[] message = bodyConverter.ToBody(Mapper.Map<CommentDto>(record));
+            byte[] response = await provider.SendRequest(requestQueue, CommandNames.DeleteComment, message);
+            var result = bodyConverter.FromBody<RabbitResult<CommentDto>>(response);
             if (!result.Success)
             {
                 throw new CommunicationException(result.Message);
