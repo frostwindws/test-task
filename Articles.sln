@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesShell", "Source\Art
 		{0F4B282A-68D1-4B31-BABC-BB94C1A73E9F} = {0F4B282A-68D1-4B31-BABC-BB94C1A73E9F}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesWeb", "Source\ArticlesWeb\ArticlesWeb.csproj", "{54318A4B-C459-4EA0-8A28-20A9AC62CCBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F6FFE545-1459-4A62-9322-C94EF1C56EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6FFE545-1459-4A62-9322-C94EF1C56EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6FFE545-1459-4A62-9322-C94EF1C56EA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54318A4B-C459-4EA0-8A28-20A9AC62CCBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54318A4B-C459-4EA0-8A28-20A9AC62CCBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54318A4B-C459-4EA0-8A28-20A9AC62CCBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54318A4B-C459-4EA0-8A28-20A9AC62CCBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
