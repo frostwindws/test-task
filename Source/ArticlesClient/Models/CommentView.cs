@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using ArticlesClient.Annotations;
+using ArticlesClient.Properties;
 using Nelibur.Sword.Extensions;
 
 namespace ArticlesClient.Models

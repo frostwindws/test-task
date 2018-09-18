@@ -1,10 +1,11 @@
-﻿using ArticlesClient.ArticlesService;
-using ArticlesClient.Models;
-using AutoMapper;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ArticlesClient.Connected_Services.ArticlesService;
+using ArticlesClient.Models;
+using AutoMapper;
 
-namespace Articles.Services.Executors.Articles
+namespace ArticlesClient.Commands.Articles
 {
     /// <summary>
     /// Команда обработки оповещения о добавлении статьи.

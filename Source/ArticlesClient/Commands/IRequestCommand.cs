@@ -1,6 +1,7 @@
-﻿using ArticlesClient.Models;
+﻿using System;
+using ArticlesClient.Models;
 
-namespace Articles.Services.Executors
+namespace ArticlesClient.Commands
 {
     /// <summary>
     /// Интерфейс команды обработчика информации об обновлении данных.

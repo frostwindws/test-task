@@ -14,6 +14,7 @@ namespace ArticlesShell.Rabbit
     public class RabbitClient : IDisposable
     {
         private readonly IConnection connection;
+        private readonly string applicationId;
         private readonly string queueName;
         private readonly IMessageBodyConverter bodyConverter;
         private readonly BlockingCollection<byte[]> responseQueue = new BlockingCollection<byte[]>();
@@ -24,11 +25,13 @@ namespace ArticlesShell.Rabbit
         /// Конструктор запроса.
         /// </summary>
         /// <param name="connection">Используемое соединение.</param>
+        /// <param name="applicationId">Идентификатор приложения</param>
         /// <param name="queueName">Имя используемой очереди.</param>
         /// <param name="bodyConverter">Конвертер тела сообщения</param>
-        public RabbitClient(IConnection connection, string queueName, IMessageBodyConverter bodyConverter)
+        public RabbitClient(IConnection connection, string applicationId, string queueName, IMessageBodyConverter bodyConverter)
         {
             this.connection = connection;
+            this.applicationId = applicationId;
             this.queueName = queueName;
             this.bodyConverter = bodyConverter;
         }
@@ -64,6 +67,7 @@ namespace ArticlesShell.Rabbit
                 props.CorrelationId = correlationId;
                 props.Type = type;
                 props.ReplyTo = replyTo;
+                props.AppId = applicationId;
                 byte[] body = bodyConverter.ToBody(requestObject);
                 channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: props, body: body);
 

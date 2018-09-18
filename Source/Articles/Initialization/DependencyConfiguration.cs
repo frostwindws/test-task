@@ -9,7 +9,7 @@ using Articles.Models;
 using Articles.Nhibernate;
 using Articles.Nhibernate.Mapping;
 using Articles.Services;
-using Articles.Services.Executors;
+using Articles.Services.Commands;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Autofac.Integration.Wcf;
@@ -128,7 +128,6 @@ namespace Articles.Initialization
                 Uri rabbitUri = new Uri(ConfigurationManager.ConnectionStrings["RabbitConnection"].ConnectionString);
                 string exchange = ConfigurationManager.AppSettings["RabbitExchange"];
                 string listenningQueue = ConfigurationManager.AppSettings["RabbitListenningQueue"];
-                string announceQueue = ConfigurationManager.AppSettings["RabbitAnnounceQueue"];
 
                 var factory = new ConnectionFactory
                 {
@@ -136,7 +135,7 @@ namespace Articles.Initialization
                     AutomaticRecoveryEnabled = true
                 };
 
-                return new RabbitListener(factory.CreateConnection(), exchange, listenningQueue, announceQueue);
+                return new RabbitListener(factory.CreateConnection(), exchange, listenningQueue);
             }
             catch (Exception e)
             {

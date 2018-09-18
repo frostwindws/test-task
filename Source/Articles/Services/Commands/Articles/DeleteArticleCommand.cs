@@ -1,7 +1,7 @@
-﻿using Articles.Models;
-using System;
+﻿using System;
+using Articles.Models;
 
-namespace Articles.Services.Executors.Articles
+namespace Articles.Services.Commands.Articles
 {
     /// <summary>
     /// Команда на удаление статьи.
@@ -24,7 +24,7 @@ namespace Articles.Services.Executors.Articles
 
             context.Articles.Delete(record.Id);
             context.Commit();
-            return null;
+            return record;
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using Articles.Models;
-using Articles.Services.Executors.Articles;
-using Articles.Services.Executors.Comments;
+﻿using System;
 using System.Collections.Generic;
+using Articles.Models;
+using Articles.Services.Commands.Articles;
+using Articles.Services.Commands.Comments;
 
-namespace Articles.Services.Executors
+namespace Articles.Services.Commands
 {
     /// <summary>
     /// Исполнитель команд обновления данных
@@ -13,7 +14,7 @@ namespace Articles.Services.Executors
         /// <summary>
         /// Набор команд для статей
         /// </summary>
-        private static Dictionary<string, IRequestCommand<Article>> ArticleCommands = new Dictionary<string, IRequestCommand<Article>>
+        private static readonly Dictionary<string, IRequestCommand<Article>> articleCommands = new Dictionary<string, IRequestCommand<Article>>
         {
             { "article-create", new CreateArticleCommand()},
             { "article-update", new UpdateArticleCommand()},
@@ -23,7 +24,7 @@ namespace Articles.Services.Executors
         /// <summary>
         /// Набор команд для комментариев
         /// </summary>
-        private static Dictionary<string, IRequestCommand<Comment>> CommentCommands = new Dictionary<string, IRequestCommand<Comment>>
+        private static readonly Dictionary<string, IRequestCommand<Comment>> commentCommands = new Dictionary<string, IRequestCommand<Comment>>
         {
             { "comment-create", new CreateCommentCommand()},
             { "comment-update", new UpdateCommentCommand()},
@@ -37,7 +38,7 @@ namespace Articles.Services.Executors
         /// <returns>True, если команда относится к командам для статей</returns>
         public bool IsArticleCommand(string name)
         {
-            return ArticleCommands.ContainsKey(name);
+            return articleCommands.ContainsKey(name);
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Articles.Services.Executors
         /// <returns>True, если команда относится к командам для комментариев</returns>
         public bool IsCommentCommand(string name)
         {
-            return CommentCommands.ContainsKey(name);
+            return commentCommands.ContainsKey(name);
         }
 
         /// <summary>
@@ -55,12 +56,12 @@ namespace Articles.Services.Executors
         /// </summary>
         /// <param name="name">Имя команды.</param>
         /// <param name="context">Контекст выполнения.</param>
-        /// <param name="record">Данные статьи для команды.</param>
+        /// <param name="article">Данные статьи для команды.</param>
         /// <param name="validator">Валидатор статьи.</param>
         /// <returns>Статья, результат выполнения команды.</returns>
         public Article ExecuteForArticle(string name, IDataContext context, Article article, IModelValidator<Article> validator)
         {
-            if (ArticleCommands.TryGetValue(name, out IRequestCommand<Article> command))
+            if (articleCommands.TryGetValue(name, out IRequestCommand<Article> command))
             {
                 return command.Execute(context, article, validator);
             }
@@ -73,12 +74,12 @@ namespace Articles.Services.Executors
         /// </summary>
         /// <param name="name">Имя команды.</param>
         /// <param name="context">Контекст выполнения.</param>
-        /// <param name="record">Данные коммантария для команды.</param>
+        /// <param name="comment">Данные коммантария для команды.</param>
         /// <param name="validator">Валидатор комментария.</param>
         /// <returns>комментарий, результат выполнения команды.</returns>
         public Comment ExecuteForComment(string name, IDataContext context, Comment comment, IModelValidator<Comment> validator)
         {
-            if (CommentCommands.TryGetValue(name, out IRequestCommand<Comment> command))
+            if (commentCommands.TryGetValue(name, out IRequestCommand<Comment> command))
             {
                 return command.Execute(context, comment, validator);
             }

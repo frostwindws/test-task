@@ -73,7 +73,8 @@ namespace ArticlesShell.Cmdlets
             string rabbitUri = string.IsNullOrWhiteSpace(RabbitUri) ? DefaultRabbitUri : RabbitUri;
             string queue = string.IsNullOrWhiteSpace(Queue) ? DefaultQueue : Queue;
             var factory = new ConnectionFactory { Uri = new Uri(rabbitUri) };
-            rabbitClient = new RabbitClient(factory.CreateConnection(), queue, new JsonMessageBodyConverter());
+            string applicationId = Guid.NewGuid().ToString();
+            rabbitClient = new RabbitClient(factory.CreateConnection(), applicationId, queue, new JsonMessageBodyConverter());
         }
 
         /// <summary>

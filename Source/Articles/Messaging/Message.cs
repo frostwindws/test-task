@@ -19,6 +19,11 @@
         /// Тип сообщения.
         /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Идентификатор приложения-источника сообщения
+        /// </summary>
+        public string ApplicationId { get; set; }
         
         /// <summary>
         /// Данные запроса.

@@ -8,27 +8,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ArticlesClient.CommentsService {
-    using System.Runtime.Serialization;
-    using System;
-    
-    
+using System;
+using System.Runtime.Serialization;
+
+namespace ArticlesClient.Connected_Services.CommentsService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfArrayOfCommentDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    [System.SerializableAttribute()]
+    [DataContract(Name="ResultDtoOfArrayOfCommentDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [Serializable()]
     public partial class ResultDtoOfArrayOfCommentDtoO_Po34nZx : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ArticlesClient.CommentsService.CommentDto[] DataField;
+        [OptionalField()]
+        private CommentDto[] DataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string MessageField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private bool SuccessField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -41,8 +40,8 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ArticlesClient.CommentsService.CommentDto[] Data {
+        [DataMember()]
+        public CommentDto[] Data {
             get {
                 return this.DataField;
             }
@@ -54,7 +53,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Message {
             get {
                 return this.MessageField;
@@ -67,7 +66,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public bool Success {
             get {
                 return this.SuccessField;
@@ -92,26 +91,26 @@ namespace ArticlesClient.CommentsService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CommentDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    [System.SerializableAttribute()]
+    [DataContract(Name="CommentDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [Serializable()]
     public partial class CommentDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private long ArticleIdField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string AuthorField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string ContentField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private System.DateTime CreatedField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private long IdField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -124,7 +123,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public long ArticleId {
             get {
                 return this.ArticleIdField;
@@ -137,7 +136,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Author {
             get {
                 return this.AuthorField;
@@ -150,7 +149,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Content {
             get {
                 return this.ContentField;
@@ -163,7 +162,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public System.DateTime Created {
             get {
                 return this.CreatedField;
@@ -176,7 +175,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public long Id {
             get {
                 return this.IdField;
@@ -201,20 +200,20 @@ namespace ArticlesClient.CommentsService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfCommentDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    [System.SerializableAttribute()]
+    [DataContract(Name="ResultDtoOfCommentDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [Serializable()]
     public partial class ResultDtoOfCommentDtoO_Po34nZx : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ArticlesClient.CommentsService.CommentDto DataField;
+        [OptionalField()]
+        private CommentDto DataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string MessageField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private bool SuccessField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -227,8 +226,8 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ArticlesClient.CommentsService.CommentDto Data {
+        [DataMember()]
+        public CommentDto Data {
             get {
                 return this.DataField;
             }
@@ -240,7 +239,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Message {
             get {
                 return this.MessageField;
@@ -253,7 +252,7 @@ namespace ArticlesClient.CommentsService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public bool Success {
             get {
                 return this.SuccessField;
@@ -281,49 +280,49 @@ namespace ArticlesClient.CommentsService {
     public interface ICommentsService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetAll", ReplyAction="http://tempuri.org/ICommentsService/GetAllResponse")]
-        ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx GetAll();
+        ResultDtoOfArrayOfCommentDtoO_Po34nZx GetAll();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetAll", ReplyAction="http://tempuri.org/ICommentsService/GetAllResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetAllAsync();
+        System.Threading.Tasks.Task<ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetAllAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Get", ReplyAction="http://tempuri.org/ICommentsService/GetResponse")]
-        ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx Get(long id);
+        ResultDtoOfCommentDtoO_Po34nZx Get(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Get", ReplyAction="http://tempuri.org/ICommentsService/GetResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx> GetAsync(long id);
+        System.Threading.Tasks.Task<ResultDtoOfCommentDtoO_Po34nZx> GetAsync(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetForArticle", ReplyAction="http://tempuri.org/ICommentsService/GetForArticleResponse")]
-        ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx GetForArticle(long id);
+        ResultDtoOfArrayOfCommentDtoO_Po34nZx GetForArticle(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetForArticle", ReplyAction="http://tempuri.org/ICommentsService/GetForArticleResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetForArticleAsync(long id);
+        System.Threading.Tasks.Task<ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetForArticleAsync(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Create", ReplyAction="http://tempuri.org/ICommentsService/CreateResponse")]
-        ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx Create(ArticlesClient.CommentsService.CommentDto comment);
+        ResultDtoOfCommentDtoO_Po34nZx Create(CommentDto comment);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Create", ReplyAction="http://tempuri.org/ICommentsService/CreateResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx> CreateAsync(ArticlesClient.CommentsService.CommentDto comment);
+        System.Threading.Tasks.Task<ResultDtoOfCommentDtoO_Po34nZx> CreateAsync(CommentDto comment);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Update", ReplyAction="http://tempuri.org/ICommentsService/UpdateResponse")]
-        ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx Update(ArticlesClient.CommentsService.CommentDto comment);
+        ResultDtoOfCommentDtoO_Po34nZx Update(CommentDto comment);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Update", ReplyAction="http://tempuri.org/ICommentsService/UpdateResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx> UpdateAsync(ArticlesClient.CommentsService.CommentDto comment);
+        System.Threading.Tasks.Task<ResultDtoOfCommentDtoO_Po34nZx> UpdateAsync(CommentDto comment);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Delete", ReplyAction="http://tempuri.org/ICommentsService/DeleteResponse")]
-        ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx Delete(long id);
+        ResultDtoOfCommentDtoO_Po34nZx Delete(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Delete", ReplyAction="http://tempuri.org/ICommentsService/DeleteResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx> DeleteAsync(long id);
+        System.Threading.Tasks.Task<ResultDtoOfCommentDtoO_Po34nZx> DeleteAsync(long id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface ICommentsServiceChannel : ArticlesClient.CommentsService.ICommentsService, System.ServiceModel.IClientChannel {
+    public interface ICommentsServiceChannel : ICommentsService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class CommentsServiceClient : System.ServiceModel.ClientBase<ArticlesClient.CommentsService.ICommentsService>, ArticlesClient.CommentsService.ICommentsService {
+    public partial class CommentsServiceClient : System.ServiceModel.ClientBase<ICommentsService>, ICommentsService {
         
         public CommentsServiceClient() {
         }
@@ -344,51 +343,51 @@ namespace ArticlesClient.CommentsService {
                 base(binding, remoteAddress) {
         }
         
-        public ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx GetAll() {
+        public ResultDtoOfArrayOfCommentDtoO_Po34nZx GetAll() {
             return base.Channel.GetAll();
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetAllAsync() {
+        public System.Threading.Tasks.Task<ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetAllAsync() {
             return base.Channel.GetAllAsync();
         }
         
-        public ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx Get(long id) {
+        public ResultDtoOfCommentDtoO_Po34nZx Get(long id) {
             return base.Channel.Get(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx> GetAsync(long id) {
+        public System.Threading.Tasks.Task<ResultDtoOfCommentDtoO_Po34nZx> GetAsync(long id) {
             return base.Channel.GetAsync(id);
         }
         
-        public ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx GetForArticle(long id) {
+        public ResultDtoOfArrayOfCommentDtoO_Po34nZx GetForArticle(long id) {
             return base.Channel.GetForArticle(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetForArticleAsync(long id) {
+        public System.Threading.Tasks.Task<ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetForArticleAsync(long id) {
             return base.Channel.GetForArticleAsync(id);
         }
         
-        public ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx Create(ArticlesClient.CommentsService.CommentDto comment) {
+        public ResultDtoOfCommentDtoO_Po34nZx Create(CommentDto comment) {
             return base.Channel.Create(comment);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx> CreateAsync(ArticlesClient.CommentsService.CommentDto comment) {
+        public System.Threading.Tasks.Task<ResultDtoOfCommentDtoO_Po34nZx> CreateAsync(CommentDto comment) {
             return base.Channel.CreateAsync(comment);
         }
         
-        public ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx Update(ArticlesClient.CommentsService.CommentDto comment) {
+        public ResultDtoOfCommentDtoO_Po34nZx Update(CommentDto comment) {
             return base.Channel.Update(comment);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx> UpdateAsync(ArticlesClient.CommentsService.CommentDto comment) {
+        public System.Threading.Tasks.Task<ResultDtoOfCommentDtoO_Po34nZx> UpdateAsync(CommentDto comment) {
             return base.Channel.UpdateAsync(comment);
         }
         
-        public ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx Delete(long id) {
+        public ResultDtoOfCommentDtoO_Po34nZx Delete(long id) {
             return base.Channel.Delete(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.CommentsService.ResultDtoOfCommentDtoO_Po34nZx> DeleteAsync(long id) {
+        public System.Threading.Tasks.Task<ResultDtoOfCommentDtoO_Po34nZx> DeleteAsync(long id) {
             return base.Channel.DeleteAsync(id);
         }
     }

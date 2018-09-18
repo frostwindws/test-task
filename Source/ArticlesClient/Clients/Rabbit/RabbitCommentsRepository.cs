@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using ArticlesClient.ArticlesService;
 using ArticlesClient.Clients.Rabbit.Converters;
+using ArticlesClient.Commands;
+using ArticlesClient.Connected_Services.ArticlesService;
 using ArticlesClient.Models;
 using AutoMapper;
 

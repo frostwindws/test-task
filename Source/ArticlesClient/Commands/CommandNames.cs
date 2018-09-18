@@ -1,4 +1,6 @@
-﻿namespace ArticlesClient.Clients.Rabbit
+﻿using System;
+
+namespace ArticlesClient.Commands
 {
     /// <summary>
     /// Допустимые типы запросов для отправки на RabbitMQ.

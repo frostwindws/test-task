@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Articles.Models;
-using Articles.Services.Executors;
+using Articles.Services.Commands;
 using Articles.Services.Models;
 using AutoMapper;
 using Nelibur.Sword.Extensions;
@@ -108,7 +108,7 @@ namespace Articles.Services
         /// <summary>
         /// Запрос списка комментариев к статье.
         /// </summary>
-        /// <param name="id">Идентификатор статьи.</param>
+        /// <param name="articleid">Идентификатор статьи.</param>
         /// <returns>Возвращает массив комментариев к указанной статье.</returns>
         public ResultDto<CommentDto[]> GetForArticle(long articleid)
         {

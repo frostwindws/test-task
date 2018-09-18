@@ -1,9 +1,9 @@
-﻿using Articles.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Articles.Models;
 
-namespace Articles.Services.Executors.Articles
+namespace Articles.Services.Commands.Articles
 {
     /// <summary>
     /// Команда на добавление статьи.

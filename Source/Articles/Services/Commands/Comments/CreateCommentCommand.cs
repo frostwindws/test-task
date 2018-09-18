@@ -1,9 +1,9 @@
-﻿using Articles.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Articles.Models;
 
-namespace Articles.Services.Executors.Comments
+namespace Articles.Services.Commands.Comments
 {
     /// <summary>
     /// Команда на добавление комментария.

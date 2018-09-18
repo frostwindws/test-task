@@ -1,11 +1,11 @@
-﻿using Articles.Services.Executors.Articles;
-using Articles.Services.Executors.Comments;
-using ArticlesClient.ArticlesService;
-using ArticlesClient.Clients.Rabbit;
-using ArticlesClient.Models;
+﻿using System;
 using System.Collections.Generic;
+using ArticlesClient.Commands.Articles;
+using ArticlesClient.Commands.Comments;
+using ArticlesClient.Connected_Services.ArticlesService;
+using ArticlesClient.Models;
 
-namespace Articles.Services.Executors
+namespace ArticlesClient.Commands
 {
     /// <summary>
     /// Исполнитель команд обновления данных.
@@ -15,7 +15,7 @@ namespace Articles.Services.Executors
         /// <summary>
         /// Набор команд для статей.
         /// </summary>
-        private static Dictionary<string, IRequestCommand<ArticleDto>> ArticleCommands = new Dictionary<string, IRequestCommand<ArticleDto>>
+        private static readonly Dictionary<string, IRequestCommand<ArticleDto>> articleCommands = new Dictionary<string, IRequestCommand<ArticleDto>>
         {
             { CommandNames.CreateArticle, new CreateArticleCommand()},
             { CommandNames.UpdateArticle, new UpdateArticleCommand()},
@@ -25,7 +25,7 @@ namespace Articles.Services.Executors
         /// <summary>
         /// Набор команд для комментариев.
         /// </summary>
-        private static Dictionary<string, IRequestCommand<CommentDto>> CommentCommands = new Dictionary<string, IRequestCommand<CommentDto>>
+        private static readonly Dictionary<string, IRequestCommand<CommentDto>> commentCommands = new Dictionary<string, IRequestCommand<CommentDto>>
         {
             { CommandNames.CreateComment, new CreateCommentCommand()},
             { CommandNames.UpdateComment, new UpdateCommentCommand()},
@@ -39,7 +39,7 @@ namespace Articles.Services.Executors
         /// <returns>True, если команда относится к командам для статей</returns>
         public bool IsArticleCommand(string name)
         {
-            return ArticleCommands.ContainsKey(name);
+            return articleCommands.ContainsKey(name);
         }
 
         /// <summary>
@@ -49,37 +49,40 @@ namespace Articles.Services.Executors
         /// <returns>True, если команда относится к командам для комментариев</returns>
         public bool IsCommentCommand(string name)
         {
-            return CommentCommands.ContainsKey(name);
+            return commentCommands.ContainsKey(name);
         }
 
         /// <summary>
         /// Выполнение метода для статьи.
         /// </summary>
+        /// <param name="name">Имя выполняемой команды.</param>
         /// <param name="viewData">Контейнер отображаемых данных.</param>
-        /// <param name="record">Данные обновленной статьи.</param>
+        /// <param name="article">Данные обновленной статьи.</param>
         public void ExecuteForArticle(string name, ViewDataContainer viewData, ArticleDto article)
         {
-            if (ArticleCommands.TryGetValue(name, out IRequestCommand<ArticleDto> command))
+            if (!articleCommands.TryGetValue(name, out IRequestCommand<ArticleDto> command))
             {
-                command.Execute(viewData, article);
+                throw new KeyNotFoundException($"Received unknown command type message \"{name}\"");
             }
 
-            throw new KeyNotFoundException($"Received unknown command type message \"{name}\"");
+            command.Execute(viewData, article);
+
         }
 
         /// <summary>
         /// Выполнение метода для комментария.
         /// </summary>
+        /// <param name="name">Имя выполняемой команды.</param>
         /// <param name="viewData">Контейнер отображаемых данных.</param>
-        /// <param name="record">Данные обновленного комментария.</param>
-        public void ExecuteForComment(string name, ViewDataContainer viewData, CommentDto article)
+        /// <param name="comment">Данные обновленного комментария.</param>
+        public void ExecuteForComment(string name, ViewDataContainer viewData, CommentDto comment)
         {
-            if (CommentCommands.TryGetValue(name, out IRequestCommand<CommentDto> command))
+            if (!commentCommands.TryGetValue(name, out IRequestCommand<CommentDto> command))
             {
-                command.Execute(viewData, article);
+                throw new KeyNotFoundException($"Received unknown command type message \"{name}\"");
             }
 
-            throw new KeyNotFoundException($"Received unknown command type message \"{name}\"");
+            command.Execute(viewData, comment);
         }
     }
 }

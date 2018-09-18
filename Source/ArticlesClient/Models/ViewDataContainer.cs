@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using ArticlesClient.Annotations;
+using ArticlesClient.Properties;
 
 namespace ArticlesClient.Models
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using ArticlesClient.ArticlesService;
+using ArticlesClient.Connected_Services.ArticlesService;
 using ArticlesClient.Models;
 using AutoMapper;
 

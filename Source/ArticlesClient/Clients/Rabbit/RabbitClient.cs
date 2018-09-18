@@ -1,8 +1,13 @@
-﻿using Articles.Services.Executors;
-using ArticlesClient.ArticlesService;
+﻿using System;
 using ArticlesClient.Clients.Rabbit.Converters;
 using ArticlesClient.Models;
 using System.Collections.Generic;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
+using ArticlesClient.Commands;
+using ArticlesClient.Connected_Services.ArticlesService;
+using RabbitMQ.Client.Exceptions;
 
 namespace ArticlesClient.Clients.Rabbit
 {
@@ -15,7 +20,6 @@ namespace ArticlesClient.Clients.Rabbit
         private readonly AnnounceCommandsInvoker invoker;
         private readonly IMessageBodyConverter bodyConverter;
         private readonly string announceExchange;
-        private readonly string announceQueue;
         private ViewDataContainer subscribedViewData;
 
         /// <summary>
@@ -36,19 +40,16 @@ namespace ArticlesClient.Clients.Rabbit
         /// <param name="bodyConverter">Конвертер тела сообщения.</param>
         /// <param name="requestQueue">Очередь для отправки сообщений.</param>
         /// <param name="announceExchange">Обмен для получения оповещений.</param>
-        /// <param name="announceQueue">Очередь для получения оповещений.</param>
-        public RabbitClient(RabbitRequestProvider provider, 
-            AnnounceCommandsInvoker invoker, 
-            IMessageBodyConverter bodyConverter, 
-            string requestQueue, 
-            string announceExchange, 
-            string announceQueue)
+        public RabbitClient(RabbitRequestProvider provider,
+            AnnounceCommandsInvoker invoker,
+            IMessageBodyConverter bodyConverter,
+            string requestQueue,
+            string announceExchange)
         {
             this.provider = provider;
             this.invoker = invoker;
             this.bodyConverter = bodyConverter;
             this.announceExchange = announceExchange;
-            this.announceQueue = announceQueue;
             Articles = new RabbitArticlesRepository(provider, requestQueue, bodyConverter);
             Comments = new RabbitCommentsRepository(provider, requestQueue, bodyConverter);
         }
@@ -60,7 +61,7 @@ namespace ArticlesClient.Clients.Rabbit
         public void SubscribeToAnnounce(ViewDataContainer viewData)
         {
             subscribedViewData = viewData;
-            provider.SubscribeToAnnounce(announceExchange, announceQueue, ReceiveAnnounceData);
+            provider.SubscribeToAnnounce(announceExchange, ReceiveAnnounceData);
         }
 
         /// <summary>
@@ -70,19 +71,30 @@ namespace ArticlesClient.Clients.Rabbit
         /// <param name="message">Тело сообщения оповещения.</param>
         private void ReceiveAnnounceData(string name, byte[] message)
         {
-            if (invoker.IsArticleCommand(name))
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                ArticleDto article = bodyConverter.FromBody<ArticleDto>(message);
-                invoker.ExecuteForArticle(name, subscribedViewData, article);
-            }else if (invoker.IsCommentCommand(name))
-            {
-                CommentDto comment = bodyConverter.FromBody<CommentDto>(message);
-                invoker.ExecuteForComment(name, subscribedViewData, comment);
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Received unknown command type message \"{name}\"");
-            }
+                try
+                {
+                    if (invoker.IsArticleCommand(name))
+                    {
+                        var article = bodyConverter.FromBody<RabbitResult<ArticleDto>>(message);
+                        invoker.ExecuteForArticle(name, subscribedViewData, article.Data);
+                    }
+                    else if (invoker.IsCommentCommand(name))
+                    {
+                        var comment = bodyConverter.FromBody< RabbitResult<CommentDto>>(message);
+                        invoker.ExecuteForComment(name, subscribedViewData, comment.Data);
+                    }
+                    else
+                    {
+                        throw new KeyNotFoundException($"Received unknown command type message \"{name}\"");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            });
         }
 
         /// <summary>

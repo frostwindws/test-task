@@ -1,7 +1,7 @@
-﻿using Articles.Models;
-using System;
+﻿using System;
+using Articles.Models;
 
-namespace Articles.Services.Executors.Comments
+namespace Articles.Services.Commands.Comments
 {
     /// <summary>
     /// Команда на удаление комментария.
@@ -24,7 +24,7 @@ namespace Articles.Services.Executors.Comments
 
             context.Comments.Delete(record.Id);
             context.Commit();
-            return null;
+            return record;
         }
     }
 }

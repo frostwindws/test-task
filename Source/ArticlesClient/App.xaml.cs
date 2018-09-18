@@ -1,5 +1,4 @@
-﻿using Articles.Services.Executors;
-using ArticlesClient.Clients.Rabbit;
+﻿using ArticlesClient.Clients.Rabbit;
 using ArticlesClient.Clients.Rabbit.Converters;
 using ArticlesClient.Clients.Wcf;
 using ArticlesClient.Utils;
@@ -7,13 +6,14 @@ using RabbitMQ.Client;
 using System;
 using System.Configuration;
 using System.Windows;
+using ArticlesClient.Commands;
 
 namespace ArticlesClient
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application, IDisposable
+    public partial class App : Application
     {
         /// <summary>
         /// Фабрика клиентов для получения данных.
@@ -34,6 +34,10 @@ namespace ArticlesClient
             AutomapHelper.InitMapping();
             base.OnStartup(e);
             InitConnections();
+
+            // Финализация лиента должа проиходить как при обычном выходе из приложения, так и при аварийном
+            Dispatcher.ShutdownStarted += (sender, args) => RabbitClient?.Dispose();
+            Dispatcher.UnhandledException +=(sender, args) => RabbitClient?.Dispose();
         }
 
         /// <summary>
@@ -50,20 +54,12 @@ namespace ArticlesClient
             };
 
             // Соединение с Rabbit формируется и закрывается на уровне приложения. Поэтому провайдер не владеет им
-            var provider = new RabbitRequestProvider(rabbitConnectionFactory.CreateConnection());
+            string applicationd = Guid.NewGuid().ToString();
+            var provider = new RabbitRequestProvider(rabbitConnectionFactory.CreateConnection(), applicationd);
 
             string requestsQueue = ConfigurationManager.AppSettings["RabbitRequestsQueue"];
             string announceExchange = ConfigurationManager.AppSettings["RabbitAnnounceExchange"];
-            string announceQueue = ConfigurationManager.AppSettings["RabbitAnnounceQueue"];
-            RabbitClient = new RabbitClient(provider, new AnnounceCommandsInvoker(), new JsonMessageBodyConverter(), requestsQueue, announceExchange, announceQueue);
-        }
-
-        /// <summary>
-        /// Освобождение ресурсов
-        /// </summary>
-        public void Dispose()
-        {
-            RabbitClient?.Dispose();
+            RabbitClient = new RabbitClient(provider, new AnnounceCommandsInvoker(), new JsonMessageBodyConverter(), requestsQueue, announceExchange);
         }
     }
 }

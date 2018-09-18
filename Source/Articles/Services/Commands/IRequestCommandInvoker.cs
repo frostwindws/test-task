@@ -1,13 +1,13 @@
-﻿using Articles.Models;
+﻿using System;
+using Articles.Models;
 
-namespace Articles.Services.Executors
+namespace Articles.Services.Commands
 {
     /// <summary>
     /// Интерфейс провайдера исполнителей.
     /// </summary>
     public interface IRequestCommandInvoker
     {
-
         /// <summary>
         /// Проверка принадлежности команды к к группе команд для статей по ее имени.
         /// </summary>
@@ -27,7 +27,7 @@ namespace Articles.Services.Executors
         /// </summary>
         /// <param name="name">Имя команды.</param>
         /// <param name="context">Контекст выполнения.</param>
-        /// <param name="record">Данные статьи для команды.</param>
+        /// <param name="article">Данные статьи для команды.</param>
         /// <param name="validator">Валидатор статьи.</param>
         /// <returns>Статья, результат выполнения команды.</returns>
         Article ExecuteForArticle(string name, IDataContext context, Article article, IModelValidator<Article> validator);
@@ -37,7 +37,7 @@ namespace Articles.Services.Executors
         /// </summary>
         /// <param name="name">Имя команды.</param>
         /// <param name="context">Контекст выполнения.</param>
-        /// <param name="record">Данные коммантария для команды.</param>
+        /// <param name="comment">Данные коммантария для команды.</param>
         /// <param name="validator">Валидатор комментария.</param>
         /// <returns>комментарий, результат выполнения команды.</returns>
         Comment ExecuteForComment(string name, IDataContext context, Comment comment, IModelValidator<Comment> validator);

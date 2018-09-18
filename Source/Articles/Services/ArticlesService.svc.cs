@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Articles.Models;
-using Articles.Services.Executors;
+using Articles.Services.Commands;
 using Articles.Services.Models;
 using AutoMapper;
 using Nelibur.Sword.Extensions;

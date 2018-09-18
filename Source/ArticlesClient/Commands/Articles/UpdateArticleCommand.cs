@@ -1,8 +1,9 @@
-﻿using ArticlesClient.ArticlesService;
-using ArticlesClient.Models;
+﻿using System;
 using System.Linq;
+using ArticlesClient.Connected_Services.ArticlesService;
+using ArticlesClient.Models;
 
-namespace Articles.Services.Executors.Articles
+namespace ArticlesClient.Commands.Articles
 {
     /// <summary>
     /// Команда обработки оповещения об обновлении статьи.

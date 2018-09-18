@@ -1,8 +1,10 @@
-﻿using ArticlesClient.ArticlesService;
-using ArticlesClient.Models;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using ArticlesClient.Connected_Services.ArticlesService;
+using ArticlesClient.Models;
 
-namespace Articles.Services.Executors.Comments
+namespace ArticlesClient.Commands.Comments
 {
     /// <summary>
     /// Команда обработки оповещения об удалении комментария.
@@ -22,6 +24,7 @@ namespace Articles.Services.Executors.Comments
                 if (commentToDelete != null)
                 {
                     viewData.CurrentArticle.Comments.Remove(commentToDelete);
+                    viewData.CurrentArticle.Comments = new ObservableCollection<CommentView>(viewData.CurrentArticle.Comments);
                 }
             }
         }

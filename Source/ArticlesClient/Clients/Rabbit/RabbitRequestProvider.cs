@@ -14,6 +14,7 @@ namespace ArticlesClient.Clients.Rabbit
     internal class RabbitRequestProvider : IDisposable
     {
         private readonly IConnection connection;
+        private readonly string applicationId;
         private readonly IModel channel;
         private readonly BlockingCollection<byte[]> responseQueue = new BlockingCollection<byte[]>();
         private readonly CancellationTokenSource tockenSource = new CancellationTokenSource();
@@ -23,9 +24,11 @@ namespace ArticlesClient.Clients.Rabbit
         /// Конструктор запроса.
         /// </summary>
         /// <param name="connection">Используемое соединение.</param>
-        public RabbitRequestProvider(IConnection connection)
+        /// <param name="applicationId">Идентификатор сообщений (необходим для отбрасывания оповещений событий, источником которых было само приложение)</param>
+        public RabbitRequestProvider(IConnection connection, string applicationId)
         {
             this.connection = connection;
+            this.applicationId = applicationId;
             channel = connection.CreateModel();
         }
 
@@ -58,6 +61,7 @@ namespace ArticlesClient.Clients.Rabbit
             props.CorrelationId = correlationId;
             props.Type = type;
             props.ReplyTo = replyTo;
+            props.AppId = applicationId;
             channel.BasicPublish(exchange: "", routingKey: requestQueue, basicProperties: props, body: requestBody);
 
             // Получение ответа
@@ -83,13 +87,21 @@ namespace ArticlesClient.Clients.Rabbit
         /// Подписка на оповещения
         /// </summary>
         /// <param name="announceExchange">Обмен для прослушивания оповещений</param>
-        /// <param name="announceQueue">Очередь для прослушивания оповещений</param>
         /// <param name="onReceived">Метод обработки сообщений оповещений</param>
-        public void SubscribeToAnnounce(string announceExchange, string announceQueue, Action<string, byte[]> onReceived)
+        public void SubscribeToAnnounce(string announceExchange, Action<string, byte[]> onReceived)
         {
+            string announceQueue = channel.QueueDeclare().QueueName;
             channel.QueueBind(announceQueue, announceExchange, "");
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (sender, args) => { onReceived.Invoke(args.BasicProperties.Type, args.Body); };
+            consumer.Received += (sender, args) =>
+            {
+                if (args.BasicProperties.AppId != applicationId)
+                {
+                    // Рассматриваются только чужие оповещения
+                    onReceived.Invoke(args.BasicProperties.Type, args.Body);
+                }
+            };
+            channel.BasicConsume(announceQueue, true, consumer);
         }
 
         /// <summary>

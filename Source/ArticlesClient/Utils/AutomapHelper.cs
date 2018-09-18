@@ -1,4 +1,4 @@
-﻿using ArticlesClient.ArticlesService;
+﻿using ArticlesClient.Connected_Services.ArticlesService;
 using ArticlesClient.Models;
 using AutoMapper;
 
@@ -16,7 +16,7 @@ namespace ArticlesClient.Utils
                 config.CreateMap<CommentView, CommentDto>()
                     .ForMember(d => d.ExtensionData, m => m.Ignore())
                     .ReverseMap();
-                config.CreateMap<CommentView, CommentsService.CommentDto>()
+                config.CreateMap<CommentView, Connected_Services.CommentsService.CommentDto>()
                     .ForMember(d => d.ExtensionData, m => m.Ignore())
                     .ReverseMap();
                 config.CreateMap<ArticleView, ArticleDto>()

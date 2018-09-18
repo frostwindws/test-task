@@ -1,6 +1,7 @@
 ﻿using ArticlesClient.Clients.Rabbit;
 using ArticlesClient.Models;
 using ArticlesClient.Utils;
+using RabbitMQ.Client.Exceptions;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace ArticlesClient
         /// Клиент подключения к Rabbit
         /// </summary>
         private RabbitClient RabbitClient => ((App)Application.Current).RabbitClient;
-                
+
         /// <summary>
         /// Конструктор основного окна приложения.
         /// </summary>
@@ -39,10 +40,17 @@ namespace ArticlesClient
             InitializeComponent();
 
             viewData = (ViewDataContainer)DataContext;
-
-            RabbitClient.SubscribeToAnnounce(viewData);
-
             RequestArticlesList();
+
+            try
+            {
+                RabbitClient.SubscribeToAnnounce(viewData);
+            }
+            catch (OperationInterruptedException e)
+            {
+                // Ошибка подключения к очереди оповещений
+                MessageBox.Show($"Announce queue connection error: {e.Message}. Automatic updates will be disabled");
+            }
         }
 
         /// <summary>

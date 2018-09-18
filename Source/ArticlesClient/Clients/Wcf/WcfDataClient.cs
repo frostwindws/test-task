@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
-using ArticlesClient.ArticlesService;
-using ArticlesClient.CommentsService;
+using ArticlesClient.Connected_Services.ArticlesService;
+using ArticlesClient.Connected_Services.CommentsService;
 using ArticlesClient.Models;
 
 namespace ArticlesClient.Clients.Wcf

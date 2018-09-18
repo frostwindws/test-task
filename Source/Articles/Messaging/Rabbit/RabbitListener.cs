@@ -23,10 +23,9 @@ namespace Articles.Messaging.Rabbit
         private readonly TimeSpan connectionRetryTimeout = TimeSpan.FromSeconds(10);
 
         private readonly IConnection connection;
-        private readonly IModel channel;
+        private IModel channel;
         private readonly string exchange;
         private readonly string listenningQueue;
-        private readonly string announceQueue;
 
         /// <summary>
         /// Количество текущих попыток переподключений подряд.
@@ -39,14 +38,22 @@ namespace Articles.Messaging.Rabbit
         /// <param name="connection">Соединение для подключения к Rabbit.</param>
         /// <param name="exchange">Имя обмена для рассылки оповещений.</param>
         /// <param name="listenningQueue">Имя используемой для ожидания сообщений очереди.</param>
-        /// <param name="announceQueue">Имя используемой для оповещений очереди.</param>
-        public RabbitListener(IConnection connection, string exchange, string listenningQueue, string announceQueue)
+        public RabbitListener(IConnection connection, string exchange, string listenningQueue)
         {
             this.connection = connection;
-            channel = connection.CreateModel();
             this.exchange = exchange;
             this.listenningQueue = listenningQueue;
-            this.announceQueue = announceQueue;
+            InitChanel();
+        }
+
+        /// <summary>
+        /// Инициализация канала и очередей
+        /// </summary>
+        private void InitChanel()
+        {
+            channel = connection.CreateModel();
+            channel.QueueDeclare(listenningQueue, durable: false, exclusive: false, autoDelete: false);
+            channel.BasicQos(0, 1, false);
         }
 
         /// <summary>
@@ -59,28 +66,22 @@ namespace Articles.Messaging.Rabbit
         {
             try
             {
-                channel.QueueDeclare(listenningQueue, durable: false, exclusive: false, autoDelete: false);
-                channel.BasicQos(0, 1, false);
                 EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
-
                 channel.BasicConsume(queue: listenningQueue, autoAck: false, consumer: consumer);
                 consumer.Received += (sender, args) =>
                 {
-                    try
+
+                    Log.Information("Rabbit Listener: executing {Type} command", args.BasicProperties.Type);
+                    onAcceptMessage(new Message
                     {
-                        Log.Information("Rabbit Listener: executing {Type} command", args.BasicProperties.Type);
-                        onAcceptMessage(new Message
-                        {
-                            Id = args.BasicProperties.CorrelationId,
-                            Type = args.BasicProperties.Type,
-                            ReplyTo = args.BasicProperties.ReplyTo,
-                            Body = args.Body
-                        });
-                    }
-                    finally
-                    {
-                        ((EventingBasicConsumer)sender).Model.BasicAck(deliveryTag: args.DeliveryTag, multiple: false);
-                    }
+                        Id = args.BasicProperties.CorrelationId,
+                        Type = args.BasicProperties.Type,
+                        ReplyTo = args.BasicProperties.ReplyTo,
+                        ApplicationId = args.BasicProperties.AppId,
+                        Body = args.Body
+                    });
+
+                    ((EventingBasicConsumer)sender).Model.BasicAck(deliveryTag: args.DeliveryTag, multiple: false);
                 };
 
                 Log.Information("RabbitMQ Listener has successfully started. Listenning for {queue} queue", listenningQueue);
@@ -134,11 +135,13 @@ namespace Articles.Messaging.Rabbit
         /// <param name="message">Передаваемое сообщение.</param>
         public void Announce(Message message)
         {
-            channel.ExchangeDeclare(exchange, "direct");
+            channel.ExchangeDeclare(exchange, "fanout");
             IBasicProperties properties = channel.CreateBasicProperties();
             properties.Type = message.Type ?? properties.Type;
+            properties.Persistent = false;
             properties.CorrelationId = message.Id;
-            channel.BasicPublish(exchange, announceQueue, properties, message.Body);
+            properties.AppId = message.ApplicationId;
+            channel.BasicPublish(exchange, "", properties, message.Body);
         }
 
         /// <summary>

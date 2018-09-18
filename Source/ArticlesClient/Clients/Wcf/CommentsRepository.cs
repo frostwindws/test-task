@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using ArticlesClient.CommentsService;
+using ArticlesClient.Connected_Services.CommentsService;
 using ArticlesClient.Models;
 using AutoMapper;
 

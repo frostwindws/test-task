@@ -8,27 +8,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ArticlesClient.ArticlesService {
-    using System.Runtime.Serialization;
-    using System;
-    
-    
+using System;
+using System.Runtime.Serialization;
+
+namespace ArticlesClient.Connected_Services.ArticlesService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfArrayOfArticleDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    [System.SerializableAttribute()]
+    [DataContract(Name="ResultDtoOfArrayOfArticleDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [Serializable()]
     public partial class ResultDtoOfArrayOfArticleDtoO_Po34nZx : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ArticlesClient.ArticlesService.ArticleDto[] DataField;
+        [OptionalField()]
+        private ArticleDto[] DataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string MessageField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private bool SuccessField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -41,8 +40,8 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ArticlesClient.ArticlesService.ArticleDto[] Data {
+        [DataMember()]
+        public ArticleDto[] Data {
             get {
                 return this.DataField;
             }
@@ -54,7 +53,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Message {
             get {
                 return this.MessageField;
@@ -67,7 +66,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public bool Success {
             get {
                 return this.SuccessField;
@@ -92,29 +91,29 @@ namespace ArticlesClient.ArticlesService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ArticleDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    [System.SerializableAttribute()]
+    [DataContract(Name="ArticleDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [Serializable()]
     public partial class ArticleDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string AuthorField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ArticlesClient.ArticlesService.CommentDto[] CommentsField;
+        [OptionalField()]
+        private CommentDto[] CommentsField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string ContentField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private System.DateTime CreatedField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private long IdField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string TitleField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -127,7 +126,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Author {
             get {
                 return this.AuthorField;
@@ -140,8 +139,8 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ArticlesClient.ArticlesService.CommentDto[] Comments {
+        [DataMember()]
+        public CommentDto[] Comments {
             get {
                 return this.CommentsField;
             }
@@ -153,7 +152,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Content {
             get {
                 return this.ContentField;
@@ -166,7 +165,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public System.DateTime Created {
             get {
                 return this.CreatedField;
@@ -179,7 +178,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public long Id {
             get {
                 return this.IdField;
@@ -192,7 +191,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Title {
             get {
                 return this.TitleField;
@@ -217,26 +216,26 @@ namespace ArticlesClient.ArticlesService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CommentDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    [System.SerializableAttribute()]
+    [DataContract(Name="CommentDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [Serializable()]
     public partial class CommentDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private long ArticleIdField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string AuthorField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string ContentField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private System.DateTime CreatedField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private long IdField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -249,7 +248,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public long ArticleId {
             get {
                 return this.ArticleIdField;
@@ -262,7 +261,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Author {
             get {
                 return this.AuthorField;
@@ -275,7 +274,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Content {
             get {
                 return this.ContentField;
@@ -288,7 +287,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public System.DateTime Created {
             get {
                 return this.CreatedField;
@@ -301,7 +300,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public long Id {
             get {
                 return this.IdField;
@@ -326,20 +325,20 @@ namespace ArticlesClient.ArticlesService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfArticleDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    [System.SerializableAttribute()]
+    [DataContract(Name="ResultDtoOfArticleDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    [Serializable()]
     public partial class ResultDtoOfArticleDtoO_Po34nZx : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        [System.NonSerializedAttribute()]
+        [NonSerialized()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ArticlesClient.ArticlesService.ArticleDto DataField;
+        [OptionalField()]
+        private ArticleDto DataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private string MessageField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [OptionalField()]
         private bool SuccessField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -352,8 +351,8 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public ArticlesClient.ArticlesService.ArticleDto Data {
+        [DataMember()]
+        public ArticleDto Data {
             get {
                 return this.DataField;
             }
@@ -365,7 +364,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public string Message {
             get {
                 return this.MessageField;
@@ -378,7 +377,7 @@ namespace ArticlesClient.ArticlesService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember()]
         public bool Success {
             get {
                 return this.SuccessField;
@@ -406,43 +405,43 @@ namespace ArticlesClient.ArticlesService {
     public interface IArticlesService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/GetAll", ReplyAction="http://tempuri.org/IArticlesService/GetAllResponse")]
-        ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx GetAll();
+        ResultDtoOfArrayOfArticleDtoO_Po34nZx GetAll();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/GetAll", ReplyAction="http://tempuri.org/IArticlesService/GetAllResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx> GetAllAsync();
+        System.Threading.Tasks.Task<ResultDtoOfArrayOfArticleDtoO_Po34nZx> GetAllAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Get", ReplyAction="http://tempuri.org/IArticlesService/GetResponse")]
-        ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Get(long id);
+        ResultDtoOfArticleDtoO_Po34nZx Get(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Get", ReplyAction="http://tempuri.org/IArticlesService/GetResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> GetAsync(long id);
+        System.Threading.Tasks.Task<ResultDtoOfArticleDtoO_Po34nZx> GetAsync(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Create", ReplyAction="http://tempuri.org/IArticlesService/CreateResponse")]
-        ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Create(ArticlesClient.ArticlesService.ArticleDto article);
+        ResultDtoOfArticleDtoO_Po34nZx Create(ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Create", ReplyAction="http://tempuri.org/IArticlesService/CreateResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> CreateAsync(ArticlesClient.ArticlesService.ArticleDto article);
+        System.Threading.Tasks.Task<ResultDtoOfArticleDtoO_Po34nZx> CreateAsync(ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Update", ReplyAction="http://tempuri.org/IArticlesService/UpdateResponse")]
-        ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Update(ArticlesClient.ArticlesService.ArticleDto article);
+        ResultDtoOfArticleDtoO_Po34nZx Update(ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Update", ReplyAction="http://tempuri.org/IArticlesService/UpdateResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> UpdateAsync(ArticlesClient.ArticlesService.ArticleDto article);
+        System.Threading.Tasks.Task<ResultDtoOfArticleDtoO_Po34nZx> UpdateAsync(ArticleDto article);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Delete", ReplyAction="http://tempuri.org/IArticlesService/DeleteResponse")]
-        ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Delete(long id);
+        ResultDtoOfArticleDtoO_Po34nZx Delete(long id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Delete", ReplyAction="http://tempuri.org/IArticlesService/DeleteResponse")]
-        System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> DeleteAsync(long id);
+        System.Threading.Tasks.Task<ResultDtoOfArticleDtoO_Po34nZx> DeleteAsync(long id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IArticlesServiceChannel : ArticlesClient.ArticlesService.IArticlesService, System.ServiceModel.IClientChannel {
+    public interface IArticlesServiceChannel : IArticlesService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ArticlesServiceClient : System.ServiceModel.ClientBase<ArticlesClient.ArticlesService.IArticlesService>, ArticlesClient.ArticlesService.IArticlesService {
+    public partial class ArticlesServiceClient : System.ServiceModel.ClientBase<IArticlesService>, IArticlesService {
         
         public ArticlesServiceClient() {
         }
@@ -463,43 +462,43 @@ namespace ArticlesClient.ArticlesService {
                 base(binding, remoteAddress) {
         }
         
-        public ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx GetAll() {
+        public ResultDtoOfArrayOfArticleDtoO_Po34nZx GetAll() {
             return base.Channel.GetAll();
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx> GetAllAsync() {
+        public System.Threading.Tasks.Task<ResultDtoOfArrayOfArticleDtoO_Po34nZx> GetAllAsync() {
             return base.Channel.GetAllAsync();
         }
         
-        public ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Get(long id) {
+        public ResultDtoOfArticleDtoO_Po34nZx Get(long id) {
             return base.Channel.Get(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> GetAsync(long id) {
+        public System.Threading.Tasks.Task<ResultDtoOfArticleDtoO_Po34nZx> GetAsync(long id) {
             return base.Channel.GetAsync(id);
         }
         
-        public ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Create(ArticlesClient.ArticlesService.ArticleDto article) {
+        public ResultDtoOfArticleDtoO_Po34nZx Create(ArticleDto article) {
             return base.Channel.Create(article);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> CreateAsync(ArticlesClient.ArticlesService.ArticleDto article) {
+        public System.Threading.Tasks.Task<ResultDtoOfArticleDtoO_Po34nZx> CreateAsync(ArticleDto article) {
             return base.Channel.CreateAsync(article);
         }
         
-        public ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Update(ArticlesClient.ArticlesService.ArticleDto article) {
+        public ResultDtoOfArticleDtoO_Po34nZx Update(ArticleDto article) {
             return base.Channel.Update(article);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> UpdateAsync(ArticlesClient.ArticlesService.ArticleDto article) {
+        public System.Threading.Tasks.Task<ResultDtoOfArticleDtoO_Po34nZx> UpdateAsync(ArticleDto article) {
             return base.Channel.UpdateAsync(article);
         }
         
-        public ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx Delete(long id) {
+        public ResultDtoOfArticleDtoO_Po34nZx Delete(long id) {
             return base.Channel.Delete(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesClient.ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> DeleteAsync(long id) {
+        public System.Threading.Tasks.Task<ResultDtoOfArticleDtoO_Po34nZx> DeleteAsync(long id) {
             return base.Channel.DeleteAsync(id);
         }
     }

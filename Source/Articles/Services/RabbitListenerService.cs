@@ -1,7 +1,6 @@
 ﻿using Articles.Messaging;
 using Articles.Messaging.Converters;
 using Articles.Models;
-using Articles.Services.Executors;
 using Articles.Services.Models;
 using AutoMapper;
 using Serilog;
@@ -9,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Articles.Services.Commands;
 
 namespace Articles.Services
 {
@@ -65,7 +65,7 @@ namespace Articles.Services
         private void ListenerOnAcceptMessage(Message message)
         {
             object result;
-            var outMessage = new Message { Id = message.Id, Type = message.Type };
+            var outMessage = new Message { Id = message.Id, Type = message.Type, ApplicationId = message.ApplicationId};
             try
             {
                 using (IDataContext context = contextFactory.GetContext())

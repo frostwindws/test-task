@@ -1,8 +1,9 @@
-﻿using ArticlesClient.ArticlesService;
-using ArticlesClient.Models;
+﻿using System;
 using System.Linq;
+using ArticlesClient.Connected_Services.ArticlesService;
+using ArticlesClient.Models;
 
-namespace Articles.Services.Executors.Comments
+namespace ArticlesClient.Commands.Comments
 {
     /// <summary>
     /// Команда обработки оповещения об обновлении комментария.

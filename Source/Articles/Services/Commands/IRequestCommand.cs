@@ -1,6 +1,7 @@
-﻿using Articles.Models;
+﻿using System;
+using Articles.Models;
 
-namespace Articles.Services.Executors
+namespace Articles.Services.Commands
 {
     /// <summary>
     /// Интерфейс команды на обновление данных.
