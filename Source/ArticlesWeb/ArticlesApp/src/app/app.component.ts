@@ -11,12 +11,12 @@ export class AppComponent {
   title = 'ArticlesApp';
   ngOnInit() {
 
-    this.hubConnection = new HubConnection('http://localhost:5000/chat');
+    /*this.hubConnection = new HubConnection('http://localhost:5000/chat');
 
     this.hubConnection
       .start()
       .then(() => console.log('Connection started!'))
-      .catch(err => console.log('Error while establishing connection :('));
+      .catch(err => console.log('Error while establishing connection :('));*/
 
   }
 }
