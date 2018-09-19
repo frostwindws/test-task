@@ -111,8 +111,11 @@ namespace Articles.Services
                 outMessage.Body = messageBodyConvertor.ToBody(result);
             }
 
-            // Оповещение клиента, сформировавшего запрос о результате выполнения
-            listener.Reply(message.ReplyTo, outMessage);
+            if (!string.IsNullOrWhiteSpace(message.ReplyTo))
+            {
+                // Оповещение клиента, сформировавшего запрос о результате выполнения
+                listener.Reply(message.ReplyTo, outMessage);
+            }
         }
     }
 }

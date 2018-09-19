@@ -14,18 +14,18 @@ namespace ArticlesService
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfArrayOfCommentDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    public partial class ResultDtoOfArrayOfCommentDtoO_Po34nZx : object
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfArrayOfArticleDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    public partial class ResultDtoOfArrayOfArticleDtoO_Po34nZx : object
     {
         
-        private ArticlesService.CommentDto[] DataField;
+        private ArticlesService.ArticleDto[] DataField;
         
         private string MessageField;
         
         private bool SuccessField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ArticlesService.CommentDto[] Data
+        public ArticlesService.ArticleDto[] Data
         {
             get
             {
@@ -60,6 +60,103 @@ namespace ArticlesService
             set
             {
                 this.SuccessField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ArticleDto", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    public partial class ArticleDto : object
+    {
+        
+        private string AuthorField;
+        
+        private ArticlesService.CommentDto[] CommentsField;
+        
+        private string ContentField;
+        
+        private System.DateTime CreatedField;
+        
+        private long IdField;
+        
+        private string TitleField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Author
+        {
+            get
+            {
+                return this.AuthorField;
+            }
+            set
+            {
+                this.AuthorField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public ArticlesService.CommentDto[] Comments
+        {
+            get
+            {
+                return this.CommentsField;
+            }
+            set
+            {
+                this.CommentsField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Content
+        {
+            get
+            {
+                return this.ContentField;
+            }
+            set
+            {
+                this.ContentField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Created
+        {
+            get
+            {
+                return this.CreatedField;
+            }
+            set
+            {
+                this.CreatedField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id
+        {
+            get
+            {
+                return this.IdField;
+            }
+            set
+            {
+                this.IdField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Title
+        {
+            get
+            {
+                return this.TitleField;
+            }
+            set
+            {
+                this.TitleField = value;
             }
         }
     }
@@ -148,18 +245,18 @@ namespace ArticlesService
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfCommentDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
-    public partial class ResultDtoOfCommentDtoO_Po34nZx : object
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResultDtoOfArticleDtoO_Po34nZx", Namespace="http://schemas.datacontract.org/2004/07/Articles.Services.Models")]
+    public partial class ResultDtoOfArticleDtoO_Po34nZx : object
     {
         
-        private ArticlesService.CommentDto DataField;
+        private ArticlesService.ArticleDto DataField;
         
         private string MessageField;
         
         private bool SuccessField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ArticlesService.CommentDto Data
+        public ArticlesService.ArticleDto Data
         {
             get
             {
@@ -199,37 +296,34 @@ namespace ArticlesService
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ArticlesService.ICommentsService")]
-    public interface ICommentsService
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ArticlesService.IArticlesService")]
+    public interface IArticlesService
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetAll", ReplyAction="http://tempuri.org/ICommentsService/GetAllResponse")]
-        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetAllAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/GetAll", ReplyAction="http://tempuri.org/IArticlesService/GetAllResponse")]
+        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx> GetAllAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Get", ReplyAction="http://tempuri.org/ICommentsService/GetResponse")]
-        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfCommentDtoO_Po34nZx> GetAsync(long id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Get", ReplyAction="http://tempuri.org/IArticlesService/GetResponse")]
+        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> GetAsync(long id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/GetForArticle", ReplyAction="http://tempuri.org/ICommentsService/GetForArticleResponse")]
-        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetForArticleAsync(long id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Create", ReplyAction="http://tempuri.org/IArticlesService/CreateResponse")]
+        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> CreateAsync(ArticlesService.ArticleDto article);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Create", ReplyAction="http://tempuri.org/ICommentsService/CreateResponse")]
-        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfCommentDtoO_Po34nZx> CreateAsync(ArticlesService.CommentDto comment);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Update", ReplyAction="http://tempuri.org/IArticlesService/UpdateResponse")]
+        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> UpdateAsync(ArticlesService.ArticleDto article);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Update", ReplyAction="http://tempuri.org/ICommentsService/UpdateResponse")]
-        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfCommentDtoO_Po34nZx> UpdateAsync(ArticlesService.CommentDto comment);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICommentsService/Delete", ReplyAction="http://tempuri.org/ICommentsService/DeleteResponse")]
-        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfCommentDtoO_Po34nZx> DeleteAsync(long id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IArticlesService/Delete", ReplyAction="http://tempuri.org/IArticlesService/DeleteResponse")]
+        System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> DeleteAsync(long id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
-    public interface ICommentsServiceChannel : ArticlesService.ICommentsService, System.ServiceModel.IClientChannel
+    public interface IArticlesServiceChannel : ArticlesService.IArticlesService, System.ServiceModel.IClientChannel
     {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
-    public partial class CommentsServiceClient : System.ServiceModel.ClientBase<ArticlesService.ICommentsService>, ArticlesService.ICommentsService
+    public partial class ArticlesServiceClient : System.ServiceModel.ClientBase<ArticlesService.IArticlesService>, ArticlesService.IArticlesService
     {
         
     /// <summary>
@@ -239,65 +333,60 @@ namespace ArticlesService
     /// <param name="clientCredentials">The client credentials</param>
     static partial void ConfigureEndpoint(System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Description.ClientCredentials clientCredentials);
         
-        public CommentsServiceClient() : 
-                base(CommentsServiceClient.GetDefaultBinding(), CommentsServiceClient.GetDefaultEndpointAddress())
+        public ArticlesServiceClient() : 
+                base(ArticlesServiceClient.GetDefaultBinding(), ArticlesServiceClient.GetDefaultEndpointAddress())
         {
-            this.Endpoint.Name = EndpointConfiguration.BasicHttpBinding_ICommentsService.ToString();
+            this.Endpoint.Name = EndpointConfiguration.BasicHttpBinding_IArticlesService.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public CommentsServiceClient(EndpointConfiguration endpointConfiguration) : 
-                base(CommentsServiceClient.GetBindingForEndpoint(endpointConfiguration), CommentsServiceClient.GetEndpointAddress(endpointConfiguration))
-        {
-            this.Endpoint.Name = endpointConfiguration.ToString();
-            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
-        }
-        
-        public CommentsServiceClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
-                base(CommentsServiceClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
+        public ArticlesServiceClient(EndpointConfiguration endpointConfiguration) : 
+                base(ArticlesServiceClient.GetBindingForEndpoint(endpointConfiguration), ArticlesServiceClient.GetEndpointAddress(endpointConfiguration))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public CommentsServiceClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(CommentsServiceClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        public ArticlesServiceClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
+                base(ArticlesServiceClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public CommentsServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public ArticlesServiceClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(ArticlesServiceClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        {
+            this.Endpoint.Name = endpointConfiguration.ToString();
+            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
+        }
+        
+        public ArticlesServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress)
         {
         }
         
-        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetAllAsync()
+        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArrayOfArticleDtoO_Po34nZx> GetAllAsync()
         {
             return base.Channel.GetAllAsync();
         }
         
-        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfCommentDtoO_Po34nZx> GetAsync(long id)
+        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> GetAsync(long id)
         {
             return base.Channel.GetAsync(id);
         }
         
-        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArrayOfCommentDtoO_Po34nZx> GetForArticleAsync(long id)
+        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> CreateAsync(ArticlesService.ArticleDto article)
         {
-            return base.Channel.GetForArticleAsync(id);
+            return base.Channel.CreateAsync(article);
         }
         
-        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfCommentDtoO_Po34nZx> CreateAsync(ArticlesService.CommentDto comment)
+        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> UpdateAsync(ArticlesService.ArticleDto article)
         {
-            return base.Channel.CreateAsync(comment);
+            return base.Channel.UpdateAsync(article);
         }
         
-        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfCommentDtoO_Po34nZx> UpdateAsync(ArticlesService.CommentDto comment)
-        {
-            return base.Channel.UpdateAsync(comment);
-        }
-        
-        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfCommentDtoO_Po34nZx> DeleteAsync(long id)
+        public System.Threading.Tasks.Task<ArticlesService.ResultDtoOfArticleDtoO_Po34nZx> DeleteAsync(long id)
         {
             return base.Channel.DeleteAsync(id);
         }
@@ -314,7 +403,7 @@ namespace ArticlesService
         
         private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
-            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_ICommentsService))
+            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IArticlesService))
             {
                 System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
                 result.MaxBufferSize = int.MaxValue;
@@ -328,27 +417,27 @@ namespace ArticlesService
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
         {
-            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_ICommentsService))
+            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IArticlesService))
             {
-                return new System.ServiceModel.EndpointAddress("http://localhost:51430/Services/CommentsService.svc");
+                return new System.ServiceModel.EndpointAddress("http://localhost:51430/Services/ArticlesService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
         
         private static System.ServiceModel.Channels.Binding GetDefaultBinding()
         {
-            return CommentsServiceClient.GetBindingForEndpoint(EndpointConfiguration.BasicHttpBinding_ICommentsService);
+            return ArticlesServiceClient.GetBindingForEndpoint(EndpointConfiguration.BasicHttpBinding_IArticlesService);
         }
         
         private static System.ServiceModel.EndpointAddress GetDefaultEndpointAddress()
         {
-            return CommentsServiceClient.GetEndpointAddress(EndpointConfiguration.BasicHttpBinding_ICommentsService);
+            return ArticlesServiceClient.GetEndpointAddress(EndpointConfiguration.BasicHttpBinding_IArticlesService);
         }
         
         public enum EndpointConfiguration
         {
             
-            BasicHttpBinding_ICommentsService,
+            BasicHttpBinding_IArticlesService,
         }
     }
 }
