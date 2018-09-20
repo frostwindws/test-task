@@ -11,7 +11,6 @@ namespace ArticlesWeb.Clients.Rabbit
     /// </summary>
     public class RabbitRequestProvider : IDisposable
     {
-        private readonly IConnection connection;
         private readonly string applicationId;
         private readonly IModel channel;
         private readonly CancellationTokenSource tockenSource = new CancellationTokenSource();
@@ -19,22 +18,21 @@ namespace ArticlesWeb.Clients.Rabbit
         /// <summary>
         /// Конструктор запроса.
         /// </summary>
-        /// <param name="connection">Используемое соединение.</param>
-        /// <param name="applicationId">Идентификатор сообщений (необходим для отбрасывания оповещений событий, источником которых было само приложение)</param>
-        public RabbitRequestProvider(IConnection connection, string applicationId)
+        /// <param name="channel">Канал подключения к Rabbit.</param>
+        /// <param name="applicationId">Идентификатор сообщений (необходим для отбрасывания оповещений событий, источником которых было само приложение).</param>
+        public RabbitRequestProvider(IModel channel, string applicationId)
         {
-            this.connection = connection;
             this.applicationId = applicationId;
-            channel = connection.CreateModel();
+            this.channel = channel;
         }
 
         /// <summary>
-        /// Отправка запроса
+        /// Отправка запроса.
         /// </summary>
-        /// <param name="requestQueue">Очередь Rabbit для отправки</param>
-        /// <param name="type">Тип запроса</param>
-        /// <param name="requestBody">Тело запроса</param>
-        /// <returns>Результат выполнения запроса</returns>
+        /// <param name="requestQueue">Очередь Rabbit для отправки.</param>
+        /// <param name="type">Тип запроса.</param>
+        /// <param name="requestBody">Тело запроса.</param>
+        /// <returns>Результат выполнения запроса.</returns>
         public void SendRequest(string requestQueue, string type, byte[] requestBody)
         {
             // Создание очереди запросов на сервер (если сервер еще не стартовал или очередь была удалена)
@@ -47,22 +45,27 @@ namespace ArticlesWeb.Clients.Rabbit
         }
 
         /// <summary>
-        /// Подписка на оповещения
+        /// Подписка на оповещения.
         /// </summary>
-        /// <param name="announceExchange">Обмен для прослушивания оповещений</param>
-        /// <param name="onReceived">Метод обработки сообщений оповещений</param>
-        public void SubscribeToAnnounce(string announceExchange, Func<string, byte[], Task> onReceived)
+        /// <param name="announceExchange">Обмен для прослушивания оповещений.</param>
+        /// <param name="onReceived">Метод обработки сообщений оповещений.</param>
+        /// <param name="cancellationToken">Токен отмены подписки.</param>
+        public async Task SubscribeToAnnounce(string announceExchange, Func<string, byte[], CancellationToken, Task> onReceived, CancellationToken cancellationToken)
         {
             string announceQueue = channel.QueueDeclare().QueueName;
             channel.QueueBind(announceQueue, announceExchange, "");
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += async (sender, args) =>
             {
-                // Рассматриваются только чужие оповещения
-                await onReceived.Invoke(args.BasicProperties.Type, args.Body);
+                await onReceived.Invoke(args.BasicProperties.Type, args.Body, cancellationToken);
             };
 
             channel.BasicConsume(announceQueue, true, consumer);
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+            }
         }
 
         /// <summary>
@@ -70,9 +73,8 @@ namespace ArticlesWeb.Clients.Rabbit
         /// </summary>
         public void Dispose()
         {
+            // Канал принадлежит приложению, поэтому не завкрывается
             tockenSource?.Cancel();
-            channel?.Dispose();
-            connection?.Dispose();
         }
     }
 }

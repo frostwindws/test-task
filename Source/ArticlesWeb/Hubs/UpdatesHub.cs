@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 
 namespace ArticlesWeb.Hubs
 {
+    /// <summary>
+    /// Хаб для подписки на обновления.
+    /// Поскольку общение одностороннее, то хаб  методов не содержит
+    /// </summary>
     public class UpdatesHub : Hub
     {
-        public async Task SendUpdate(string type, object data)
-        {
-            await Clients.All.SendAsync(type, data);
-        }
     }
 }

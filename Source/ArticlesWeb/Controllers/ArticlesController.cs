@@ -13,7 +13,7 @@ namespace ArticlesWeb.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ArticlesController : ControllerBase
+    public class ArticlesController : ControllerBase, IDisposable
     {
         private readonly IReadContext readContext;
         private readonly IUpdateContext updateContext;
@@ -77,6 +77,15 @@ namespace ArticlesWeb.Controllers
         public void Delete(long id)
         {
             updateContext.SendUpdateForArticle(CommandNames.DeleteArticle, new Article { Id = id });
+        }
+
+        /// <summary>
+        /// Освобождение ресурсов.
+        /// </summary>
+        public void Dispose()
+        {
+            readContext?.Dispose();
+            updateContext?.Dispose();
         }
     }
 }

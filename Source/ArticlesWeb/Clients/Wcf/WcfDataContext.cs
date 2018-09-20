@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ArticlesService;
 using ArticlesWeb.Models;
 using CommentsService;
@@ -25,7 +24,7 @@ namespace ArticlesWeb.Clients.Wcf
         public IRepository<Comment> Comments { get; set; }
 
         /// <summary>
-        /// Конструктор клиента данных c использованием кастомнымных сервисов
+        /// Конструктор клиента данных c использованием кастомнымных сервисов.
         /// </summary>
         public WcfDataContext() : this(new ArticlesServiceClient(), new CommentsServiceClient())
         {

@@ -11,7 +11,7 @@ namespace ArticlesWeb.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class CommentsController : ControllerBase
+    public class CommentsController : ControllerBase, IDisposable
     {
         private readonly IUpdateContext updateContext;
 
@@ -51,6 +51,14 @@ namespace ArticlesWeb.Controllers
         public void Delete(long id)
         {
             updateContext.SendUpdateForComment(CommandNames.DeleteComment, new Comment { Id = id });
+        }
+
+        /// <summary>
+        /// Освобождение ресурсов.
+        /// </summary>
+        public void Dispose()
+        {
+            updateContext?.Dispose();
         }
     }
 }

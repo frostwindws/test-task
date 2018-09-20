@@ -36,5 +36,26 @@ namespace ArticlesWeb.Clients.Rabbit.Commands
         /// Запрос на удаление комментария.
         /// </summary>
         public const string DeleteComment = "comment-delete";
+
+
+        /// <summary>
+        /// Проверка принадлежности команды к к группе команд для статей по ее имени.
+        /// </summary>
+        /// <param name="name">имя команды.</param>
+        /// <returns>True, если команда относится к командам для статей</returns>
+        public static bool IsArticleCommand(string name)
+        {
+            return name.StartsWith("article-");
+        }
+
+        /// <summary>
+        /// Проверка принадлежности команды к к группе команд для комментариев по ее имени.
+        /// </summary>
+        /// <param name="name">имя команды.</param>
+        /// <returns>True, если команда относится к командам для комментариев</returns>
+        public static bool IsCommentCommand(string name)
+        {
+            return name.StartsWith("comment-");
+        }
     }
 }
