@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ArticlesApp\src\app\services\viewdata.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ArticlesApp\src\app\components\delete.prompt\" />
+    <Folder Include="ArticlesApp\src\app\components\article.editor\" />
+    <Folder Include="ArticlesApp\src\app\components\comment.editor\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -24,6 +31,10 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.4.*" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.4.*" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.4.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ArticlesApp\src\app\services\viewdata.service.ts" />
   </ItemGroup>
 
   <ItemGroup>

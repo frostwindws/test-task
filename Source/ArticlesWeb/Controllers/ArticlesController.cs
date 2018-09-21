@@ -5,6 +5,7 @@ using ArticlesWeb.Clients;
 using ArticlesWeb.Clients.Rabbit.Commands;
 using ArticlesWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+// ReSharper disable UnusedMember.Global
 
 namespace ArticlesWeb.Controllers
 {

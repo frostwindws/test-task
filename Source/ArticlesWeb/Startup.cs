@@ -2,13 +2,16 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using ArticlesService;
 using ArticlesWeb.Clients;
 using ArticlesWeb.Clients.Rabbit;
 using ArticlesWeb.Clients.Rabbit.Converters;
 using ArticlesWeb.Clients.Wcf;
 using ArticlesWeb.Hubs;
+using ArticlesWeb.Models;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +23,7 @@ using Newtonsoft.Json.Serialization;
 using RabbitMQ.Client;
 using Serilog;
 using Serilog.Events;
+using CommentDto = CommentsService.CommentDto;
 
 namespace ArticlesWeb
 {
@@ -155,6 +159,8 @@ namespace ArticlesWeb
                 app.UseHsts();
             }
 
+            InitClassMapping();
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .WriteTo.File(Path.Combine(env.ContentRootPath, @"Logs\log-.txt"),
@@ -184,6 +190,18 @@ namespace ArticlesWeb
 
             applicationLifetime.ApplicationStarted.Register(OnStartup, applicationLifetime.ApplicationStopping);
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
+        }
+
+        /// <summary>
+        /// Инициализация маппинга классов
+        /// </summary>
+        private void InitClassMapping()
+        {
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<Comment, CommentDto>().ReverseMap();
+                config.CreateMap<Article, ArticleDto>().ReverseMap();
+            });
         }
 
         /// <summary>

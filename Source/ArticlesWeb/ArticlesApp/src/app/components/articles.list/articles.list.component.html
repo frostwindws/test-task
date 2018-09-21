@@ -1,0 +1,5 @@
+<ul class="articles-list">
+  <li *ngFor="let article of articles" (click)="onSelect(article)" [class.selected]="article == currentArticle">{{article.title}}</li>
+  <li (click)="getArticles()">Refresh</li>
+  <li (click)="onAdd()">Add new article</li>
+</ul>

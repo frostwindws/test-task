@@ -1,22 +1,25 @@
 import { Component } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
 
+/**
+ * Корневой компонент приложения.
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.less']
 })
 export class AppComponent {
   private hubConnection: HubConnection;
-  title = 'ArticlesApp';
+
+  /**
+   * Заголовок страницы.
+   */
+  title = 'Artilces';
+
+  /**
+   * Инициализация компонента приложения.
+   */
   ngOnInit() {
-
-    /*this.hubConnection = new HubConnection('http://localhost:5000/chat');
-
-    this.hubConnection
-      .start()
-      .then(() => console.log('Connection started!'))
-      .catch(err => console.log('Error while establishing connection :('));*/
-
   }
 }

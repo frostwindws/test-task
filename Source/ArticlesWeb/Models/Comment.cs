@@ -31,10 +31,5 @@ namespace ArticlesWeb.Models
         /// Дата создания.
         /// </summary>
         public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Статья, к которой относится комментарий.
-        /// </summary>
-        public Article Article { get; set; }
     }
 }

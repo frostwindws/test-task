@@ -1,0 +1,14 @@
+<div *ngIf="currentArticle" class="article-view">
+  <h2>{{currentArticle.title}}</h2>
+  <div class="actions">
+    <div (click)="onEdit()">Edit</div>
+    <div (click)="onRefresh()">Refresh</div>
+    <div (click)="onDelete()">Delete</div>
+    <div (click)="onAddComment()">Add Comment</div>
+  </div>
+  <div class="content">{{currentArticle.content}}</div>
+  <div class="footer">By {{currentArticle.author}} at {{currentArticle.created | date:'dd.MM.yyyy HH:mm'}}</div>
+  <div class="comments">
+    <comment-view *ngFor="let comment of currentArticle.comments" [comment]="comment"></comment-view>
+  </div>
+</div>
