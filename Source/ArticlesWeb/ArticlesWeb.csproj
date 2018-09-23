@@ -10,9 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ArticlesApp\src\app\components\delete.prompt\" />
-    <Folder Include="ArticlesApp\src\app\components\article.editor\" />
-    <Folder Include="ArticlesApp\src\app\components\comment.editor\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

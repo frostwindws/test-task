@@ -2,15 +2,16 @@
  * Модель комментария к статье
  */
 export class ArticleComment {
+
   /**
    * Идентификатор.
    */
-  id: number;
+  id: number = 0;
 
   /**
    * Идентификатор статьи.
    */
-  articleId: string;
+  articleId: number;
 
   /**
    * Автор.
@@ -25,5 +26,5 @@ export class ArticleComment {
   /**
    * Дата создания.
    */
-  created: string;
+  created: Date = null;
 }

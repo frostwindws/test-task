@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{title()}}</h2>
+<form class="article-editor" [formGroup]="formData">
+  <mat-form-field>
+    <input matInput maxlength="200" required placeholder="Title" formControlName="title">
+    <mat-error class="error-message" *ngIf="formData.get('title').hasError('required') && (formData.get('title').dirty || formData.get('title').touched)">
+      The field "Title" is mandatory
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput maxlength="200" required placeholder="Author" formControlName="author" [attr.disabled]="isNew">
+    <mat-error class="error-message" *ngIf="formData.get('author').hasError('required') && (formData.get('author').dirty || formData.get('author').touched)">
+      The field "Author" is mandatory
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput required placeholder="Content" formControlName="content"></textarea>
+    <mat-error class="error-message" *ngIf="formData.get('content').hasError('required') && (formData.get('content').dirty || formData.get('content').touched)">
+      The field "Content" is mandatory
+    </mat-error>
+  </mat-form-field>
+  <mat-dialog-actions>
+    <button mat-raised-button (click)="onSave()" [disabled]="!formData.valid">Save</button>
+    <button mat-raised-button [mat-dialog-close]="false">Cancel</button>
+  </mat-dialog-actions>
+</form>

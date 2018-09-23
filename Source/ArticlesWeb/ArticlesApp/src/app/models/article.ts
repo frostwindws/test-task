@@ -5,7 +5,7 @@ export class Article {
   /**
    * Идентификатор.
    */
-  id: number;
+  id: number = 0;
 
   /**
    * Заголовок.
@@ -25,7 +25,7 @@ export class Article {
   /**
    * Дата создания.
    */
-  created: string;
+  created: Date = null;
 
   /**
    * Комментарии к статье
