@@ -44,7 +44,9 @@ export class ArticleView implements OnInit {
    * Инициализация компонента.
    */
   ngOnInit() {
-    this.viewData.currentArticle.subscribe(article => this.article = article);
+    this.viewData.currentArticle.subscribe(article => {
+      this.article = article;
+    });
   }
 
   /**

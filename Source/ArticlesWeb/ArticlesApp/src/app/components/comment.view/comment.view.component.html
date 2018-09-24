@@ -2,8 +2,8 @@
   <div class="header">
     <h4>By {{comment.author}} at {{comment.created | date:'dd.MM.yyyy HH:mm'}}</h4>
     <div class="actions">
-      <div (click)="onEdit()">Edit</div>
-      <div (click)="onDelete()">Delete</div>
+      <button mat-button (click)="onEdit()">Edit</button>
+      <button mat-button (click)="onDelete()">Delete</button>
     </div>
   </div>
   <div class="content">{{comment.content}}</div>

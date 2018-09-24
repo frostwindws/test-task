@@ -1,0 +1,40 @@
+.article-view {
+  padding: 0 2em;
+
+  & > .header {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+
+    & > h2 {
+      flex-grow: 1;
+    }
+
+    & > .actions {
+      display: flex;
+      flex-basis: 15em;
+      flex-flow: row wrap;
+      align-items: stretch;
+
+      > button {
+        flex: 50%;
+        min-width: 8em;
+      }
+    }
+  }
+
+  & > .content {
+    padding: 1em 0;
+    font-size: 1.1em;
+  }
+
+  & > footer {
+    text-align: right;
+    color: dimgray;
+  }
+
+  & > .comments > comment-view {
+    margin: 1em 0;
+    display: block;
+  }
+}

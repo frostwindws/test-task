@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ArticlesApp\src\app\services\signalr.service.ts" />
     <None Remove="ArticlesApp\src\app\services\viewdata.service.ts" />
   </ItemGroup>
 
@@ -31,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ArticlesApp\src\app\services\signalr.service.ts" />
     <TypeScriptCompile Include="ArticlesApp\src\app\services\viewdata.service.ts" />
   </ItemGroup>
 

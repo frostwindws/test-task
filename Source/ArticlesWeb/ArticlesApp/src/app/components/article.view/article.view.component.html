@@ -1,14 +1,16 @@
-<div *ngIf="currentArticle" class="article-view">
-  <h2>{{currentArticle.title}}</h2>
-  <div class="actions">
-    <div (click)="onEdit()">Edit</div>
-    <div (click)="onRefresh()">Refresh</div>
-    <div (click)="onDelete()">Delete</div>
-    <div (click)="onAddComment()">Add Comment</div>
+<div *ngIf="article" class="article-view">
+  <div class="header">
+    <h2>{{article.title}}</h2>
+    <div class="actions">
+      <button mat-button (click)="onEdit()">Edit</button>
+      <button mat-button (click)="onDelete()">Delete</button>
+      <button mat-button (click)="onRefresh()">Refresh</button>
+      <button mat-button (click)="onAddComment()">Add Comment</button>
+    </div>
   </div>
-  <div class="content">{{currentArticle.content}}</div>
-  <div class="footer">By {{currentArticle.author}} at {{currentArticle.created | date:'dd.MM.yyyy HH:mm'}}</div>
+  <div class="content">{{article.content}}</div>
+  <div class="footer">By {{article.author}} at {{article.created | date:'dd.MM.yyyy HH:mm'}}</div>
   <div class="comments">
-    <comment-view *ngFor="let comment of currentArticle.comments" [comment]="comment"></comment-view>
+    <comment-view *ngFor="let comment of article.comments" [comment]="comment"></comment-view>
   </div>
 </div>

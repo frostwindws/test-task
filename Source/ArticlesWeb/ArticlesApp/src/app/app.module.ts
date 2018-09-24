@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatIconModule, MatTableModule, MatAutocompleteModule, MatInputModule, MatDialogModule, MatSnackBarModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { ArticlesList } from "./components/articles.list/articles.list.component"
@@ -24,9 +26,18 @@ import { ViewDataService } from "./services/viewdata.service";
     Prompt
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatDialogModule,
+    MatSnackBarModule
   ],
   entryComponents: [ArticleEditor, CommentEditor, Prompt],
   providers: [ViewDataService],

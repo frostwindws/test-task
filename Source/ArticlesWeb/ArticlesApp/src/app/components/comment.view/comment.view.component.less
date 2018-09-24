@@ -1,0 +1,34 @@
+.comment-view {
+  & > .header {
+    display: flex;
+    flex-direction: row;
+    border-radius: 0.7em 0.7em 0 0;
+    padding: 0.5em 1em;
+    background-color: #4d6dc1;
+    color: whitesmoke;
+    align-items:baseline;
+
+    & > h4 {
+      flex-grow: 1;
+      margin: 0;
+    }
+
+    & > .actions {
+      display: flex;
+      flex-flow: row wrap;
+
+      & > button {
+        flex: 50%;
+      }
+    }
+  }
+
+  & > .content {
+    border-radius: 0 0 0.7em 0.7em;
+    border-width: 0 1px 1px 1px;
+    border-color: #4d6dc1;
+    border-style: solid;
+    padding: 0.5em 1em;
+    text-align: justify;
+  }
+}

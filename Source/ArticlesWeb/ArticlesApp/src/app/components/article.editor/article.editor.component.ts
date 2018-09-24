@@ -40,7 +40,7 @@ export class ArticleEditor {
    * @param viewData Сервис разделяемых данных для отображения.
    */
   constructor(public dialogRef: MatDialogRef<ArticleEditor>, @Inject(MAT_DIALOG_DATA) public article: Article) {
-    this.isNew = article.id == 0;
+    this.isNew = (article.id === 0);
 
     if (!this.isNew) {
       this.articleId = article.id;

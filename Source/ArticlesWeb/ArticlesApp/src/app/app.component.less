@@ -1,0 +1,15 @@
+.content {
+  min-width: 600px;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+
+  & > articles-list {
+    flex-shrink: 1;
+  }
+
+  & > article-view {
+    flex-basis: 1;
+    flex-grow: 1;
+  }
+}
