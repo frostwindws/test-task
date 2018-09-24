@@ -1,7 +1,8 @@
 import { Component, Input } from "@angular/core";
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 
 import { ArticleComment } from "../../models/article.comment";
+import { Result } from "../../models/result";
 
 import { CommentService } from "../../services/comment.service";
 
@@ -25,18 +26,23 @@ export class CommentView {
   /**
    * Конструктор компонента.
    */
-  constructor(public dialog: MatDialog, private commentService: CommentService) { }
+  constructor(public snackBar: MatSnackBar, public dialog: MatDialog, private commentService: CommentService) { }
 
   /**
    * Запуск редактирования комментария.
    */
   onEdit() {
+    let comment: ArticleComment = Object.assign({}, this.comment);
     this.dialog.open(CommentEditor, {
       width: '600px',
-      data: this.comment
+      data: comment
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.commentService.updateComment(result);
+        this.commentService.updateComment(result)
+          .subscribe((result: Result) => {
+            let message = result.success ? 'Edit comment request was sent succesfully' : result.message;
+            this.snackBar.open(message, null, { duration: 1000 });
+          });
       }
     });
   }
@@ -50,7 +56,11 @@ export class CommentView {
       data: `Do you really want to delete comment by "${this.comment.author}"?`
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.commentService.deleteComment(this.comment);
+        this.commentService.deleteComment(this.comment)
+          .subscribe((result: Result) => {
+            let message = result.success ? 'Delete comment request was sent succesfully' : result.message;
+            this.snackBar.open(message, null, { duration: 1000 });
+          });
       }
     });
   }

@@ -17,7 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesShell", "Source\Art
 		{0F4B282A-68D1-4B31-BABC-BB94C1A73E9F} = {0F4B282A-68D1-4B31-BABC-BB94C1A73E9F}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesWeb", "Source\ArticlesWeb\ArticlesWeb.csproj", "{54318A4B-C459-4EA0-8A28-20A9AC62CCBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticlesWeb", "Source\ArticlesWeb\ArticlesWeb.csproj", "{54318A4B-C459-4EA0-8A28-20A9AC62CCBC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0F4B282A-68D1-4B31-BABC-BB94C1A73E9F} = {0F4B282A-68D1-4B31-BABC-BB94C1A73E9F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

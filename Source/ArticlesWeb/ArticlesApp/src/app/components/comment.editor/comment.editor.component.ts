@@ -20,21 +20,6 @@ export class CommentEditor {
   formData: FormGroup;
 
   /**
-   * Идентификатор редактируемого комментария.
-   */
-  commentId: number;
-
-  /**
-   * Идентификатор статьи комментария.
-   */
-  articleId: number;
-
-  /**
-   * Флаг редактирования нового комментария.
-   */
-  isNew: boolean;
-
-  /**
    * Заголовок окна редактирования.
    */
   title: string;
@@ -45,18 +30,11 @@ export class CommentEditor {
    * @param comment Редактируемый комментарий.
    */
   constructor(public dialogRef: MatDialogRef<CommentEditor>, @Inject(MAT_DIALOG_DATA) public comment: ArticleComment) {
-    this.isNew = comment.id == 0;
-
-    if (!this.isNew) {
-      this.commentId = comment.id;
-      this.articleId = comment.articleId;
-      this.title = 'Edit comment';
-    } else {
-      this.title = 'Add new comment';
-    }
+    let isNew = comment.id === 0;
+    this.title = !isNew ? 'Edit comment' : 'Add new comment';
 
     this.formData = new FormGroup({
-      author: new FormControl(comment.author),
+      author: new FormControl({ value: comment.author, disabled: !isNew }),
       content: new FormControl(comment.content),
     });
   }
@@ -66,7 +44,7 @@ export class CommentEditor {
    */
   onSave(): void {
     if (this.formData.valid) {
-      this.dialogRef.close(Object.assign({ id: this.commentId || 0 }, this.formData.value));
+      this.dialogRef.close(Object.assign(this.comment, this.formData.value));
     }
   }
 }

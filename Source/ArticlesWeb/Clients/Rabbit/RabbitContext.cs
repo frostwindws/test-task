@@ -86,13 +86,16 @@ namespace ArticlesWeb.Clients.Rabbit
                 var result = bodyConverter.FromBody<RabbitResult<ArticleDto>>(body);
                 data = Mapper.Map<Article>(result.Data);
             }
-            else if (CommandNames.IsArticleCommand(type))
+            else if (CommandNames.IsCommentCommand(type))
             {
                 var result = bodyConverter.FromBody<RabbitResult<CommentDto>>(body);
                 data = Mapper.Map<Comment>(result.Data);
             }
 
-            await hubContext.Clients.All.SendCoreAsync(type, new[] { data }, cancellationToken);
+            if (data != null)
+            {
+                await hubContext.Clients.All.SendCoreAsync(type, new[] { data }, cancellationToken);
+            }
         }
 
         /// <summary>

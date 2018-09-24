@@ -1,4 +1,4 @@
-<ul class="articles-list">
+<ul class="articles-list" [class.loading]="isLoading">
   <li *ngFor="let article of articles" (click)="onSelect(article)" [class.selected]="currentArticle && article.id == currentArticle.id">{{article.title}}</li>
   <li (click)="getArticles()" class="action">Refresh</li>
   <li (click)="onAdd()" class="action">Add new article</li>

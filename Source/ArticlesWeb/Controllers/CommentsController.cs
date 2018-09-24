@@ -3,6 +3,8 @@ using ArticlesWeb.Clients;
 using ArticlesWeb.Clients.Rabbit.Commands;
 using ArticlesWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+// ReSharper disable UnusedMember.Global
 
 namespace ArticlesWeb.Controllers
 {
@@ -26,9 +28,18 @@ namespace ArticlesWeb.Controllers
         /// </summary>
         /// <param name="comment"></param>
         [HttpPost]
-        public void Post([FromBody] Comment comment)
+        public Result Post([FromBody] Comment comment)
         {
-            updateContext.SendUpdateForComment(CommandNames.CreateComment, comment);
+            try
+            {
+                updateContext.SendUpdateForComment(CommandNames.CreateComment, comment);
+                return new Result();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Error was occured while processing Comment Post request");
+                return new Result(e.GetBaseException().Message);
+            }
         }
 
         /// <summary>
@@ -37,9 +48,18 @@ namespace ArticlesWeb.Controllers
         /// </summary>
         /// <param name="comment">Обновляемые данные комментария.</param>
         [HttpPut]
-        public void Put([FromBody] Comment comment)
+        public Result Put([FromBody] Comment comment)
         {
-            updateContext.SendUpdateForComment(CommandNames.UpdateComment, comment);
+            try
+            {
+                updateContext.SendUpdateForComment(CommandNames.UpdateComment, comment);
+                return new Result();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Error was occured while processing Comment Put request");
+                return new Result(e.GetBaseException().Message);
+            }
         }
 
         /// <summary>
@@ -48,9 +68,18 @@ namespace ArticlesWeb.Controllers
         /// </summary>
         /// <param name="id">Идентификатор удаляемого комментария.</param>
         [HttpDelete("{id}")]
-        public void Delete(long id)
+        public Result Delete(long id)
         {
-            updateContext.SendUpdateForComment(CommandNames.DeleteComment, new Comment { Id = id });
+            try
+            {
+                updateContext.SendUpdateForComment(CommandNames.DeleteComment, new Comment { Id = id });
+                return new Result();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Error was occured while processing Comment Delete request");
+                return new Result(e.GetBaseException().Message);
+            }
         }
 
         /// <summary>

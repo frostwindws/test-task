@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Articles.Models;
 using Articles.Services.Commands;
 using Articles.Services.Models;
 using AutoMapper;
-using Nelibur.Sword.Extensions;
 using Serilog;
 
 namespace Articles.Services
@@ -105,7 +103,7 @@ namespace Articles.Services
                     return ResultBuilder.Fault<ArticleDto>("Article wasn't found");
                 }
 
-                IEnumerable<Comment> comments = context.Comments.GetForArticle(article.Id);
+                IEnumerable<Comment> comments = context.Comments.GetForArticle(article.Id).OrderByDescending(c => c.Created);
                 data.Comments = Mapper.Map<CommentDto[]>(comments);
                 return ResultBuilder.Success(data);
             });

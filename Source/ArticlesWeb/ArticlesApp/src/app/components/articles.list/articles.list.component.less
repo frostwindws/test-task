@@ -1,7 +1,5 @@
 .articles-list {
   list-style-type: none;
-  border-right: solid 1px grey;
-  border-left: solid 1px grey;
   position: relative;
 
   & > li {
@@ -10,7 +8,9 @@
     font-weight: bold;
     cursor: pointer;
     padding: 0.5em 1em;
-    border-bottom: solid 1px grey;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: gray;
 
     &.selected {
       background-color: #4d6dc1;
@@ -28,22 +28,5 @@
       background-color: lightgray;
       transition: background-color 200ms linear;
     }
-  }
-
-  &.loading:after {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 0.6em;
-    content: 'Обновление...';
-    text-align: center;
-    font-size: 1.5em;
-    color: #fafafa;
-    background-color: rgba(50, 50, 50, 0.7);
-    transition: background-color 200ms linear;
   }
 }

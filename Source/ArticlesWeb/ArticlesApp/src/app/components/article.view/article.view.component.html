@@ -1,4 +1,4 @@
-<div *ngIf="article" class="article-view">
+<div *ngIf="article" class="article-view" [class.loading]="isLoading">
   <div class="header">
     <h2>{{article.title}}</h2>
     <div class="actions">

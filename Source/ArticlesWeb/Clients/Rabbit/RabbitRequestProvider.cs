@@ -53,6 +53,7 @@ namespace ArticlesWeb.Clients.Rabbit
         public async Task SubscribeToAnnounce(string announceExchange, Func<string, byte[], CancellationToken, Task> onReceived, CancellationToken cancellationToken)
         {
             string announceQueue = channel.QueueDeclare().QueueName;
+            channel.ExchangeDeclare(announceExchange, "fanout");
             channel.QueueBind(announceQueue, announceExchange, "");
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += async (sender, args) =>

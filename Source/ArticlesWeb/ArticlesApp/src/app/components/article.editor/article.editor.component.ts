@@ -20,16 +20,6 @@ export class ArticleEditor {
   formData: FormGroup;
 
   /**
-   * Идентификатор редактируемой статьи.
-   */
-  articleId: number;
-
-  /**
-   * Флаг редактирования новой статьи.
-   */
-  isNew: boolean;
-
-  /**
    * Заголовок окна редактирования.
    */
   title: string;
@@ -40,18 +30,12 @@ export class ArticleEditor {
    * @param viewData Сервис разделяемых данных для отображения.
    */
   constructor(public dialogRef: MatDialogRef<ArticleEditor>, @Inject(MAT_DIALOG_DATA) public article: Article) {
-    this.isNew = (article.id === 0);
-
-    if (!this.isNew) {
-      this.articleId = article.id;
-      this.title = 'Edit article ' + article.title;
-    } else {
-      this.title = 'Add new article';
-    }
+    let isNew = (article.id === 0);
+    this.title = !isNew ? 'Edit article ' + article.title : 'Add new article';
 
     this.formData = new FormGroup({
       title: new FormControl(article.title),
-      author: new FormControl(article.author),
+      author: new FormControl({ value: article.author, disabled: !isNew }),
       content: new FormControl(article.content),
     });
   }
@@ -61,7 +45,7 @@ export class ArticleEditor {
    */
   onSave(): void {
     if (this.formData.valid) {
-      this.dialogRef.close(Object.assign({ id: this.articleId || 0 }, this.formData.value));
+      this.dialogRef.close(Object.assign(this.article, this.formData.value));
     }
   }
 }

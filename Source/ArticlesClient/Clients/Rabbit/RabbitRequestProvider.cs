@@ -91,6 +91,7 @@ namespace ArticlesClient.Clients.Rabbit
         public void SubscribeToAnnounce(string announceExchange, Action<string, byte[]> onReceived)
         {
             string announceQueue = channel.QueueDeclare().QueueName;
+            channel.ExchangeDeclare(announceExchange, "fanout");
             channel.QueueBind(announceQueue, announceExchange, "");
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (sender, args) =>

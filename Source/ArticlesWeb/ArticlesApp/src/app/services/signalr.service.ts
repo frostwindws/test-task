@@ -19,6 +19,7 @@ export class SignalRService {
     let builder = new HubConnectionBuilder();
 
     this.hubConnection = builder.withUrl(signalRUrl).build();
+    this.hubConnection.start();
   }
 
   /**
@@ -26,7 +27,9 @@ export class SignalRService {
    * @param type Тип сообщения.
    * @param callback Метод обработки сообщения.
    */
-  public subscribe(type: string, callback: (args) => void) {
-    this.hubConnection.on(type, callback);
+  public subscribe(type: string, scope, callback: (result) => void) {
+    this.hubConnection.on(type, (result) => {
+      callback.call(scope, result);
+    });
   }
 }

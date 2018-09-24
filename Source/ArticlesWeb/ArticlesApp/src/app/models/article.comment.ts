@@ -26,5 +26,5 @@ export class ArticleComment {
   /**
    * Дата создания.
    */
-  created: Date = null;
+  created: Date = new Date();
 }

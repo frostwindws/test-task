@@ -91,19 +91,10 @@ namespace ArticlesWeb
         // ReSharper disable once UnusedMember.Global
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //string connection = Configuration.GetConnectionString("ClientsConnection");
-            //services.AddDbContext<ClientsContext>(options => options.UseSqlServer(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ArticlesApp/dist"; });
             services.AddSignalR()
-                .AddJsonProtocol(options => { options.PayloadSerializerSettings.ContractResolver = new DefaultContractResolver(); });
-            //services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
-            //{
-            //    builder
-            //    .AllowAnyMethod()
-            //    .AllowAnyHeader()
-            //    .WithOrigins("http://localhost:63366");
-            //}));
+                .AddJsonProtocol(options => { options.PayloadSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver(); });
 
             return BuildAutofacServiceProvider(services);
         }
@@ -173,7 +164,6 @@ namespace ArticlesWeb
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseMvc();
-            //app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
                 routes.MapHub<UpdatesHub>("/updates");

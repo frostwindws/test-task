@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{title()}}</h2>
+<h2 mat-dialog-title>{{title}}</h2>
 <form class="article-editor" [formGroup]="formData">
   <mat-form-field>
     <input matInput maxlength="200" required placeholder="Author" formControlName="author" [attr.disabled]="isNew">

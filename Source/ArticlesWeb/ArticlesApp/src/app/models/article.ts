@@ -1,3 +1,5 @@
+import { ArticleComment } from "./article.comment";
+
 /**
  * Модель статьи.
  */
@@ -25,10 +27,10 @@ export class Article {
   /**
    * Дата создания.
    */
-  created: Date = null;
+  created: Date = new Date();
 
   /**
    * Комментарии к статье
    */
-  comments: Comment[];
+  comments: ArticleComment[] = [];
 }

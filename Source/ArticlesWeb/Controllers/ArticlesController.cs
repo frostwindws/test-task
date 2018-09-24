@@ -5,6 +5,8 @@ using ArticlesWeb.Clients;
 using ArticlesWeb.Clients.Rabbit.Commands;
 using ArticlesWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+
 // ReSharper disable UnusedMember.Global
 
 namespace ArticlesWeb.Controllers
@@ -54,9 +56,18 @@ namespace ArticlesWeb.Controllers
         /// </summary>
         /// <param name="article">Добавляемая статья.</param>
         [HttpPost]
-        public void Post([FromBody] Article article)
+        public Result Post([FromBody] Article article)
         {
-            updateContext.SendUpdateForArticle(CommandNames.CreateArticle, article);
+            try
+            {
+                updateContext.SendUpdateForArticle(CommandNames.CreateArticle, article);
+                return new Result();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Error was occured while processing Article Post request");
+                return new Result(e.GetBaseException().Message);
+            }
         }
 
         /// <summary>
@@ -64,9 +75,18 @@ namespace ArticlesWeb.Controllers
         /// PUT: api/Articles/{id}.
         /// </summary>
         /// <param name="article">Одновленные данные статьи.</param>
-        public void Put([FromBody] Article article)
+        public Result Put([FromBody] Article article)
         {
-            updateContext.SendUpdateForArticle(CommandNames.UpdateArticle, article);
+            try
+            {
+                updateContext.SendUpdateForArticle(CommandNames.UpdateArticle, article);
+                return new Result();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Error was occured while processing Article Put request");
+                return new Result(e.GetBaseException().Message);
+            }
         }
 
         /// <summary>
@@ -75,9 +95,18 @@ namespace ArticlesWeb.Controllers
         /// </summary>
         /// <param name="id">Идентификатор удаляемой статьи.</param>
         [HttpDelete("{id}")]
-        public void Delete(long id)
+        public Result Delete(long id)
         {
-            updateContext.SendUpdateForArticle(CommandNames.DeleteArticle, new Article { Id = id });
+            try
+            {
+                updateContext.SendUpdateForArticle(CommandNames.DeleteArticle, new Article { Id = id });
+                return new Result();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Error was occured while processing Article Delete request");
+                return new Result(e.GetBaseException().Message);
+            }
         }
 
         /// <summary>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 
 import { Article } from "../../models/article";
+import { Result } from "../../models/result";
 
 import { ArticleService } from "../../services/article.service";
 import { SignalRService } from "../../services/signalr.service";
@@ -18,16 +19,16 @@ import { ArticleEditor } from '../article.editor/article.editor.component';
   styleUrls: ["./articles.list.component.less"]
 })
 export class ArticlesList implements OnInit {
-  articles: Article[];
-  currentArticle: Article;
-  isLoading = false;
+  private articles: Article[];
+  private currentArticle: Article;
+  private isLoading = false;
 
   /**
    * Конструктор компонента.
    * @param articleService Сервис получения/обновления данных о статьях.
    * @param viewData Сервис разделяемых данных для отображения.
    */
-  constructor(public dialog: MatDialog, private signalr: SignalRService, private articleService: ArticleService, private viewData: ViewDataService) { }
+  constructor(public snackBar: MatSnackBar, public dialog: MatDialog, private signalr: SignalRService, private articleService: ArticleService, private viewData: ViewDataService) { }
 
   /**
    * Инициализация компонента.
@@ -37,9 +38,9 @@ export class ArticlesList implements OnInit {
     this.getArticles();
 
     // Подписка на обновления данных
-    this.signalr.subscribe('article-create', this.onArticleCreate);
-    this.signalr.subscribe('article-update', this.onArticleUpdate);
-    this.signalr.subscribe('article-delete', this.onArticleDelete);
+    this.signalr.subscribe('article-create', this, this.onArticleCreated);
+    this.signalr.subscribe('article-update', this, this.onArticleUpdated);
+    this.signalr.subscribe('article-delete', this, this.onArticleDeleted);
   }
 
   /**
@@ -79,7 +80,11 @@ export class ArticlesList implements OnInit {
       data: new Article()
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.articleService.addArticle(result);
+        this.articleService.addArticle(result)
+          .subscribe((result: Result) => {
+            let message = result.success ? 'Add article request was sent succesfully' : result.message;
+            this.snackBar.open(message, null, { duration: 1000 });
+          });
       }
     });
   }
@@ -88,45 +93,46 @@ export class ArticlesList implements OnInit {
    * Обработчик оповещения о создании новой статьи.
    * @param article Созданная статья.
    */
-  private onArticleCreate(article: Article) {
+  private onArticleCreated(article: Article) {
     if (!this.isLoading) {
-      let clients = this.articles.slice();
-      clients.push(article);
-      this.articles = clients;
+      this.articles.unshift(article);
     }
   }
 
   /**
-   * Обработчик оповещения об обновлении статьи
-   * @param article Обновленная статья
+   * Обработчик оповещения об обновлении статьи.
+   * @param article Обновленная статья.
    */
-  private onArticleUpdate(article: Article) {
+  private onArticleUpdated(article: Article) {
     if (!this.isLoading) {
-      let index = this.getIndexById(article.id);
-      this.articles[index].title = article.title;
+      let index = this.getIndexById(this.articles, article.id);
+      if (index >= 0) {
+        this.articles[index].title = article.title;
+      }
     }
   }
 
   /**
-   * Обработчик оповещения о удалении статьи
-   * @param article Удаленная статья
+   * Обработчик оповещения о удалении статьи.
+   * @param article Удаленная статья.
    */
-  private onArticleDelete(article: Article) {
+  private onArticleDeleted(article: Article) {
 
     if (!this.isLoading) {
-      let index = this.getIndexById(article.id);
-      let articles = this.articles.slice(index, 1);
-      this.articles = articles;
+      let index = this.getIndexById(this.articles, article.id);
+      if (index >= 0) {
+        this.articles.splice(index, 1);
+      }
     }
   }
 
   /**
-   * Get client index in clients list by his id
-   * @param id Client id
+   * Поиск статьи в массиве по ее илентификатору.
+   * @param id Идентификатор статьи.
    */
-  private getIndexById(id: number): number {
-    for (var i = 0; i < this.articles.length; i++) {
-      if (this.articles[i].id === id) return i;
+  private getIndexById(array: Article[], id: number): number {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i].id === id) return i;
     }
 
     return -1;
