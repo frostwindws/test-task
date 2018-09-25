@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
+    <Configurations>Debug;Release;Release Without Core</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -11,6 +12,20 @@
     <WarningsAsErrors />
     <NoWarn />
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Without Core|AnyCPU'">
+    <OutputPath>..\..\Out\Debug\ArticlesWeb\</OutputPath>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="ArticlesApp\src\app\services\signalr.service.ts" />
