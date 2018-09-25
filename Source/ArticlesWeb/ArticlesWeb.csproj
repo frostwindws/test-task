@@ -5,6 +5,13 @@
     <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\Out\Debug\ArticlesWeb\</OutputPath>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn />
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="ArticlesApp\src\app\services\signalr.service.ts" />
     <None Remove="ArticlesApp\src\app\services\viewdata.service.ts" />
