@@ -3,18 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
-    <Configurations>Debug;Release;Release Without Core</Configurations>
+    <Configurations>Debug;Release</Configurations>
+    <UserSecretsId>3f4a2e67-207f-4ff2-b799-cf62cdffd1c0</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\Out\Debug\ArticlesWeb\</OutputPath>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-    <NoWarn />
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Without Core|AnyCPU'">
-    <OutputPath>..\..\Out\Debug\ArticlesWeb\</OutputPath>
+    <OutputPath>..\..\Out\Release\ArticlesWeb\</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn />
