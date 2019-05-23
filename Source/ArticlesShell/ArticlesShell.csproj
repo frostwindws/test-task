@@ -77,6 +77,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.testing.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app.config" />
     <None Include="Connected Services\CommentsService\ArticlesShell.CommentsService.ResultDtoOfArrayOfCommentDtoO_Po34nZx.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
